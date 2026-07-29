@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian AI Assistant - Interactive Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffb300; /* McCain Yellow */
+            --primary-hover: #e6a200;
+            --bg-body: #f5f6f8;
+            --bg-surface: #ffffff;
+            --text-main: #1a1a1a;
+            --text-secondary: #666666;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .logo-circle {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: #f3f4f6;
+            color: var(--text-main);
+        }
+
+        .nav-links a.active {
+            background-color: #fff8e1;
+            color: #b37d00;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-surface);
+        }
+
+        .profile-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #d1d5db;
+        }
+
+        /* Chat Area */
+        .chat-container {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding-bottom: 120px; /* Space for input */
+        }
+
+        .welcome-screen {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .welcome-screen h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .welcome-screen p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .suggestions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .suggestion-btn {
+            background-color: var(--bg-surface);
+            border: 1.5px solid var(--primary);
+            color: var(--text-main);
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            max-width: 350px;
+            text-align: left;
+        }
+
+        .suggestion-btn:hover {
+            background-color: var(--primary);
+            box-shadow: 0 10px 15px -3px rgba(255, 179, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Messages */
+        .message {
+            display: flex;
+            width: 100%;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .ai-message {
+            justify-content: flex-start;
+        }
+
+        .bubble {
+            max-width: 70%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .user-message .bubble {
+            background-color: #f3f4f6;
+            color: var(--text-main);
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai-bubble {
+            max-width: 800px;
+        }
+
+        /* Cards inside AI Bubble */
+        .card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #f9fafb;
+            font-size: 16px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body p {
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 24px 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .progress-labels .active {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Stats Grid (Q2) */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background-color: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #f3f4f6;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .stat-value.highlight {
+            color: #b37d00;
+        }
+
+        /* Chips */
+        .follow-up-chips {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            background-color: #fff8e1;
+            border: 1px solid var(--primary);
+            color: #b37d00;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            background-color: var(--primary);
+            color: var(--text-main);
+        }
+
+        /* Input Area */
+        .input-area {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px 40px;
+            background: linear-gradient(transparent, var(--bg-body) 20%);
+        }
+
+        .input-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 10px 15px -3px rgba(255, 179, 0, 0.15);
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            outline: none;
+            background: transparent;
+        }
+
+        .send-btn {
+            background-color: var(--primary);
+            color: var(--text-main);
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .send-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Loading Dots */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px 0;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #d1d5db;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-area">
+            <div class="logo-circle">M</div>
+            <span class="logo-text">Meridian</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="active">Assistant</a>
+            <a href="#">Dashboard</a>
+            <a href="#">Orders</a>
+            <a href="#">Shipments</a>
+            <a href="#">Settings</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header class="header">
+            <div class="profile-area">
+                <span class="profile-name">Sarah J.</span>
+                <div class="avatar"></div>
+            </div>
+        </header>
+
+        <div class="chat-container" id="chat-container">
+            <div id="initial-state" class="welcome-screen">
+                <h1>Where is my order? <br>Just ask.</h1>
+                <p>Your Supply Chain AI Assistant is here to provide instant updates.</p>
+                <div class="suggestions">
+                    <button class="suggestion-btn" onclick="askQuestion(1)">
+                        <strong>Q1:</strong> What is the status of order 123? (List orders with product xxx not shipped yet)
+                    </button>
+                    <button class="suggestion-btn" onclick="askQuestion(2)">
+                        <strong>Q2:</strong> What is the current on-hand stock for SKU 123 at plant 4001, and how many open orders exist against it?
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input type="text" id="chat-input" placeholder="Ask Meridian about an order, shipment, or inventory..." onkeypress="handleEnter(event)">
+                <button class="send-btn" onclick="handleSend()">Ask</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const initialState = document.getElementById('initial-state');
+        const chatInput = document.getElementById('chat-input');
+
+        function appendUserMessage(text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message user-message';
+            msgDiv.innerHTML = `<div class="bubble">${text}</div>`;
+            chatContainer.appendChild(msgDiv);
+            scrollToBottom();
+        }
+
+        function appendAIMessage(htmlContent) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ai-message';
+            msgDiv.innerHTML = `<div class="ai-bubble">${htmlContent}</div>`;
+            chatContainer.appendChild(msgDiv);
+            scrollToBottom();
+        }
+
+        function showLoading() {
+            const loader = document.createElement('div');
+            loader.id = 'loading';
+            loader.className = 'message ai-message';
+            loader.innerHTML = \`
+                <div class="bubble ai-bubble" style="background: transparent; border: none; padding-left: 0;">
+                    <div class="typing-indicator">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            \`;
+            chatContainer.appendChild(loader);
+            scrollToBottom();
+        }
+
+        function hideLoading() {
+            const loader = document.getElementById('loading');
+            if(loader) loader.remove();
+        }
+        
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function askQuestion(qNum) {
+            if(initialState) initialState.style.display = 'none';
+            
+            let userText = '';
+            let aiResponse = '';
+            
+            if (qNum === 1) {
+                userText = 'What is the status of order 123? Give me a list of all orders with product xxx that have not shipped yet.';
+                aiResponse = \`
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>📦 Order Status & Unshipped Products</strong>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Order #123 Status:</strong></p>
+                            <p>Order <strong>#123</strong> is currently <strong>Processing</strong> at warehouse WH-04. It has not shipped yet.</p>
+                            
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 33%;"></div>
+                                </div>
+                                <div class="progress-labels">
+                                    <span>Received</span>
+                                    <span class="active">Processing</span>
+                                    <span>Shipped</span>
+                                    <span>Delivered</span>
+                                </div>
+                            </div>
+                            
+                            <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
+                            
+                            <p><strong>Unshipped Orders for Product XXX:</strong></p>
+                            <p>Besides Order #123, there are <strong>3</strong> other orders containing Product XXX that are pending shipment:</p>
+                            <ul style="margin-left: 20px; margin-top: 10px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                                <li>Order #124 (Scheduled to load: Oct 26)</li>
+                                <li>Order #128 (Credit Hold)</li>
+                                <li>Order #135 (Pending material availability)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="follow-up-chips">
+                        <button class="chip" onclick="handleSendText('Release credit hold for Order 128')">Release credit hold for #128</button>
+                        <button class="chip" onclick="handleSendText('When will material be available for #135?')">When will material be available for #135?</button>
+                    </div>
+                \`;
+            } else if (qNum === 2) {
+                userText = 'What is the current on-hand stock (in cases) for SKU [123] at plant/warehouse [4001], and how many open orders exist against it?';
+                aiResponse = \`
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>🏭 Inventory Analysis: SKU 123 at Plant 4001</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-grid">
+                                <div class="stat-box">
+                                    <span class="stat-label">On-Hand Stock (Cases)</span>
+                                    <span class="stat-value">12,450</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-label">Open Orders (Cases)</span>
+                                    <span class="stat-value">3,200</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-label">Available to Promise</span>
+                                    <span class="stat-value highlight">9,250</span>
+                                </div>
+                            </div>
+                            <p style="margin-top: 16px;">
+                                <strong>Status: <span style="color: #059669;">Healthy</span></strong><br>
+                                There is sufficient stock on hand to fulfill all current open orders for SKU 123 at Plant 4001. No shortages are projected for the next 14 days based on current demand.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="follow-up-chips">
+                        <button class="chip" onclick="handleSendText('Show me the breakdown of the open orders')">Show breakdown of open orders</button>
+                        <button class="chip" onclick="handleSendText('Check stock for SKU 124 at Plant 4001')">Check stock for SKU 124</button>
+                    </div>
+                \`;
+            }
+            
+            appendUserMessage(userText);
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(aiResponse);
+            }, 1500);
+        }
+
+        function handleSendText(text) {
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage(text);
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage("<div class='bubble' style='background: #fff; border: 1px solid #eee;'>I am an interactive prototype. In a live system, I would process this request by querying SAP and Databricks.</div>");
+            }, 1000);
+        }
+
+        function handleSend() {
+            const text = chatInput.value.trim();
+            if(!text) return;
+            chatInput.value = '';
+            handleSendText(text);
+        }
+
+        function handleEnter(e) {
+            if(e.key === 'Enter') handleSend();
+        }
+    </script>
+</body>
+</html>
