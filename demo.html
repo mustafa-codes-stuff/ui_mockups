@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ffb300; /* McCain Yellow */
+            --primary: #ffb300;
             --primary-hover: #e6a200;
             --bg-body: #f5f6f8;
             --bg-surface: #ffffff;
@@ -133,16 +133,16 @@
             display: flex;
             flex-direction: column;
             gap: 24px;
-            padding-bottom: 120px; /* Space for input */
+            padding-bottom: 120px;
         }
 
         .welcome-screen {
             text-align: center;
-            margin-top: 60px;
+            margin-top: 40px;
         }
 
         .welcome-screen h1 {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: 700;
             line-height: 1.2;
             letter-spacing: -1px;
@@ -151,16 +151,16 @@
 
         .welcome-screen p {
             color: var(--text-secondary);
-            font-size: 18px;
-            margin-bottom: 40px;
+            font-size: 16px;
+            margin-bottom: 30px;
         }
 
         .suggestions {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -168,15 +168,16 @@
             background-color: var(--bg-surface);
             border: 1.5px solid var(--primary);
             color: var(--text-main);
-            padding: 16px 24px;
+            padding: 14px 20px;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            max-width: 350px;
+            max-width: 400px;
             text-align: left;
+            flex: 1 1 45%;
         }
 
         .suggestion-btn:hover {
@@ -254,8 +255,10 @@
             border-radius: 4px;
             overflow: hidden;
             margin-bottom: 12px;
+            display: flex;
         }
-
+        
+        /* Multiple segments for status progress */
         .progress-fill {
             height: 100%;
             background-color: var(--primary);
@@ -273,7 +276,7 @@
             font-weight: 600;
         }
 
-        /* Stats Grid (Q2) */
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -302,6 +305,30 @@
 
         .stat-value.highlight {
             color: #b37d00;
+        }
+
+        /* Details Grid for Order Status */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .detail-item .label {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        .detail-item .value {
+            font-weight: 500;
         }
 
         /* Chips */
@@ -434,11 +461,17 @@
                 <h1>Where is my order? <br>Just ask.</h1>
                 <p>Your Supply Chain AI Assistant is here to provide instant updates.</p>
                 <div class="suggestions">
+                    <button class="suggestion-btn" onclick="askQuestion(3)">
+                        <strong>Mockup:</strong> Where is Order #12345?
+                    </button>
+                    <button class="suggestion-btn" onclick="askQuestion(4)">
+                        <strong>Mockup:</strong> Why is Order #12345 delayed?
+                    </button>
                     <button class="suggestion-btn" onclick="askQuestion(1)">
-                        <strong>Q1:</strong> What is the status of order 123? (List orders with product xxx not shipped yet)
+                        <strong>Q1:</strong> List orders with product xxx not shipped yet
                     </button>
                     <button class="suggestion-btn" onclick="askQuestion(2)">
-                        <strong>Q2:</strong> What is the current on-hand stock for SKU 123 at plant 4001, and how many open orders exist against it?
+                        <strong>Q2:</strong> On-hand stock for SKU 123 at plant 4001?
                     </button>
                 </div>
             </div>
@@ -477,7 +510,7 @@
             const loader = document.createElement('div');
             loader.id = 'loading';
             loader.className = 'message ai-message';
-            loader.innerHTML = \`
+            loader.innerHTML = `
                 <div class="bubble ai-bubble" style="background: transparent; border: none; padding-left: 0;">
                     <div class="typing-indicator">
                         <div class="dot"></div>
@@ -485,7 +518,7 @@
                         <div class="dot"></div>
                     </div>
                 </div>
-            \`;
+            `;
             chatContainer.appendChild(loader);
             scrollToBottom();
         }
@@ -507,7 +540,7 @@
             
             if (qNum === 1) {
                 userText = 'What is the status of order 123? Give me a list of all orders with product xxx that have not shipped yet.';
-                aiResponse = \`
+                aiResponse = `
                     <div class="card">
                         <div class="card-header">
                             <strong>📦 Order Status & Unshipped Products</strong>
@@ -543,10 +576,10 @@
                         <button class="chip" onclick="handleSendText('Release credit hold for Order 128')">Release credit hold for #128</button>
                         <button class="chip" onclick="handleSendText('When will material be available for #135?')">When will material be available for #135?</button>
                     </div>
-                \`;
+                `;
             } else if (qNum === 2) {
                 userText = 'What is the current on-hand stock (in cases) for SKU [123] at plant/warehouse [4001], and how many open orders exist against it?';
-                aiResponse = \`
+                aiResponse = `
                     <div class="card">
                         <div class="card-header">
                             <strong>🏭 Inventory Analysis: SKU 123 at Plant 4001</strong>
@@ -576,7 +609,75 @@
                         <button class="chip" onclick="handleSendText('Show me the breakdown of the open orders')">Show breakdown of open orders</button>
                         <button class="chip" onclick="handleSendText('Check stock for SKU 124 at Plant 4001')">Check stock for SKU 124</button>
                     </div>
-                \`;
+                `;
+            } else if (qNum === 3) {
+                userText = 'Where is Order #12345?';
+                aiResponse = `
+                    <div class="card">
+                        <div class="card-header" style="font-size: 18px; padding-bottom: 12px; border-bottom: none;">
+                            <strong>Order #12345 Status</strong>
+                        </div>
+                        <div class="card-body" style="padding-top: 0;">
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 50%;"></div>
+                                </div>
+                                <div class="progress-labels">
+                                    <span>Ordered</span>
+                                    <span>Shipped</span>
+                                    <span class="active">In Transit</span>
+                                    <span>Delivered</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="label">📍 Origin</span>
+                                    <span class="value">Florence, SC <br><small style="color:#666;">2023-10-26</small></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">📍 Destination</span>
+                                    <span class="value">Oak Brook, IL <br><small style="color:#666;">Memphis, TN</small></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">🚚 Carrier</span>
+                                    <span class="value">DHL Express</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">📅 Estimated Delivery</span>
+                                    <span class="value">Oct 29, 2023</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="follow-up-chips">
+                        <button class="chip" onclick="askQuestion(4)">Why is it delayed?</button>
+                        <button class="chip" onclick="handleSendText('View on full map')">View on full map</button>
+                        <button class="chip" onclick="handleSendText('Request proof of delivery')">Request proof of delivery</button>
+                        <button class="chip" onclick="handleSendText('Contact carrier')">Contact carrier</button>
+                    </div>
+                `;
+            } else if (qNum === 4) {
+                userText = 'Why is it delayed?';
+                aiResponse = `
+                    <div class="card">
+                        <div class="card-header" style="background-color: #fef3c7; border-bottom: 1px solid #fde68a;">
+                            <strong>⚠️ Transit Delay for Order #12345</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Order <strong>#12345</strong> (Processed Potato Flakes, 22 Tons) from <strong>Florenceville-Bristol, NB</strong> to <strong>Mississauga, ON</strong> is currently delayed in transit.</p>
+                            <p>Due to <strong>severe winter weather conditions</strong> along the <strong>Trans-Canada Highway (Hwy 2) near Montreal, QC</strong>, the shipment carrier (<strong>Bison Transport</strong>) has implemented mandatory rest stops and slower transit speeds for safety.</p>
+                            <p>The estimated delivery date has been updated to <strong>Tuesday, October 26, 11:30 AM</strong> (originally Oct 24, 4:00 PM).</p>
+                            <p>We are closely monitoring the situation.</p>
+                            <p style="margin-top: 16px;">Tracking Link: <a href="#" style="color: #0284c7; text-decoration: underline;">[Track #T987654321]</a></p>
+                        </div>
+                    </div>
+                    <div class="follow-up-chips">
+                        <button class="chip" onclick="handleSendText('Are there any other shipments affected by this storm?')">Check other affected shipments</button>
+                        <button class="chip" onclick="handleSendText('Alert the receiving warehouse')">Alert receiving warehouse</button>
+                    </div>
+                `;
             }
             
             appendUserMessage(userText);
@@ -585,7 +686,7 @@
             setTimeout(() => {
                 hideLoading();
                 appendAIMessage(aiResponse);
-            }, 1500);
+            }, 1000);
         }
 
         function handleSendText(text) {
