@@ -209,13 +209,32 @@
         }
 
         .user-message .bubble {
-            background-color: #f3f4f6;
-            color: var(--text-main);
+            background-color: var(--primary); /* McCain yellow */
+            color: #000000;
+            font-weight: 500;
             border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 5px rgba(255, 179, 0, 0.2);
         }
 
         .ai-bubble {
             max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .ai-bubble-text {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 20px;
+            border-bottom-left-radius: 4px;
+            font-size: 15px;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            line-height: 1.5;
         }
 
         /* Cards inside AI Bubble */
@@ -541,6 +560,7 @@
             if (qNum === 1) {
                 userText = 'What is the status of order 123? Give me a list of all orders with product xxx that have not shipped yet.';
                 aiResponse = `
+                    <div class="ai-bubble-text">I've checked the status for Order #123 and found 3 other unshipped orders for Product XXX. Here are the details:</div>
                     <div class="card">
                         <div class="card-header">
                             <strong>📦 Order Status & Unshipped Products</strong>
@@ -580,6 +600,7 @@
             } else if (qNum === 2) {
                 userText = 'What is the current on-hand stock (in cases) for SKU [123] at plant/warehouse [4001], and how many open orders exist against it?';
                 aiResponse = `
+                    <div class="ai-bubble-text">Here is the current inventory analysis for SKU 123 at Plant 4001:</div>
                     <div class="card">
                         <div class="card-header">
                             <strong>🏭 Inventory Analysis: SKU 123 at Plant 4001</strong>
@@ -613,6 +634,7 @@
             } else if (qNum === 3) {
                 userText = 'Where is Order #12345?';
                 aiResponse = `
+                    <div class="ai-bubble-text">Here is the latest status for Order #12345:</div>
                     <div class="card">
                         <div class="card-header" style="font-size: 18px; padding-bottom: 12px; border-bottom: none;">
                             <strong>Order #12345 Status</strong>
@@ -661,6 +683,7 @@
             } else if (qNum === 4) {
                 userText = 'Why is it delayed?';
                 aiResponse = `
+                    <div class="ai-bubble-text">Order #12345 is currently experiencing a transit delay. Here is the latest update:</div>
                     <div class="card">
                         <div class="card-header" style="background-color: #fef3c7; border-bottom: 1px solid #fde68a;">
                             <strong>⚠️ Transit Delay for Order #12345</strong>
