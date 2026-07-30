@@ -642,7 +642,7 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-                function askQuestion(qNum) {
+                        function askQuestion(qNum) {
             if(initialState) initialState.style.display = 'none';
             
             let userText = '';
@@ -651,118 +651,114 @@
             if (qNum === 1) {
                 userText = 'What is the status of order 123? Give me a list of all orders with product xxx that have not shipped yet.';
                 aiResponse = `
-                    <div class="ai-text-content">I've checked the status for Order #123 and found 3 other unshipped orders for Product XXX. Here are the details:</div>
+                    <div class="ai-text-content">I've checked the status for Order 123 and found 3 other unshipped orders for Product XXX. Here are the details:</div>
                     <div class="data-card" style="width: 100%;">
                         <div class="data-card-header">
-                            <span class="data-card-title">📦 Order Status & Unshipped Products</span>
+                            <span class="data-card-title">Order 123 · Unshipped Products</span>
+                            <span class="status-badge healthy" style="background-color: #f3f4f6; color: #4b5563; border-color: #d1d5db;">PROCESSING</span>
                         </div>
                         <div class="data-card-body">
-                            <p style="font-size: 13px; margin-bottom: 12px;">Order <strong>#123</strong> is currently <strong>Processing</strong> at warehouse WH-04. It has not shipped yet.</p>
-                            <div class="progress-container">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 33%;"></div>
-                                </div>
-                                <div class="progress-labels">
-                                    <span>Received</span>
-                                    <span class="active">Processing</span>
-                                    <span>Shipped</span>
-                                    <span>Delivered</span>
-                                </div>
-                            </div>
-                            <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
-                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Unshipped Orders for Product XXX:</strong><br>Besides Order #123, there are 3 other orders pending shipment:</p>
                             <table class="data-table">
                                 <tr>
-                                    <td class="label">Order #124</td>
+                                    <td class="label">Current Status (Order 123)</td>
+                                    <td class="value">Processing at WH-04</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Order 124 (Product XXX)</td>
                                     <td class="value">Scheduled to load: Oct 26</td>
                                 </tr>
                                 <tr>
-                                    <td class="label">Order #128</td>
-                                    <td class="value">Credit Hold</td>
+                                    <td class="label">Order 128 (Product XXX)</td>
+                                    <td class="value" style="color: #dc2626;">Credit Hold</td>
                                 </tr>
                                 <tr>
-                                    <td class="label">Order #135</td>
+                                    <td class="label">Order 135 (Product XXX)</td>
                                     <td class="value">Pending material availability</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
+                    <div class="ai-text-content" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
+                        <strong>Source: ERP Order Management System</strong>
+                    </div>
                     <div class="follow-up-chips">
                         <button class="chip" onclick="handleSendText('Release credit hold for Order 128')">Release credit hold for #128</button>
                         <button class="chip" onclick="handleSendText('When will material be available for #135?')">When will material be available for #135?</button>
+                    </div>
+                    <div class="bubble-footer">
+                        <span>Data as of 14:00 (refreshed every 2h)</span>
+                        <a href="#">View SQL</a>
+                        <span style="cursor: pointer;">▲ helpful</span>
                     </div>
                 `;
             } else if (qNum === 2) {
                 userText = 'What is the current on-hand stock (in cases) for SKU [123] at plant/warehouse [4001], and how many open orders exist against it?';
                 aiResponse = `
-                    <div class="ai-text-content">Here is the current inventory analysis for SKU 123 at Plant 4001:</div>
+                    <div class="ai-text-content">Here is the current inventory analysis for <strong>SKU 123</strong> at <strong>Plant 4001</strong>. There is sufficient stock on hand to fulfill all current open orders.</div>
                     <div class="data-card" style="width: 100%;">
                         <div class="data-card-header">
-                            <span class="data-card-title">🏭 Inventory Analysis: SKU 123 at Plant 4001</span>
+                            <span class="data-card-title">Inventory Analysis · SKU 123</span>
+                            <span class="status-badge healthy">HEALTHY</span>
                         </div>
                         <div class="data-card-body">
-                            <div class="stats-grid">
-                                <div class="stat-box">
-                                    <span class="stat-label">On-Hand Stock (Cases)</span>
-                                    <span class="stat-value">12,450</span>
-                                </div>
-                                <div class="stat-box">
-                                    <span class="stat-label">Open Orders (Cases)</span>
-                                    <span class="stat-value">3,200</span>
-                                </div>
-                                <div class="stat-box">
-                                    <span class="stat-label">Available to Promise</span>
-                                    <span class="stat-value highlight">9,250</span>
-                                </div>
-                            </div>
-                            <p style="font-size: 13px; color: var(--text-secondary); margin-top: 16px;">
-                                <strong>Status: <span style="color: #059669;">Healthy</span></strong><br>
-                                There is sufficient stock on hand to fulfill all current open orders for SKU 123 at Plant 4001. No shortages are projected for the next 14 days based on current demand.
-                            </p>
+                            <table class="data-table">
+                                <tr>
+                                    <td class="label">On-Hand Stock</td>
+                                    <td class="value">12,450 cases</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Open Orders</td>
+                                    <td class="value">3,200 cases</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Available to Promise</td>
+                                    <td class="value">9,250 cases</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Projected Shortages (14 days)</td>
+                                    <td class="value">None</td>
+                                </tr>
+                            </table>
                         </div>
+                    </div>
+                    <div class="ai-text-content" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
+                        <strong>Source: Global Inventory Dashboard</strong>
                     </div>
                     <div class="follow-up-chips">
                         <button class="chip" onclick="handleSendText('Show me the breakdown of the open orders')">Show breakdown of open orders</button>
                         <button class="chip" onclick="handleSendText('Check stock for SKU 124 at Plant 4001')">Check stock for SKU 124</button>
                     </div>
+                    <div class="bubble-footer">
+                        <span>Data as of 14:00 (refreshed every 2h)</span>
+                        <a href="#">View SQL</a>
+                        <span style="cursor: pointer;">▲ helpful</span>
+                    </div>
                 `;
             } else if (qNum === 3) {
                 userText = 'Where is Order #12345?';
                 aiResponse = `
-                    <div class="ai-text-content">Here is the latest status for Order #12345:</div>
+                    <div class="ai-text-content">Order <strong>12345</strong> is currently in transit. The delivery is proceeding as scheduled.</div>
                     <div class="data-card" style="width: 100%;">
                         <div class="data-card-header">
-                            <span class="data-card-title">Order #12345 Status</span>
+                            <span class="data-card-title">Order 12345 · In Transit</span>
                             <span class="status-badge healthy">IN TRANSIT</span>
                         </div>
                         <div class="data-card-body">
-                            <div class="progress-container">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 50%;"></div>
-                                </div>
-                                <div class="progress-labels">
-                                    <span>Ordered</span>
-                                    <span>Shipped</span>
-                                    <span class="active">In Transit</span>
-                                    <span>Delivered</span>
-                                    <span>Completed</span>
-                                </div>
-                            </div>
-                            <table class="data-table" style="margin-top: 24px;">
+                            <table class="data-table">
                                 <tr>
-                                    <td class="label">📍 Origin</td>
-                                    <td class="value">Florence, SC <br><span style="font-size: 11px; font-weight: normal; color: var(--text-secondary);">2023-10-26</span></td>
+                                    <td class="label">Origin</td>
+                                    <td class="value">Florence, SC (Departed Oct 26)</td>
                                 </tr>
                                 <tr>
-                                    <td class="label">📍 Destination</td>
-                                    <td class="value">Oak Brook, IL <br><span style="font-size: 11px; font-weight: normal; color: var(--text-secondary);">Memphis, TN</span></td>
+                                    <td class="label">Destination</td>
+                                    <td class="value">Oak Brook, IL</td>
                                 </tr>
                                 <tr>
-                                    <td class="label">🚚 Carrier</td>
+                                    <td class="label">Carrier</td>
                                     <td class="value">DHL Express</td>
                                 </tr>
                                 <tr>
-                                    <td class="label">📅 Estimated Delivery</td>
+                                    <td class="label">Estimated Delivery</td>
                                     <td class="value">Oct 29, 2023</td>
                                 </tr>
                             </table>
@@ -774,25 +770,56 @@
                         <button class="chip" onclick="handleSendText('Request proof of delivery')">Request proof of delivery</button>
                         <button class="chip" onclick="handleSendText('Contact carrier')">Contact carrier</button>
                     </div>
+                    <div class="bubble-footer">
+                        <span>Data as of 14:00 (refreshed every 2h)</span>
+                        <a href="#">View SQL</a>
+                        <span style="cursor: pointer;">▲ helpful</span>
+                    </div>
                 `;
             } else if (qNum === 4) {
                 userText = 'Why is it delayed?';
                 aiResponse = `
-                    <div class="ai-text-content">Order #12345 is currently experiencing a transit delay. Here is the latest update:</div>
-                    <div class="data-card" style="width: 100%; border-color: #fde68a;">
-                        <div class="data-card-header" style="background-color: #fef3c7; border-bottom-color: #fde68a;">
-                            <span class="data-card-title">⚠️ Transit Delay for Order #12345</span>
+                    <div class="ai-text-content">
+                        Order <strong>12345</strong> (Processed Potato Flakes) is currently <strong>delayed</strong> in transit. Due to severe winter weather conditions along the Trans-Canada Highway, the carrier has implemented mandatory rest stops.
+                    </div>
+                    <div class="data-card" style="width: 100%;">
+                        <div class="data-card-header">
+                            <span class="data-card-title">Order 12345 · Transit Exception</span>
+                            <span class="status-badge delayed">DELAYED</span>
                         </div>
-                        <div class="data-card-body" style="font-size: 13px; line-height: 1.6;">
-                            <p>Order <strong>#12345</strong> (Processed Potato Flakes, 22 Tons) from <strong>Florenceville-Bristol, NB</strong> to <strong>Mississauga, ON</strong> is currently delayed in transit.</p>
-                            <p style="margin-top: 12px;">Due to <strong>severe winter weather conditions</strong> along the <strong>Trans-Canada Highway (Hwy 2) near Montreal, QC</strong>, the shipment carrier (<strong>Bison Transport</strong>) has implemented mandatory rest stops and slower transit speeds for safety.</p>
-                            <p style="margin-top: 12px;">The estimated delivery date has been updated to <strong>Tuesday, October 26, 11:30 AM</strong> (originally Oct 24, 4:00 PM).</p>
-                            <p style="margin-top: 12px; color: #0284c7; text-decoration: underline; cursor: pointer;">[Track #T987654321]</p>
+                        <div class="data-card-body">
+                            <table class="data-table">
+                                <tr>
+                                    <td class="label">Status</td>
+                                    <td class="value" style="color: #dc2626;">Delayed / Weather Exception</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Carrier</td>
+                                    <td class="value">Bison Transport [Track #T987654321]</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Location</td>
+                                    <td class="value">Near Montreal, QC</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Updated Delivery Date</td>
+                                    <td class="value">Oct 26, 11:30 AM (originally Oct 24)</td>
+                                </tr>
+                            </table>
                         </div>
+                    </div>
+                    <div class="ai-text-content" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
+                        On returns: for a delayed/short delivery, the customer may request a credit or re-delivery within the agreed window.<br>
+                        <strong>Source: Returns & Quality Policy · §3.2</strong>
                     </div>
                     <div class="follow-up-chips">
                         <button class="chip" onclick="handleSendText('Are there any other shipments affected by this storm?')">Check other affected shipments</button>
                         <button class="chip" onclick="handleSendText('Alert the receiving warehouse')">Alert receiving warehouse</button>
+                    </div>
+                    <div class="bubble-footer">
+                        <span>Data as of 14:00 (refreshed every 2h)</span>
+                        <a href="#">View SQL</a>
+                        <span style="cursor: pointer;">▲ helpful</span>
                     </div>
                 `;
             }
