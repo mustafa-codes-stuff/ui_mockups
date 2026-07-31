@@ -217,7 +217,7 @@
         }
 
         .bubble-user {
-            background-color: var(--primary); /* Keep McCain yellow */
+            background-color: var(--primary);
             color: #000000;
             padding: 12px 20px;
             border-radius: 16px;
@@ -288,6 +288,12 @@
             color: #059669;
             background-color: #ecfdf5;
             border-color: #6ee7b7;
+        }
+        
+        .status-badge.neutral {
+            color: #4b5563;
+            background-color: #f3f4f6;
+            border-color: #d1d5db;
         }
 
         .data-card-body {
@@ -370,7 +376,7 @@
         }
 
         .send-btn {
-            background-color: #dc2626; /* Using a distinct color for send like the ref */
+            background-color: #dc2626;
             color: white;
             border: none;
             border-radius: 20px;
@@ -393,7 +399,6 @@
             margin-top: 12px;
         }
 
-        
         /* Chips */
         .follow-up-chips {
             display: flex;
@@ -419,68 +424,15 @@
             background-color: #f9fafb;
             border-color: #d1d5db;
         }
-        
-        /* Progress Bar */
-        .progress-container {
-            margin: 24px 0;
-            width: 100%;
-        }
 
-        .progress-bar {
-            height: 8px;
-            background-color: #e5e7eb;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 12px;
-            display: flex;
+        .chip.demo-chip {
+            background-color: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1d4ed8;
         }
         
-        .progress-fill {
-            height: 100%;
-            background-color: var(--primary);
-        }
-
-        .progress-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .progress-labels span.active {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-        
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-bottom: 16px;
-        }
-
-        .stat-box {
-            background-color: #f9fafb;
-            padding: 16px;
-            border-radius: 8px;
-            border: 1px solid #f3f4f6;
-        }
-
-        .stat-label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .stat-value.highlight {
-            color: #b37d00;
+        .chip.demo-chip:hover {
+            background-color: #dbeafe;
         }
 
         /* Initial Screen */
@@ -527,7 +479,6 @@
 <body>
 
     <div class="app-container">
-        
         <!-- Header -->
         <header class="header">
             <div class="header-left">
@@ -552,32 +503,23 @@
             <!-- Sidebar -->
             <aside class="sidebar">
                 <div class="sidebar-section">
-                    <div class="sidebar-title">FAQS</div>
-                    <button class="nav-btn" onclick="askQuestion(3)">Where is order [ID]?</button>
-                    <button class="nav-btn" onclick="askQuestion(1)">Which orders haven't shipped?</button>
-                    <button class="nav-btn">What's the returns policy?</button>
-                    <button class="nav-btn">Orders below reorder point</button>
-                </div>
-                
-                <div class="sidebar-section">
-                    <div class="sidebar-title">RECENT</div>
-                    <button class="nav-btn active" onclick="askQuestion(3)">Status of order 4500123</button>
-                    <button class="nav-btn" onclick="askQuestion(2)">Top 5 SKUs by revenue</button>
-                    <button class="nav-btn">Shortages for GB last week</button>
+                    <div class="sidebar-title">DEMO SCENARIOS</div>
+                    <button class="nav-btn" onclick="askMainQuestion('Q1')">Q1: Order Status</button>
+                    <button class="nav-btn" onclick="askMainQuestion('Q2')">Q2: Inventory Analysis</button>
+                    <button class="nav-btn" onclick="askMainQuestion('Q3')">Q3: Shortage Orders</button>
                 </div>
             </aside>
 
             <!-- Chat Area -->
             <main class="chat-main">
                 <div class="chat-container" id="chat-container">
-                                        <div id="initial-state">
-                        <div class="initial-title">Where is my order? <br>Just ask.</div>
-                        <div style="text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 32px;">Your Supply Chain AI Assistant is here to provide instant updates.</div>
-                        <div class="initial-suggestions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 800px; margin: 0 auto;">
-                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askQuestion(3)"><strong>Where is Order #12345?</strong><br><span style="color: #6b7280; font-size: 12px;">Track current location</span></button>
-                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askQuestion(4)"><strong>Why is Order #12345 delayed?</strong><br><span style="color: #6b7280; font-size: 12px;">Check exceptions and alerts</span></button>
-                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askQuestion(1)"><strong>Q1: Unshipped products</strong><br><span style="color: #6b7280; font-size: 12px;">List orders with product xxx not shipped</span></button>
-                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askQuestion(2)"><strong>Q2: On-hand stock</strong><br><span style="color: #6b7280; font-size: 12px;">Check SKU 123 at plant 4001</span></button>
+                    <div id="initial-state">
+                        <div class="initial-title">Supply Chain Assistant <br>Interactive Demo</div>
+                        <div style="text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 32px;">Select a question below to explore the different logic scenarios.</div>
+                        <div class="initial-suggestions" style="display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 600px; margin: 0 auto;">
+                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askMainQuestion('Q1')"><strong>What is the status of order [ID]?</strong><br><span style="color: #6b7280; font-size: 12px;">Tests 8 different SAP order states (Cancelled, Blocked, Shipped, etc)</span></button>
+                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askMainQuestion('Q2')"><strong>What is the on-hand stock for SKU [123] at plant [4001]?</strong><br><span style="color: #6b7280; font-size: 12px;">Tests 3 different inventory status scenarios</span></button>
+                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askMainQuestion('Q3')"><strong>Show orders with shortages for [sales org]</strong><br><span style="color: #6b7280; font-size: 12px;">Tests 3 different shortage identification scenarios</span></button>
                         </div>
                     </div>
                 </div>
@@ -595,264 +537,8 @@
         </div>
     </div>
 
-    <script>
-        const chatContainer = document.getElementById('chat-container');
-        const initialState = document.getElementById('initial-state');
-        const chatInput = document.getElementById('chat-input');
+    <!-- Data generation script -->
+    <script src="scenarios.js"></script>
 
-        function appendUserMessage(text) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message user-message';
-            msgDiv.innerHTML = `<div class="bubble-user">${text}</div>`;
-            chatContainer.appendChild(msgDiv);
-            scrollToBottom();
-        }
-
-        function appendAIMessage(htmlContent) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message ai-message';
-            msgDiv.innerHTML = `<div class="bubble-ai">${htmlContent}</div>`;
-            chatContainer.appendChild(msgDiv);
-            scrollToBottom();
-        }
-
-        function showLoading() {
-            const loader = document.createElement('div');
-            loader.id = 'loading';
-            loader.className = 'message ai-message';
-            loader.innerHTML = `
-                <div class="bubble-ai" style="padding: 12px 20px; max-width: 80px;">
-                    <div class="typing-indicator">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
-                </div>
-            `;
-            chatContainer.appendChild(loader);
-            scrollToBottom();
-        }
-
-        function hideLoading() {
-            const loader = document.getElementById('loading');
-            if(loader) loader.remove();
-        }
-        
-        function scrollToBottom() {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-                        function askQuestion(qNum) {
-            if(initialState) initialState.style.display = 'none';
-            
-            let userText = '';
-            let aiResponse = '';
-            
-            if (qNum === 1) {
-                userText = 'What is the status of order 123? Give me a list of all orders with product xxx that have not shipped yet.';
-                aiResponse = `
-                    <div class="ai-text-content">I've checked the status for Order 123 and found 3 other unshipped orders for Product XXX. Here are the details:</div>
-                    <div class="data-card" style="width: 100%;">
-                        <div class="data-card-header">
-                            <span class="data-card-title">Order 123 · Unshipped Products</span>
-                            <span class="status-badge healthy" style="background-color: #f3f4f6; color: #4b5563; border-color: #d1d5db;">PROCESSING</span>
-                        </div>
-                        <div class="data-card-body">
-                            <table class="data-table">
-                                <tr>
-                                    <td class="label">Current Status (Order 123)</td>
-                                    <td class="value">Processing at WH-04</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Order 124 (Product XXX)</td>
-                                    <td class="value">Scheduled to load: Oct 26</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Order 128 (Product XXX)</td>
-                                    <td class="value" style="color: #dc2626;">Credit Hold</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Order 135 (Product XXX)</td>
-                                    <td class="value">Pending material availability</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="ai-text-content" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
-                        <strong>Source: ERP Order Management System</strong>
-                    </div>
-                    <div class="follow-up-chips">
-                        <button class="chip" onclick="handleSendText('Release credit hold for Order 128')">Release credit hold for #128</button>
-                        <button class="chip" onclick="handleSendText('When will material be available for #135?')">When will material be available for #135?</button>
-                    </div>
-                    <div class="bubble-footer">
-                        <span>Data as of 14:00 (refreshed every 2h)</span>
-                        <a href="#">View SQL</a>
-                        <span style="cursor: pointer;">▲ helpful</span>
-                    </div>
-                `;
-            } else if (qNum === 2) {
-                userText = 'What is the current on-hand stock (in cases) for SKU [123] at plant/warehouse [4001], and how many open orders exist against it?';
-                aiResponse = `
-                    <div class="ai-text-content">Here is the current inventory analysis for <strong>SKU 123</strong> at <strong>Plant 4001</strong>. There is sufficient stock on hand to fulfill all current open orders.</div>
-                    <div class="data-card" style="width: 100%;">
-                        <div class="data-card-header">
-                            <span class="data-card-title">Inventory Analysis · SKU 123</span>
-                            <span class="status-badge healthy">HEALTHY</span>
-                        </div>
-                        <div class="data-card-body">
-                            <table class="data-table">
-                                <tr>
-                                    <td class="label">On-Hand Stock</td>
-                                    <td class="value">12,450 cases</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Open Orders</td>
-                                    <td class="value">3,200 cases</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Available to Promise</td>
-                                    <td class="value">9,250 cases</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Projected Shortages (14 days)</td>
-                                    <td class="value">None</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="ai-text-content" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
-                        <strong>Source: Global Inventory Dashboard</strong>
-                    </div>
-                    <div class="follow-up-chips">
-                        <button class="chip" onclick="handleSendText('Show me the breakdown of the open orders')">Show breakdown of open orders</button>
-                        <button class="chip" onclick="handleSendText('Check stock for SKU 124 at Plant 4001')">Check stock for SKU 124</button>
-                    </div>
-                    <div class="bubble-footer">
-                        <span>Data as of 14:00 (refreshed every 2h)</span>
-                        <a href="#">View SQL</a>
-                        <span style="cursor: pointer;">▲ helpful</span>
-                    </div>
-                `;
-            } else if (qNum === 3) {
-                userText = 'Where is Order #12345?';
-                aiResponse = `
-                    <div class="ai-text-content">Order <strong>12345</strong> is currently in transit. The delivery is proceeding as scheduled.</div>
-                    <div class="data-card" style="width: 100%;">
-                        <div class="data-card-header">
-                            <span class="data-card-title">Order 12345 · In Transit</span>
-                            <span class="status-badge healthy">IN TRANSIT</span>
-                        </div>
-                        <div class="data-card-body">
-                            <table class="data-table">
-                                <tr>
-                                    <td class="label">Origin</td>
-                                    <td class="value">Florence, SC (Departed Oct 26)</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Destination</td>
-                                    <td class="value">Oak Brook, IL</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Carrier</td>
-                                    <td class="value">DHL Express</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Estimated Delivery</td>
-                                    <td class="value">Oct 29, 2023</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="follow-up-chips">
-                        <button class="chip" onclick="askQuestion(4)">Why is it delayed?</button>
-                        <button class="chip" onclick="handleSendText('View on full map')">View on full map</button>
-                        <button class="chip" onclick="handleSendText('Request proof of delivery')">Request proof of delivery</button>
-                        <button class="chip" onclick="handleSendText('Contact carrier')">Contact carrier</button>
-                    </div>
-                    <div class="bubble-footer">
-                        <span>Data as of 14:00 (refreshed every 2h)</span>
-                        <a href="#">View SQL</a>
-                        <span style="cursor: pointer;">▲ helpful</span>
-                    </div>
-                `;
-            } else if (qNum === 4) {
-                userText = 'Why is it delayed?';
-                aiResponse = `
-                    <div class="ai-text-content">
-                        Order <strong>12345</strong> (Processed Potato Flakes) is currently <strong>delayed</strong> in transit. Due to severe winter weather conditions along the Trans-Canada Highway, the carrier has implemented mandatory rest stops.
-                    </div>
-                    <div class="data-card" style="width: 100%;">
-                        <div class="data-card-header">
-                            <span class="data-card-title">Order 12345 · Transit Exception</span>
-                            <span class="status-badge delayed">DELAYED</span>
-                        </div>
-                        <div class="data-card-body">
-                            <table class="data-table">
-                                <tr>
-                                    <td class="label">Status</td>
-                                    <td class="value" style="color: #dc2626;">Delayed / Weather Exception</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Carrier</td>
-                                    <td class="value">Bison Transport [Track #T987654321]</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Location</td>
-                                    <td class="value">Near Montreal, QC</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Updated Delivery Date</td>
-                                    <td class="value">Oct 26, 11:30 AM (originally Oct 24)</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="ai-text-content" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
-                        On returns: for a delayed/short delivery, the customer may request a credit or re-delivery within the agreed window.<br>
-                        <strong>Source: Returns & Quality Policy · §3.2</strong>
-                    </div>
-                    <div class="follow-up-chips">
-                        <button class="chip" onclick="handleSendText('Are there any other shipments affected by this storm?')">Check other affected shipments</button>
-                        <button class="chip" onclick="handleSendText('Alert the receiving warehouse')">Alert receiving warehouse</button>
-                    </div>
-                    <div class="bubble-footer">
-                        <span>Data as of 14:00 (refreshed every 2h)</span>
-                        <a href="#">View SQL</a>
-                        <span style="cursor: pointer;">▲ helpful</span>
-                    </div>
-                `;
-            }
-            
-            appendUserMessage(userText);
-            showLoading();
-            
-            setTimeout(() => {
-                hideLoading();
-                appendAIMessage(aiResponse);
-            }, 1000);
-        }
-
-        function handleSendText(text) {
-            if(initialState) initialState.style.display = 'none';
-            appendUserMessage(text);
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                appendAIMessage("<div class='ai-text-content' style='margin-bottom:0;'>I am an interactive prototype. In a live system, I would process this request by querying SAP and Databricks.</div>");
-            }, 1000);
-        }
-
-        function handleSend() {
-            const text = chatInput.value.trim();
-            if(!text) return;
-            chatInput.value = '';
-            handleSendText(text);
-        }
-
-        function handleEnter(e) {
-            if(e.key === 'Enter') handleSend();
-        }
-    </script>
 </body>
 </html>
