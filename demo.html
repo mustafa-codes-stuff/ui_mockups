@@ -699,7 +699,46 @@
         .footer-metadata strong {
             color: #d1d5db;
         }
+
+        .inline-input-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            width: 100%;
+        }
+        .inline-input {
+            flex: 1;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 14px;
+            color: var(--text-main);
+            font-size: 13px;
+        }
+        .inline-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .inline-submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .inline-submit-btn:hover {
+            opacity: 0.9;
+        }
+        .inline-submit-btn:disabled, .inline-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     </style>
+
 </head>
 <body>
 
@@ -751,7 +790,7 @@
             </div>
 
             <!-- Fixed Input Area at bottom -->
-            <div class="input-area">
+            <div class="input-area" id="global-input-area" style="display: none;">
                 <div class="input-wrapper">
                     <button class="icon-btn">📎</button>
                     <input type="text" id="chat-input" placeholder="Ask anything about this agent..." onkeypress="handleEnter(event)">
@@ -902,7 +941,11 @@
         }
 
         function appendFollowUpActions(actions = ['Why is it delayed?', 'Get full tracking history', 'Contact Carrier', 'Alternative routes?', 'View order items', 'Update notifications']) {
-            if (!actions || actions.length === 0) return;
+            if (!actions) return;
+            if (!actions.includes('Ask something else')) {
+                actions.push('Ask something else');
+            }
+            if (actions.length === 0) return;
             let buttonsHtml = actions.map(action => `<button class="follow-up-btn" onclick="handleFollowUpClick('${action}')">${action}</button>`).join('');
             
             const msgDiv = document.createElement('div');
@@ -922,6 +965,22 @@
         }
 
         window.handleFollowUpClick = function(action) {
+            if (action === 'Ask something else') {
+                const globalInput = document.getElementById('global-input-area');
+                if (globalInput) {
+                    globalInput.style.display = 'block';
+                    document.getElementById('chat-input').focus();
+                }
+                const allFollowUps = document.querySelectorAll('.follow-up-container');
+                if(allFollowUps.length > 0) {
+                    const lastContainer = allFollowUps[allFollowUps.length - 1];
+                    const msgWrapper = lastContainer.closest('.message');
+                    if (msgWrapper) msgWrapper.style.display = 'none';
+                }
+                scrollToBottom();
+                return;
+            }
+            
             appendUserMessage(action);
             
             const allFollowUps = document.querySelectorAll('.follow-up-container');
@@ -1228,9 +1287,15 @@
                 hideLoading();
                 const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                        What SKU and plant/warehouse would you like to check inventory for?
-                        <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            What SKU and plant/warehouse would you like to check inventory for?
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" id="inline-input-INVENTORY_CHECK" placeholder="Enter SKU and Plant..." class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK')">Submit</button>
+                        </div>
                     </div>
                 `, modalId, 'INVENTORY_CHECK');
                 waitingForInput = 'INVENTORY_CHECK';
@@ -1246,9 +1311,15 @@
                 hideLoading();
                 const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                        Should I look at orders by their estimated loading date or by when the order was placed? And what date range? (Default is loading date)
-                        <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            Should I look at orders by their estimated loading date or by when the order was placed? And what date range? (Default is loading date)
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" id="inline-input-SHORTAGE_CHECK" placeholder="Enter criteria..." class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('SHORTAGE_CHECK')">Submit</button>
+                        </div>
                     </div>
                 `, modalId, 'SHORTAGE_CHECK');
                 waitingForInput = 'SHORTAGE_CHECK';
@@ -1620,6 +1691,24 @@
                 }, 1000);
             }
         }
+
+
+        window.handleInlineSend = function(state) {
+            const inputEl = document.getElementById('inline-input-' + state);
+            if(!inputEl) return;
+            const text = inputEl.value.trim();
+            if(!text) return;
+            
+            inputEl.disabled = true;
+            inputEl.nextElementSibling.disabled = true;
+            
+            handleSendText(text);
+        };
+        window.handleInlineEnter = function(event, state) {
+            if(event.key === 'Enter') {
+                handleInlineSend(state);
+            }
+        };
 
         function handleSend() {
             const text = chatInput.value.trim();
