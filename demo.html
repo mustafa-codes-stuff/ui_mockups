@@ -930,14 +930,19 @@
             if (!actions || actions.length === 0) return;
             let buttonsHtml = actions.map(action => `<button class="follow-up-btn" onclick="handleFollowUpClick('${action}')">${action}</button>`).join('');
             
-            const container = document.createElement('div');
-            container.className = 'follow-up-container';
-            container.style.marginLeft = '48px';
-            container.style.marginTop = '-8px';
-            container.innerHTML = buttonsHtml;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ai-message';
+            msgDiv.style.marginTop = '-16px'; // pull closer to previous message
+            
+            msgDiv.innerHTML = `
+                <div class="avatar-ai" style="visibility: hidden;"></div>
+                <div class="follow-up-container" style="margin-top: 0;">
+                    ${buttonsHtml}
+                </div>
+            `;
             
             const chatContainer = document.getElementById('chat-container');
-            chatContainer.appendChild(container);
+            chatContainer.appendChild(msgDiv);
             scrollToBottom();
         }
 
@@ -946,7 +951,13 @@
             
             const allFollowUps = document.querySelectorAll('.follow-up-container');
             if(allFollowUps.length > 0) {
-                allFollowUps[allFollowUps.length - 1].style.display = 'none';
+                const lastContainer = allFollowUps[allFollowUps.length - 1];
+                const msgWrapper = lastContainer.closest('.message');
+                if (msgWrapper) {
+                    msgWrapper.style.display = 'none';
+                } else {
+                    lastContainer.style.display = 'none';
+                }
             }
             
             showLoading();
