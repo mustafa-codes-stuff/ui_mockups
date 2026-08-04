@@ -869,6 +869,32 @@
                         </table>
                     </div>
                     `;
+                } else if (modalType === 'INVENTORY_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>SKU 123, Plant 4010</td><td>Stock found (1,250 cases)</td></tr>
+                            <tr><td>SKU 124, Plant 4010</td><td>Zero stock (0 cases)</td></tr>
+                            <tr><td>Any other</td><td>Not found</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'SHORTAGE_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>org 1234</td><td>Shortages found</td></tr>
+                            <tr><td>org 9999</td><td>No shortages found</td></tr>
+                            <tr><td>Any other</td><td>Invalid organization</td></tr>
+                        </table>
+                    </div>
+                    `;
                 }
             }
 
@@ -1244,61 +1270,39 @@
             }, 800);
         }
 
-        // FLOW: Inventory (Keep simple for now)
+        // FLOW: Inventory
         function startInventoryFlow() {
             if(initialState) initialState.style.display = 'none';
-            appendUserMessage("What is the on-hand stock for SKU 123 at plant 4010?");
+            appendUserMessage("Check Inventory Status");
             showLoading();
             setTimeout(() => {
                 hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
-                    <div class="ai-text-content">Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
-                    <div class="data-card" style="width: 100%;">
-                        <div class="data-card-header">
-                            <span class="data-card-title">Inventory Analysis</span>
-                            <span class="status-badge healthy">STOCK FOUND</span>
-                        </div>
-                        <div class="data-card-body">
-                            <table class="data-table">
-                                <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value">1,250 cases</td></tr>
-                                <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
-                            </table>
-                        </div>
+                    <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
+                        What SKU and plant/warehouse would you like to check inventory for?
+                        <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                     </div>
-                    <div class="footer-metadata">
-                        <span><strong>Source Tables:</strong> SAP.MARD, SAP.VBEP</span>
-                        <span><strong>Last Updated:</strong> ${getTimestamp()}</span>
-                    </div>
-                `);
+                `, modalId, 'INVENTORY_CHECK');
+                waitingForInput = 'INVENTORY_CHECK';
             }, 800);
         }
 
-        // FLOW: Shortage (Keep simple for now)
+        // FLOW: Shortage
         function startShortageFlow() {
             if(initialState) initialState.style.display = 'none';
-            appendUserMessage("Show orders with shortages for Sales Org 1234");
+            appendUserMessage("Check Shortage Orders");
             showLoading();
             setTimeout(() => {
                 hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
-                    <div class="ai-text-content">I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.</div>
-                    <div class="data-card" style="width: 100%;">
-                        <div class="data-card-header">
-                            <span class="data-card-title">Shortage Analysis</span>
-                            <span class="status-badge delayed">SHORTAGES FOUND</span>
-                        </div>
-                        <div class="data-card-body">
-                            <table class="data-table">
-                                <tr><td class="label">SAP # 450012</td><td class="value">SKU 999 (Ordered: 100, Confirmed: 50)</td></tr>
-                                <tr><td class="label">SAP # 450018</td><td class="value">SKU 888 (Ordered: 200, Confirmed: 0)</td></tr>
-                            </table>
-                        </div>
+                    <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
+                        Should I look at orders by their estimated loading date or by when the order was placed? And what date range? (Default is loading date)
+                        <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                     </div>
-                    <div class="footer-metadata">
-                        <span><strong>Source Tables:</strong> SAP.VBAK, SAP.VBAP, SAP.VBEP</span>
-                        <span><strong>Last Updated:</strong> ${getTimestamp()}</span>
-                    </div>
-                `);
+                `, modalId, 'SHORTAGE_CHECK');
+                waitingForInput = 'SHORTAGE_CHECK';
             }, 800);
         }
 
@@ -1531,6 +1535,132 @@
                             </div>
                         `, modalId, 'PRODUCT_STATUS');
                         waitingForInput = 'PRODUCT_STATUS';
+                    }, 800);
+                }
+            } else if (waitingForInput === 'INVENTORY_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('123') && input.includes('4010')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Inventory Analysis</span>
+                                    <span class="status-badge healthy">STOCK FOUND</span>
+                                </div>
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value">1,250 cases</td></tr>
+                                        <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Source Tables:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.MARD - <em>Last Updated: ${getTimestamp(1)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBEP - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Check alternate plants', 'View open orders', 'Contact Planner']);
+                    }, 800);
+                } else if (input.includes('124') && input.includes('4010')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Plant 4010 currently has 0 cases of SKU 124 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Inventory Analysis</span>
+                                    <span class="status-badge healthy">STOCK FOUND BUT ZERO</span>
+                                </div>
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value" style="color: #ef4444;">0 cases</td></tr>
+                                        <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Source Tables:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.MARD - <em>Last Updated: ${getTimestamp(1)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBEP - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Check alternate plants', 'View open orders', 'Contact Planner']);
+                    }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                        appendAIMessage(`
+                            <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
+                                Sorry, I couldn't find stock data for that plant and SKU combination. Please confirm the plant and product ID.
+                                <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                            </div>
+                        `, modalId, 'INVENTORY_CHECK');
+                        waitingForInput = 'INVENTORY_CHECK';
+                    }, 800);
+                }
+            } else if (waitingForInput === 'SHORTAGE_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('1234')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Shortage Analysis</span>
+                                    <span class="status-badge delayed">SHORTAGES FOUND</span>
+                                </div>
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        <tr><td class="label">SAP # 450012</td><td class="value">SKU 999 (Ordered: 100, Confirmed: 50)</td></tr>
+                                        <tr><td class="label">SAP # 450018</td><td class="value">SKU 888 (Ordered: 200, Confirmed: 0)</td></tr>
+                                        <tr><td class="label">...</td><td class="value">...</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Source Tables:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAP - <em>Last Updated: ${getTimestamp(3)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBEP - <em>Last Updated: ${getTimestamp(4)}</em></div>
+                                </span>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export shortage list', 'Notify Sales Team', 'Check production schedule']);
+                    }, 800);
+                } else if (input.includes('9999')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content" style="margin-bottom: 0;">Good news - I didn't find any orders with shortages that haven't shipped for the criteria you gave.</div>
+                        `);
+                        appendFollowUpActions(['Check different date range', 'Check different sales org']);
+                    }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                        appendAIMessage(`
+                            <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
+                                Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.
+                                <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                            </div>
+                        `, modalId, 'SHORTAGE_CHECK');
+                        waitingForInput = 'SHORTAGE_CHECK';
                     }, 800);
                 }
             } else {
