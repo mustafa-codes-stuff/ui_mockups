@@ -1101,34 +1101,34 @@
                         let tableSplit = data.tables.split(',');
                         let sourceTablesHtml = '';
                         if (tableSplit.length > 1) {
-                            sourceTablesHtml = \`<strong>Source Tables:</strong>\`;
+                            sourceTablesHtml = `<strong>Source Tables:</strong>`;
                             tableSplit.forEach((table, index) => {
-                                sourceTablesHtml += \`<div style="margin-top: 4px; margin-left: 8px;">\${table.trim()} - <em>Last Updated: \${getTimestamp(index * 4 + 2)}</em></div>\`;
+                                sourceTablesHtml += `<div style="margin-top: 4px; margin-left: 8px;">${table.trim()} - <em>Last Updated: ${getTimestamp(index * 4 + 2)}</em></div>`;
                             });
                         } else {
-                            sourceTablesHtml = \`<strong>Source Tables:</strong> \${data.tables} - <em>Last Updated: \${getTimestamp()}</em>\`;
+                            sourceTablesHtml = `<strong>Source Tables:</strong> ${data.tables} - <em>Last Updated: ${getTimestamp()}</em>`;
                         }
 
-                        appendAIMessage(\`
-                            <div class="ai-text-content">\${data.text}</div>
+                        appendAIMessage(`
+                            <div class="ai-text-content">${data.text}</div>
                             
-                            \${data.timeline}
+                            ${data.timeline}
 
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-header">
-                                    <span class="data-card-title">Order \${id} · \${data.title}</span>
-                                    <span class="status-badge \${data.badgeClass}">\${data.badge}</span>
+                                    <span class="data-card-title">Order ${id} · ${data.title}</span>
+                                    <span class="status-badge ${data.badgeClass}">${data.badge}</span>
                                 </div>
                                 <div class="data-card-body">
                                     <table class="data-table">
-                                        \${data.table}
+                                        ${data.table}
                                     </table>
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span>\${sourceTablesHtml}</span>
+                                <span>${sourceTablesHtml}</span>
                             </div>
-                        \`);
+                        `);
                     }, 800);
                 } else {
                     showLoading();
@@ -1136,12 +1136,12 @@
                         hideLoading();
                         
                         const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                        appendAIMessage(\`
+                        appendAIMessage(`
                             <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
                                 I'm sorry, I don't recognize that Order ID in my demo database. Please try one of the dummy IDs provided.
-                                <span class="helper-icon" onclick="toggleHelperModal('\${modalId}')">i</span>
+                                <span class="helper-icon" onclick="toggleHelperModal('${modalId}')">i</span>
                             </div>
-                        \`, modalId, 'ORDER_ID');
+                        `, modalId, 'ORDER_ID');
                         waitingForInput = 'ORDER_ID';
                     }, 800);
                 }
@@ -1153,7 +1153,7 @@
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
-                        appendAIMessage(\`
+                        appendAIMessage(`
                             <div class="ai-text-content">Here are the recent orders for <strong>Potatoes</strong> and their current statuses:</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-header">
@@ -1207,24 +1207,24 @@
                             </div>
                             <div class="footer-metadata">
                                 <span><strong>Source Tables:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: \${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAP - <em>Last Updated: \${getTimestamp(5)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: \${getTimestamp(2)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAP - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
-                        \`);
+                        `);
                     }, 800);
                 } else {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                        appendAIMessage(\`
+                        appendAIMessage(`
                             <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
                                 I'm sorry, I couldn't find any recent data for that input in this demo. Try the dummy keyword.
-                                <span class="helper-icon" onclick="toggleHelperModal('\${modalId}')">i</span>
+                                <span class="helper-icon" onclick="toggleHelperModal('${modalId}')">i</span>
                             </div>
-                        \`, modalId, 'PRODUCT_STATUS');
+                        `, modalId, 'PRODUCT_STATUS');
                         waitingForInput = 'PRODUCT_STATUS';
                     }, 800);
                 }
