@@ -724,7 +724,7 @@
                         <span style="opacity:0.5;">></span>
                     </button>
                     <button class="quick-prompt-btn" onclick="pullAllOrdersInStatus()">
-                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> Pull all orders in a particular status (Tabular View)</span>
+                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> Give me a list of all orders for a product and their status</span>
                         <span style="opacity:0.5;">></span>
                     </button>
                     <button class="quick-prompt-btn" onclick="startInventoryFlow()">
@@ -846,8 +846,9 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function getTimestamp() {
+        function getTimestamp(minusMinutes = 0) {
             const d = new Date();
+            d.setMinutes(d.getMinutes() - minusMinutes);
             const pad = (n) => n.toString().padStart(2, '0');
             return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
         }
@@ -991,24 +992,23 @@
         // FLOW: Pull all orders in status
         function pullAllOrdersInStatus() {
             if(initialState) initialState.style.display = 'none';
-            appendUserMessage("Pull all orders in a particular status (Tabular View)");
+            appendUserMessage("Give me a list of all orders for a product and their status");
             showLoading();
             setTimeout(() => {
                 hideLoading();
                 
                 appendAIMessage(`
-                    <div class="ai-text-content">I found 4 orders that are currently blocked (Credit Hold) across your authorized plants. Here is the tabular view:</div>
+                    <div class="ai-text-content">Here are the recent orders for <strong>Potatoes</strong> and their current statuses:</div>
                     <div class="data-card" style="width: 100%;">
                         <div class="data-card-header">
-                            <span class="data-card-title">All Blocked Orders (Credit Hold)</span>
-                            <span class="status-badge delayed">4 RECORDS</span>
+                            <span class="data-card-title">Order Status List: Potatoes</span>
+                            <span class="status-badge neutral">5 RECORDS</span>
                         </div>
                         <div class="data-card-body" style="padding: 0;">
                             <table class="data-table" style="text-align: left; padding: 16px;">
                                 <thead>
                                     <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
                                         <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
-                                        <th style="padding: 12px 16px; font-weight: 500;">Product</th>
                                         <th style="padding: 12px 16px; font-weight: 500;">Customer</th>
                                         <th style="padding: 12px 16px; font-weight: 500;">Plant</th>
                                         <th style="padding: 12px 16px; font-weight: 500;">Status</th>
@@ -1016,33 +1016,45 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="padding: 12px 16px;"><strong>4500123</strong></td>
-                                        <td style="padding: 12px 16px;">SKU 123 (Fries)</td>
+                                        <td style="padding: 12px 16px;"><strong>10022</strong></td>
                                         <td style="padding: 12px 16px;">Sysco (GB)</td>
                                         <td style="padding: 12px 16px;">4010</td>
-                                        <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block</td>
+                                        <td style="padding: 12px 16px; color: #6ee7b7;">Shipped</td>
                                     </tr>
                                     <tr>
-                                        <td style="padding: 12px 16px;"><strong>4500198</strong></td>
-                                        <td style="padding: 12px 16px;">SKU 444 (Wedges)</td>
+                                        <td style="padding: 12px 16px;"><strong>10023</strong></td>
                                         <td style="padding: 12px 16px;">Tesco</td>
                                         <td style="padding: 12px 16px;">4010</td>
-                                        <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block</td>
+                                        <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block (Credit Hold)</td>
                                     </tr>
                                     <tr>
-                                        <td style="padding: 12px 16px;"><strong>4500244</strong></td>
-                                        <td style="padding: 12px 16px;">SKU 123 (Fries)</td>
+                                        <td style="padding: 12px 16px;"><strong>10024</strong></td>
                                         <td style="padding: 12px 16px;">Asda</td>
                                         <td style="padding: 12px 16px;">4020</td>
-                                        <td style="padding: 12px 16px; color: #fca5a5;">Credit Hold</td>
+                                        <td style="padding: 12px 16px; color: var(--text-secondary);">Processing (No PGI)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px 16px;"><strong>10025</strong></td>
+                                        <td style="padding: 12px 16px;">Aldi</td>
+                                        <td style="padding: 12px 16px;">4010</td>
+                                        <td style="padding: 12px 16px; color: #6ee7b7;">Complete (Billed)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px 16px;"><strong>10026</strong></td>
+                                        <td style="padding: 12px 16px;">Morrisons</td>
+                                        <td style="padding: 12px 16px;">4030</td>
+                                        <td style="padding: 12px 16px; color: #fca5a5;">Cancelled</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="footer-metadata">
-                        <span><strong>Source Tables:</strong> SAP.VBAK, SAP.VBAP, SAP.KNA1</span>
-                        <span><strong>Last Updated:</strong> ${getTimestamp()}</span>
+                        <span><strong>Source Tables:</strong> 
+                            <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                            <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAP - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                            <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                        </span>
                     </div>
                 `);
             }, 1000);
