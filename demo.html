@@ -926,10 +926,19 @@
             return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
         }
 
-        function buildFollowUpActions(actions = ['Why is it delayed?', 'Get full tracking history', 'Contact Carrier', 'Alternative routes?', 'View order items', 'Update notifications']) {
-            if (!actions || actions.length === 0) return '';
+        function appendFollowUpActions(actions = ['Why is it delayed?', 'Get full tracking history', 'Contact Carrier', 'Alternative routes?', 'View order items', 'Update notifications']) {
+            if (!actions || actions.length === 0) return;
             let buttonsHtml = actions.map(action => `<button class="follow-up-btn" onclick="handleFollowUpClick('${action}')">${action}</button>`).join('');
-            return `<div class="follow-up-container">${buttonsHtml}</div>`;
+            
+            const container = document.createElement('div');
+            container.className = 'follow-up-container';
+            container.style.marginLeft = '48px';
+            container.style.marginTop = '-8px';
+            container.innerHTML = buttonsHtml;
+            
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.appendChild(container);
+            scrollToBottom();
         }
 
         window.handleFollowUpClick = function(action) {
@@ -1331,8 +1340,8 @@
                             <div class="footer-metadata">
                                 <span>${sourceTablesHtml}</span>
                             </div>
-                            ${buildFollowUpActions()}
                         `);
+                        appendFollowUpActions();
                     }, 800);
                 } else {
                     showLoading();
@@ -1397,8 +1406,8 @@
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
-                            ${buildFollowUpActions(['View all items', 'Export to Excel', 'Contact Warehouse', 'Check production schedule'])}
                         `);
+                        appendFollowUpActions(['View all items', 'Export to Excel', 'Contact Warehouse', 'Check production schedule']);
                     }, 800);
                 } else if (input.includes('fries') && input.includes('blocked')) {
                     showLoading();
@@ -1449,8 +1458,8 @@
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(5)}</em></div>
                                 </span>
                             </div>
-                            ${buildFollowUpActions(['Check credit hold details', 'Review delivery blocks', 'Contact Sales', 'Escalate to Management'])}
                         `);
+                        appendFollowUpActions(['Check credit hold details', 'Review delivery blocks', 'Contact Sales', 'Escalate to Management']);
                     }, 800);
                 } else if (input.includes('wedges') && input.includes('complete')) {
                     showLoading();
@@ -1496,8 +1505,8 @@
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.VBRK - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
-                            ${buildFollowUpActions(['Download Invoices', 'Export to Excel', 'Check payment status'])}
                         `);
+                        appendFollowUpActions(['Download Invoices', 'Export to Excel', 'Check payment status']);
                     }, 800);
                 } else {
                     showLoading();
