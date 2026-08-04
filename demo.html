@@ -558,6 +558,34 @@
             margin-top: 2px;
         }
 
+        /* Follow-up Actions */
+        .follow-up-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .follow-up-btn {
+            background-color: #facc15;
+            color: #000;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .follow-up-btn:hover {
+            background-color: #eab308;
+        }
+
+        .follow-up-btn:active {
+            transform: scale(0.98);
+        }
+
         /* Data Card */
         .data-card {
             background-color: var(--bg-card);
@@ -898,6 +926,12 @@
             return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
         }
 
+        function buildFollowUpActions(actions = ['Why is it delayed?', 'Get full tracking history', 'Contact Carrier', 'Alternative routes?', 'View order items', 'Update notifications']) {
+            if (!actions || actions.length === 0) return '';
+            let buttonsHtml = actions.map(action => `<button class="follow-up-btn">${action}</button>`).join('');
+            return `<div class="follow-up-container">${buttonsHtml}</div>`;
+        }
+
         // Timeline Builder
         function buildTimeline(stage, assignees = {}) {
             let classes = ['', '', '', '', '', ''];
@@ -1205,6 +1239,7 @@
                             <div class="footer-metadata">
                                 <span>${sourceTablesHtml}</span>
                             </div>
+                            ${buildFollowUpActions()}
                         `);
                     }, 800);
                 } else {
@@ -1270,6 +1305,7 @@
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
+                            ${buildFollowUpActions(['View all items', 'Export to Excel', 'Contact Warehouse', 'Check production schedule'])}
                         `);
                     }, 800);
                 } else if (input.includes('fries') && input.includes('blocked')) {
@@ -1321,6 +1357,7 @@
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(5)}</em></div>
                                 </span>
                             </div>
+                            ${buildFollowUpActions(['Check credit hold details', 'Review delivery blocks', 'Contact Sales', 'Escalate to Management'])}
                         `);
                     }, 800);
                 } else if (input.includes('wedges') && input.includes('complete')) {
@@ -1367,6 +1404,7 @@
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.VBRK - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
+                            ${buildFollowUpActions(['Download Invoices', 'Export to Excel', 'Check payment status'])}
                         `);
                     }, 800);
                 } else {
