@@ -1247,15 +1247,20 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                waitingForInput = 'ORDER_ID';
-                
                 const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                        Please provide the Order ID you would like me to check.
-                        <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            Please provide the Order ID you would like me to check.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" id="inline-input-ORDER_ID" placeholder="Enter Order ID..." class="inline-input" onkeypress="handleInlineEnter(event, 'ORDER_ID')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('ORDER_ID')">Submit</button>
+                        </div>
                     </div>
-                `, modalId);
+                `, modalId, 'ORDER_ID');
+                waitingForInput = 'ORDER_ID';
             }, 800);
         }
 
@@ -1266,15 +1271,20 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                waitingForInput = 'PRODUCT_STATUS';
-                
                 const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                        Which product and what status would you like me to check?
-                        <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            Which product and what status would you like me to check?
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" id="inline-input-PRODUCT_STATUS" placeholder="Enter product and status..." class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS')">Submit</button>
+                        </div>
                     </div>
                 `, modalId, 'PRODUCT_STATUS');
+                waitingForInput = 'PRODUCT_STATUS';
             }, 800);
         }
 
@@ -1385,9 +1395,15 @@
                         
                         const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                         appendAIMessage(`
-                            <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                                I'm sorry, I don't recognize that Order ID in my demo database. Please try one of the dummy IDs provided.
-                                <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                                <div style="display: flex; align-items: center;">
+                                    I'm sorry, I don't recognize that Order ID in my demo database. Please try one of the dummy IDs provided.
+                                    <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                                </div>
+                                <div class="inline-input-container">
+                                    <input type="text" id="inline-input-ORDER_ID" placeholder="Enter Order ID..." class="inline-input" onkeypress="handleInlineEnter(event, 'ORDER_ID')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('ORDER_ID')">Submit</button>
+                                </div>
                             </div>
                         `, modalId, 'ORDER_ID');
                         waitingForInput = 'ORDER_ID';
@@ -1549,9 +1565,15 @@
                         hideLoading();
                         const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                         appendAIMessage(`
-                            <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                                I'm sorry, I couldn't find any recent data for that input in this demo. Try the dummy keyword.
-                                <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                                <div style="display: flex; align-items: center;">
+                                    I'm sorry, I couldn't find any recent data for that input in this demo. Try the dummy keyword.
+                                    <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                                </div>
+                                <div class="inline-input-container">
+                                    <input type="text" id="inline-input-PRODUCT_STATUS" placeholder="Enter product and status..." class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS')">Submit</button>
+                                </div>
                             </div>
                         `, modalId, 'PRODUCT_STATUS');
                         waitingForInput = 'PRODUCT_STATUS';
@@ -1620,9 +1642,15 @@
                         hideLoading();
                         const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                         appendAIMessage(`
-                            <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                                Sorry, I couldn't find stock data for that plant and SKU combination. Please confirm the plant and product ID.
-                                <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                                <div style="display: flex; align-items: center;">
+                                    Sorry, I couldn't find stock data for that plant and SKU combination. Please confirm the plant and product ID.
+                                    <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                                </div>
+                                <div class="inline-input-container">
+                                    <input type="text" id="inline-input-INVENTORY_CHECK" placeholder="Enter SKU and Plant..." class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK')">Submit</button>
+                                </div>
                             </div>
                         `, modalId, 'INVENTORY_CHECK');
                         waitingForInput = 'INVENTORY_CHECK';
@@ -1675,9 +1703,15 @@
                         hideLoading();
                         const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                         appendAIMessage(`
-                            <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                                Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.
-                                <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                                <div style="display: flex; align-items: center;">
+                                    Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.
+                                    <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                                </div>
+                                <div class="inline-input-container">
+                                    <input type="text" id="inline-input-SHORTAGE_CHECK" placeholder="Enter criteria..." class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_CHECK')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('SHORTAGE_CHECK')">Submit</button>
+                                </div>
                             </div>
                         `, modalId, 'SHORTAGE_CHECK');
                         waitingForInput = 'SHORTAGE_CHECK';
