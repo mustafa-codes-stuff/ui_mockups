@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meridian AI Assistant - Interactive Demo</title>
+    <title>McCain Chatbot - Interactive Demo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffb300;
             --primary-hover: #e6a200;
-            --bg-outer: #d1d5db; /* gray-300 */
-            --bg-app: #f3f4f6;   /* gray-100 */
-            --bg-chat: #ffffff;
-            --bg-bubble: #f3f4f6; 
-            --text-main: #111827;
-            --text-secondary: #4b5563;
-            --border-color: #e5e7eb;
+            --bg-outer: #000000;
+            --bg-sidebar: #121212;
+            --bg-chat: #212121;
+            --bg-bubble-ai: #2f2f2f;
+            --bg-card: #2a2a2a;
+            --bg-input: #2f2f2f;
+            --text-main: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --border-color: #3f3f46;
+            --danger: #dc2626;
+            --success: #059669;
         }
 
         * {
@@ -38,163 +42,150 @@
         /* Main App Container */
         .app-container {
             width: 100%;
-            max-width: 1280px;
+            max-width: 1400px;
             height: 90vh;
-            background-color: var(--bg-app);
+            background-color: var(--bg-chat);
             border-radius: 12px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
             display: flex;
-            flex-direction: column;
             overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border-color);
-            background-color: var(--bg-app);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .header-logo img {
-            height: 36px;
-        }
-
-        .header-title-area {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .header-subtitle {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .badge {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 12px;
-        }
-        
-        .badge-role {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-        
-        .badge-region {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-
-        .avatar {
-            width: 32px;
-            height: 32px;
-            background-color: #94a3b8;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* Body Layout */
-        .main-body {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
+            border: 1px solid #333;
         }
 
         /* Sidebar */
         .sidebar {
             width: 260px;
-            background-color: var(--bg-app);
+            background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
-            padding: 24px 16px;
-            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 32px;
+            padding: 16px 0;
+        }
+
+        .sidebar-header {
+            padding: 0 16px 16px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-header .logo-text {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-nav {
+            padding: 0 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item.active {
+            background-color: rgba(255, 179, 0, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(255, 179, 0, 0.3);
+        }
+
+        .nav-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .sidebar-section {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 16px;
         }
 
         .sidebar-title {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
-            color: #6b7280;
-            letter-spacing: 0.5px;
-            padding-left: 8px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .nav-btn {
-            background-color: transparent;
-            border: 1px solid transparent;
-            color: var(--text-main);
-            font-size: 13px;
-            text-align: left;
-            padding: 10px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
+        .user-profile {
+            margin-top: auto;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid var(--border-color);
         }
-
-        .nav-btn:hover {
-            background-color: white;
-            border: 1px solid var(--border-color);
-        }
-
-        .nav-btn.active {
-            background-color: white;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        
+        .avatar-small {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #6b7280;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
         }
 
         /* Chat Area */
         .chat-main {
             flex: 1;
-            background-color: var(--bg-chat);
             position: relative;
             display: flex;
             flex-direction: column;
         }
 
+        .chat-header {
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .header-left span {
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
         .chat-container {
             flex: 1;
-            padding: 40px;
+            padding: 24px 60px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -202,39 +193,190 @@
             padding-bottom: 120px;
         }
 
+        /* Initial Empty State */
+        .initial-state {
+            max-width: 800px;
+            margin: 40px auto 0 auto;
+            width: 100%;
+        }
+        
+        .initial-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .initial-header .ai-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary);
+            color: #000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .initial-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .quick-prompts-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-top: 40px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .quick-prompt-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            padding: 12px 0;
+            font-size: 14px;
+            text-align: left;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .quick-prompt-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Input Area */
+        .input-area {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px 60px;
+            background: linear-gradient(transparent, var(--bg-chat) 20%);
+        }
+
+        .input-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 8px 16px;
+        }
+        
+        .input-wrapper:focus-within {
+            border-color: #6b7280;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            border: none;
+            padding: 10px 12px;
+            font-size: 14px;
+            outline: none;
+            background: transparent;
+            color: var(--text-main);
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn {
+            background-color: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        /* Beta Ribbon */
+        .beta-ribbon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #dc2626;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 30px;
+            transform: rotate(-45deg) translate(20px, 15px);
+            transform-origin: bottom right;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
         /* Messages */
         .message {
             display: flex;
             width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            gap: 16px;
         }
 
         .user-message {
             justify-content: flex-end;
+            margin-bottom: 24px;
         }
 
         .ai-message {
             justify-content: flex-start;
         }
+        
+        .avatar-ai {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
 
         .bubble-user {
-            background-color: var(--primary);
-            color: #000000;
+            background-color: transparent;
+            color: var(--text-main);
             padding: 12px 20px;
             border-radius: 16px;
-            border-bottom-right-radius: 4px;
+            border: 1px solid var(--primary);
             font-size: 14px;
-            font-weight: 500;
             max-width: 70%;
-            box-shadow: 0 2px 4px rgba(255, 179, 0, 0.2);
             line-height: 1.5;
         }
 
         .bubble-ai {
-            background-color: var(--bg-bubble);
+            background-color: var(--bg-bubble-ai);
             border: 1px solid var(--border-color);
-            padding: 20px;
-            border-radius: 16px;
-            border-top-left-radius: 4px;
+            padding: 16px;
+            border-radius: 12px;
             font-size: 14px;
             color: var(--text-main);
             max-width: 800px;
@@ -246,9 +388,9 @@
             margin-bottom: 16px;
         }
 
-        /* Internal Card within AI Bubble */
+        /* Data Card */
         .data-card {
-            background-color: #ffffff;
+            background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             overflow: hidden;
@@ -258,7 +400,7 @@
         .data-card-header {
             padding: 12px 16px;
             border-bottom: 1px dashed var(--border-color);
-            background-color: #fafafa;
+            background-color: rgba(0,0,0,0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -279,21 +421,21 @@
         }
         
         .status-badge.delayed {
-            color: #dc2626;
-            background-color: #fef2f2;
-            border-color: #fca5a5;
+            color: #fca5a5;
+            background-color: rgba(220, 38, 38, 0.2);
+            border-color: #dc2626;
         }
         
         .status-badge.healthy {
-            color: #059669;
-            background-color: #ecfdf5;
-            border-color: #6ee7b7;
+            color: #6ee7b7;
+            background-color: rgba(5, 150, 105, 0.2);
+            border-color: #059669;
         }
         
         .status-badge.neutral {
-            color: #4b5563;
-            background-color: #f3f4f6;
-            border-color: #d1d5db;
+            color: #9ca3af;
+            background-color: rgba(75, 85, 99, 0.2);
+            border-color: #4b5563;
         }
 
         .data-card-body {
@@ -308,7 +450,7 @@
 
         .data-table td {
             padding: 8px 0;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .data-table tr:last-child td {
@@ -324,81 +466,6 @@
             font-weight: 500;
         }
 
-        .bubble-footer {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 12px;
-            display: flex;
-            gap: 16px;
-        }
-
-        .bubble-footer a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        /* Input Area */
-        .input-area {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 24px;
-            background: linear-gradient(transparent, var(--bg-chat) 20%);
-        }
-
-        .input-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            display: flex;
-            align-items: center;
-            background-color: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 6px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            transition: box-shadow 0.2s, border-color 0.2s;
-        }
-
-        .input-wrapper:focus-within {
-            border-color: #d1d5db;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-        }
-
-        .input-wrapper input {
-            flex: 1;
-            border: none;
-            padding: 10px 20px;
-            font-size: 14px;
-            outline: none;
-            background: transparent;
-        }
-
-        .send-btn {
-            background-color: #dc2626;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 8px 20px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            margin-right: 4px;
-            transition: background-color 0.2s;
-        }
-
-        .send-btn:hover {
-            background-color: #b91c1c;
-        }
-
-        .input-footer {
-            text-align: center;
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 12px;
-        }
-
         /* Chips */
         .follow-up-chips {
             display: flex;
@@ -408,7 +475,7 @@
         }
 
         .chip {
-            background-color: #ffffff;
+            background-color: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-main);
             padding: 8px 16px;
@@ -417,39 +484,21 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .chip:hover {
-            background-color: #f9fafb;
-            border-color: #d1d5db;
+            background-color: rgba(255,255,255,0.05);
+            border-color: #6b7280;
         }
 
         .chip.demo-chip {
-            background-color: #eff6ff;
-            border-color: #bfdbfe;
-            color: #1d4ed8;
+            background-color: rgba(255, 179, 0, 0.1);
+            border-color: rgba(255, 179, 0, 0.3);
+            color: var(--primary);
         }
         
         .chip.demo-chip:hover {
-            background-color: #dbeafe;
-        }
-
-        /* Initial Screen */
-        .initial-suggestions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-width: 600px;
-            margin: 0 auto;
-            margin-top: 40px;
-        }
-        
-        .initial-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 24px;
+            background-color: rgba(255, 179, 0, 0.2);
         }
 
         /* Loading */
@@ -479,400 +528,446 @@
 <body>
 
     <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-left">
-                <div class="header-logo">
-                    <img src="https://en.wikipedia.org/wiki/Special:FilePath/McCain-Logo.svg" alt="McCain">
-                </div>
-                <div class="header-title-area">
-                    <span class="header-title">Meridian Order Assist</span>
-                    <span class="header-subtitle">in MCX • powered by Genie + Azure AI Foundry</span>
-                </div>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div style="width:16px; height:16px; border:2px solid var(--primary); border-radius:2px;"></div>
+                <div class="logo-text">McCain.</div>
             </div>
-            <div class="header-right">
-                <span class="badge badge-role">Role: CS Agent</span>
-                <span class="badge badge-region">Region: EMENA-GB</span>
-                <div class="avatar">AK</div>
-            </div>
-        </header>
-
-        <!-- Main Body -->
-        <div class="main-body">
             
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <div class="sidebar-section">
-                    <div class="sidebar-title">DEMO SCENARIOS</div>
-                    <button class="nav-btn" onclick="askMainQuestion('Q1')">Q1: Order Status</button>
-                    <button class="nav-btn" onclick="askMainQuestion('Q2')">Q2: Inventory Analysis</button>
-                    <button class="nav-btn" onclick="askMainQuestion('Q3')">Q3: Shortage Orders</button>
-                </div>
-            </aside>
+            <div class="sidebar-nav">
+                <div class="nav-item"><span class="nav-icon">⬡</span> AI Hub</div>
+                <div class="nav-item"><span class="nav-icon">＋</span> New Chat</div>
+                <div class="nav-item"><span class="nav-icon">🔍</span> Search chats...</div>
+                <div class="nav-item"><span class="nav-icon">⚡</span> Activity</div>
+                <div class="nav-item"><span class="nav-icon">⚡</span> Actions</div>
+                <div class="nav-item"><span class="nav-icon">💬</span> My feedback</div>
+                <div class="nav-item"><span class="nav-icon">🧭</span> Explore Agents</div>
+            </div>
 
-            <!-- Chat Area -->
-            <main class="chat-main">
-                <div class="chat-container" id="chat-container">
-                    <div id="initial-state">
-                        <div class="initial-title">Supply Chain Assistant <br>Interactive Demo</div>
-                        <div style="text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 32px;">Select a question below to explore the different logic scenarios.</div>
-                        <div class="initial-suggestions" style="display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 600px; margin: 0 auto;">
-                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askMainQuestion('Q1')"><strong>What is the status of order [ID]?</strong><br><span style="color: #6b7280; font-size: 12px;">Tests 8 different SAP order states (Cancelled, Blocked, Shipped, etc)</span></button>
-                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askMainQuestion('Q2')"><strong>What is the on-hand stock for SKU [123] at plant [4001]?</strong><br><span style="color: #6b7280; font-size: 12px;">Tests 3 different inventory status scenarios</span></button>
-                            <button class="nav-btn" style="background: white; border: 1px solid var(--border-color); padding: 16px; text-align: left;" onclick="askMainQuestion('Q3')"><strong>Show orders with shortages for [sales org]</strong><br><span style="color: #6b7280; font-size: 12px;">Tests 3 different shortage identification scenarios</span></button>
-                        </div>
-                    </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title"><span>AGENTS</span><span>+</span></div>
+                <div class="sidebar-nav" style="padding:0; margin:0;">
+                    <div class="nav-item"><span class="nav-icon" style="color:var(--primary);">⬡</span> Manufacturing Assistant</div>
+                    <div class="nav-item active"><span class="nav-icon" style="color:var(--primary);">⬡</span> McCain Chatbot (GPT-4.1)</div>
                 </div>
+            </div>
 
-                <div class="input-area">
-                    <div class="input-wrapper">
-                        <input type="text" id="chat-input" placeholder="Ask about an order, delivery, stock, shortage or billing..." onkeypress="handleEnter(event)">
-                        <button class="send-btn" onclick="handleSend()">Send</button>
+            <div class="sidebar-section">
+                <div class="sidebar-title"><span>TEAMS</span><span>+</span></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title"><span>PROJECTS</span><span>+</span></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title"><span>GROUP PROJECTS</span><span>+</span></div>
+            </div>
+
+            <div class="user-profile">
+                <div class="avatar-small">SR</div>
+                <div style="font-size: 11px; font-weight: 600;">S, SUNDAR RAMAN</div>
+            </div>
+        </aside>
+
+        <!-- Chat Area -->
+        <main class="chat-main">
+            <div class="chat-header">
+                <div class="header-left">
+                    <span style="cursor:pointer;">←</span>
+                    McCain Chatbot >
+                    <span>Interactive Order Scenario Simulator</span>
+                </div>
+                <div style="display:flex; gap:16px; color:var(--text-secondary);">
+                    <span>👍</span><span>👎</span><span>🔗</span><span>•••</span>
+                </div>
+            </div>
+
+            <div class="chat-container" id="chat-container">
+                <!-- Initial State inside chat area for dark theme -->
+                <div class="initial-state" id="initial-state">
+                    <div class="initial-header">
+                        <div class="ai-icon">MC</div>
+                        <div class="initial-title">McCain Chatbot (GPT-4.1)</div>
                     </div>
-                    <div class="input-footer">
-                        Answers are grounded in governed EDP data and cite their source. The assistant is read-only and will say when it doesn't have the information.
+
+                    <!-- Input moved inside initial state visually -->
+                    <div class="input-wrapper" style="margin-bottom: 24px; width: 100%;">
+                        <button class="icon-btn">📎</button>
+                        <input type="text" placeholder="Ask anything about this agent..." readonly style="cursor: pointer;" onclick="document.getElementById('chat-input').focus()">
+                        <button class="send-btn">↑</button>
+                    </div>
+                    
+                    <div style="text-align:center; font-size: 11px; color: var(--text-secondary); margin-bottom: 24px;">
+                        📍 Upload files to get summaries, insights, and answers
+                    </div>
+
+                    <div class="quick-prompts-title">QUICK PROMPTS 3</div>
+                    <button class="quick-prompt-btn" onclick="askMainQuestion('Q1')">
+                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> What is the status of order [ID]?</span>
+                        <span style="opacity:0.5;">></span>
+                    </button>
+                    <button class="quick-prompt-btn" onclick="askMainQuestion('Q2')">
+                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</span>
+                        <span style="opacity:0.5;">></span>
+                    </button>
+                    <button class="quick-prompt-btn" onclick="askMainQuestion('Q3')">
+                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> Show orders with shortages for [sales org]</span>
+                        <span style="opacity:0.5;">></span>
+                    </button>
+
+                    <div class="quick-prompts-title" style="margin-top: 32px;">CONVERSATIONS 0</div>
+                    <div style="text-align:center; padding: 32px 0;">
+                        <div style="font-size:24px; opacity:0.3; margin-bottom:8px;">💬</div>
+                        <div style="font-size:13px; font-weight:600;">No conversations yet</div>
+                        <div style="font-size:11px; color:var(--text-secondary);">Start a conversation to see it here</div>
                     </div>
                 </div>
-            </main>
-        </div>
+            </div>
+
+            <!-- Fixed Input Area at bottom -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <button class="icon-btn">📎</button>
+                    <input type="text" id="chat-input" placeholder="Ask anything about this agent..." onkeypress="handleEnter(event)">
+                    <button class="send-btn" onclick="handleSend()">↑</button>
+                </div>
+            </div>
+            
+            <div class="beta-ribbon">BETA</div>
+        </main>
     </div>
 
-    <!-- Data generation script -->
+    <!-- Script Logic -->
     <script>
-const chatContainer = document.getElementById('chat-container');
-const initialState = document.getElementById('initial-state');
-const chatInput = document.getElementById('chat-input');
+        const chatContainer = document.getElementById('chat-container');
+        const initialState = document.getElementById('initial-state');
+        const chatInput = document.getElementById('chat-input');
 
-function appendUserMessage(text) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'message user-message';
-    msgDiv.innerHTML = `<div class="bubble-user">${text}</div>`;
-    chatContainer.appendChild(msgDiv);
-    scrollToBottom();
-}
+        function appendUserMessage(text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message user-message';
+            msgDiv.innerHTML = \`<div class="bubble-user">\${text}</div>\`;
+            chatContainer.appendChild(msgDiv);
+            scrollToBottom();
+        }
 
-function appendAIMessage(htmlContent) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'message ai-message';
-    msgDiv.innerHTML = `<div class="bubble-ai">${htmlContent}</div>`;
-    chatContainer.appendChild(msgDiv);
-    scrollToBottom();
-}
+        function appendAIMessage(htmlContent) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ai-message';
+            msgDiv.innerHTML = \`
+                <div class="avatar-ai">MC</div>
+                <div class="bubble-ai">\${htmlContent}</div>
+            \`;
+            chatContainer.appendChild(msgDiv);
+            scrollToBottom();
+        }
 
-function showLoading() {
-    const loader = document.createElement('div');
-    loader.id = 'loading';
-    loader.className = 'message ai-message';
-    loader.innerHTML = `
-        <div class="bubble-ai" style="padding: 12px 20px; max-width: 80px;">
-            <div class="typing-indicator">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
-        </div>
-    `;
-    chatContainer.appendChild(loader);
-    scrollToBottom();
-}
-
-function hideLoading() {
-    const loader = document.getElementById('loading');
-    if(loader) loader.remove();
-}
-
-function scrollToBottom() {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-}
-
-// Map scenarios to their specific HTML payloads
-const scenarioData = {
-    // QUESTION 1 SCENARIOS
-    'q1_1': {
-        title: 'Cancelled / Rejected',
-        badge: 'CANCELLED',
-        badgeClass: 'delayed',
-        text: 'Order 123456 has been cancelled - all line items were rejected.',
-        table: `
-            <tr><td class="label">Reason</td><td class="value" style="color: #dc2626;">Customer requested cancellation (Z01)</td></tr>
-            <tr><td class="label">Status</td><td class="value">Cancelled</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q1_2': {
-        title: 'Blocked (Credit Hold)',
-        badge: 'BLOCKED',
-        badgeClass: 'delayed',
-        text: 'Order 123456 is currently on credit hold and cannot proceed until released by the Credit team.',
-        table: `
-            <tr><td class="label">Credit Status</td><td class="value" style="color: #dc2626;">Not Approved (Hold)</td></tr>
-            <tr><td class="label">Delivery Block</td><td class="value">Z1 - Credit Block</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q1_4': {
-        title: 'Open - Not Yet Allocated',
-        badge: 'OPEN',
-        badgeClass: 'neutral',
-        text: 'Order 123456 is open; no delivery exists yet.',
-        table: `
-            <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
-            <tr><td class="label">Credit Status</td><td class="value">Released</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q1_5': {
-        title: 'Delivery Created (No PGI)',
-        badge: 'PROCESSING',
-        badgeClass: 'neutral',
-        text: 'Order 123456 has delivery 0080012345.',
-        table: `
-            <tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr>
-            <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
-            <tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q1_6': {
-        title: 'Shipment Created (No PGI)',
-        badge: 'PROCESSING',
-        badgeClass: 'neutral',
-        text: 'Order 123456 has delivery 0080012345, shipment 7891011.',
-        table: `
-            <tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr>
-            <tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr>
-            <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q1_7': {
-        title: 'Loaded / Shipped - Not Yet Billed',
-        badge: 'SHIPPED',
-        badgeClass: 'healthy',
-        text: 'Order 123456 was shipped on April 16, 2026. Invoicing is still pending.',
-        table: `
-            <tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>
-            <tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q1_8': {
-        title: 'Loaded & Billed - Complete',
-        badge: 'COMPLETE',
-        badgeClass: 'healthy',
-        text: 'Order 123456 was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.',
-        table: `
-            <tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>
-            <tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr>
-            <tr><td class="label">Billing Date</td><td class="value">April 17, 2026</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q1_9': {
-        title: 'Not Found',
-        badge: 'NO MATCH',
-        badgeClass: 'delayed',
-        text: 'Sorry, I couldn\'t find that order.',
-        table: `
-            <tr><td class="label">Search Criteria</td><td class="value">Order #123456</td></tr>
-            <tr><td class="label">Authorized Sales Orgs</td><td class="value">Checked</td></tr>
-            <tr><td class="label">Result</td><td class="value">No record found matching the criteria. Please check the order number and try again.</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-
-    // QUESTION 2 SCENARIOS
-    'q2_1': {
-        title: 'Inventory Analysis · SKU 123',
-        badge: 'STOCK FOUND',
-        badgeClass: 'healthy',
-        text: 'Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.',
-        table: `
-            <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
-            <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value">1,250 cases</td></tr>
-            <tr><td class="label">Open Sales Orders (Count)</td><td class="value">8 orders</td></tr>
-            <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
-        `,
-        source: 'Global Inventory Dashboard'
-    },
-    'q2_2': {
-        title: 'Inventory Analysis · SKU 123',
-        badge: 'ZERO STOCK',
-        badgeClass: 'delayed',
-        text: 'Plant 4010 currently has 0 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.',
-        table: `
-            <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
-            <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value" style="color: #dc2626;">0 cases</td></tr>
-            <tr><td class="label">Open Sales Orders (Count)</td><td class="value">8 orders</td></tr>
-            <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
-        `,
-        source: 'Global Inventory Dashboard'
-    },
-    'q2_4': {
-        title: 'Inventory Analysis · SKU 123',
-        badge: 'NOT FOUND',
-        badgeClass: 'delayed',
-        text: 'Sorry, I couldn\'t find stock data for that plant and SKU combination. Please confirm the plant and product ID.',
-        table: `
-            <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
-            <tr><td class="label">Product ID</td><td class="value">SKU 123</td></tr>
-            <tr><td class="label">Error</td><td class="value">Material is not set up at the requested plant, or plant is outside user authorization.</td></tr>
-        `,
-        source: 'Global Inventory Dashboard'
-    },
-
-    // QUESTION 3 SCENARIOS
-    'q3_1': {
-        title: 'Shortage Analysis · Sales Org 1234',
-        badge: 'SHORTAGES FOUND',
-        badgeClass: 'delayed',
-        text: 'I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.',
-        table: `
-            <tr><td class="label">SAP # 450012</td><td class="value">SKU 999 (Ordered: 100, Confirmed: 50)</td></tr>
-            <tr><td class="label">SAP # 450018</td><td class="value">SKU 888 (Ordered: 200, Confirmed: 0)</td></tr>
-            <tr><td class="label">SAP # 450022</td><td class="value">SKU 777 (Ordered: 150, Confirmed: 140)</td></tr>
-            <tr><td class="label">...and 11 more</td><td class="value" style="color: #2563eb; cursor: pointer;">View full list</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q3_2': {
-        title: 'Shortage Analysis · Sales Org 1234',
-        badge: 'NO SHORTAGES',
-        badgeClass: 'healthy',
-        text: 'Good news - I didn\'t find any orders with shortages that haven\'t shipped for the criteria you gave.',
-        table: `
-            <tr><td class="label">Sales Org</td><td class="value">1234</td></tr>
-            <tr><td class="label">Orders Checked</td><td class="value">245</td></tr>
-            <tr><td class="label">Orders with Shortages</td><td class="value">0</td></tr>
-        `,
-        source: 'ERP Order Management System'
-    },
-    'q3_3': {
-        title: 'Shortage Analysis · Sales Org 9999',
-        badge: 'NOT AUTHORIZED',
-        badgeClass: 'delayed',
-        text: 'Sorry, I couldn\'t run that search - the sales organization provided isn\'t recognized or isn\'t one you have access to.',
-        table: `
-            <tr><td class="label">Sales Org</td><td class="value">9999</td></tr>
-            <tr><td class="label">Error</td><td class="value">Invalid or unauthorized sales org supplied.</td></tr>
-        `,
-        source: 'System Security Matrix'
-    },
-};
-
-
-// Handle main question clicks
-function askMainQuestion(qType) {
-    if(initialState) initialState.style.display = 'none';
-    
-    let userText = '';
-    let chipsHtml = '';
-    
-    if (qType === 'Q1') {
-        userText = 'What is the status of order 123456?';
-        chipsHtml = `
-            <button class="chip demo-chip" onclick="renderScenario('q1_1')">Simulate: Cancelled/Rejected</button>
-            <button class="chip demo-chip" onclick="renderScenario('q1_2')">Simulate: Blocked (Credit/Delivery)</button>
-            <button class="chip demo-chip" onclick="renderScenario('q1_4')">Simulate: Open (Not Allocated)</button>
-            <button class="chip demo-chip" onclick="renderScenario('q1_5')">Simulate: Delivery Created (No PGI)</button>
-            <button class="chip demo-chip" onclick="renderScenario('q1_6')">Simulate: Shipment Created (No PGI)</button>
-            <button class="chip demo-chip" onclick="renderScenario('q1_7')">Simulate: Shipped (Not Billed)</button>
-            <button class="chip demo-chip" onclick="renderScenario('q1_8')">Simulate: Completed (Shipped & Billed)</button>
-            <button class="chip demo-chip" onclick="renderScenario('q1_9')">Simulate: Not Found / No Match</button>
-        `;
-    } else if (qType === 'Q2') {
-        userText = 'What is the current on-hand stock for SKU 123 at plant 4010, and how many open orders exist against it?';
-        chipsHtml = `
-            <button class="chip demo-chip" onclick="renderScenario('q2_1')">Simulate: Stock Found</button>
-            <button class="chip demo-chip" onclick="renderScenario('q2_2')">Simulate: Stock Found but Zero</button>
-            <button class="chip demo-chip" onclick="renderScenario('q2_4')">Simulate: Not Found / Not Authorized</button>
-        `;
-    } else if (qType === 'Q3') {
-        userText = 'Show orders with shortages that have not yet shipped, for Sales Org 1234 between Jan 1 and Jan 31.';
-        chipsHtml = `
-            <button class="chip demo-chip" onclick="renderScenario('q3_1')">Simulate: Shortage Orders Found</button>
-            <button class="chip demo-chip" onclick="renderScenario('q3_2')">Simulate: No Shortages Found</button>
-            <button class="chip demo-chip" onclick="renderScenario('q3_3')">Simulate: Sales Org Not Authorized</button>
-        `;
-    }
-
-    appendUserMessage(userText);
-    showLoading();
-    
-    setTimeout(() => {
-        hideLoading();
-        let aiResponse = `
-            <div class="ai-text-content">
-                <strong>[DEMO MODE]</strong> Which scenario would you like to simulate for this question?
-            </div>
-            <div class="follow-up-chips">
-                ${chipsHtml}
-            </div>
-        `;
-        appendAIMessage(aiResponse);
-    }, 800);
-}
-
-// Render a specific scenario payload
-function renderScenario(scenarioId) {
-    const data = scenarioData[scenarioId];
-    if (!data) return;
-
-    // Show loading
-    showLoading();
-
-    setTimeout(() => {
-        hideLoading();
-        
-        let aiResponse = `
-            <div class="ai-text-content">${data.text}</div>
-            <div class="data-card" style="width: 100%;">
-                <div class="data-card-header">
-                    <span class="data-card-title">${data.title}</span>
-                    <span class="status-badge ${data.badgeClass}">${data.badge}</span>
+        function showLoading() {
+            const loader = document.createElement('div');
+            loader.id = 'loading';
+            loader.className = 'message ai-message';
+            loader.innerHTML = \`
+                <div class="avatar-ai">MC</div>
+                <div class="bubble-ai" style="padding: 12px 20px; max-width: 80px;">
+                    <div class="typing-indicator">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
                 </div>
-                <div class="data-card-body">
-                    <table class="data-table">
-                        ${data.table}
-                    </table>
-                </div>
-            </div>
-            <div class="ai-text-content" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
-                <strong>Source: ${data.source}</strong>
-            </div>
-            <div class="bubble-footer">
-                <span>Data as of 14:00 (refreshed every 2h)</span>
-                <a href="#">View SQL</a>
-                <span style="cursor: pointer;">▲ helpful</span>
-            </div>
-        `;
-        
-        appendAIMessage(aiResponse);
-    }, 800);
-}
+            \`;
+            chatContainer.appendChild(loader);
+            scrollToBottom();
+        }
 
-function handleSendText(text) {
-    if(initialState) initialState.style.display = 'none';
-    appendUserMessage(text);
-    showLoading();
-    setTimeout(() => {
-        hideLoading();
-        appendAIMessage("<div class='ai-text-content' style='margin-bottom:0;'>I am an interactive prototype. In a live system, I would process this request by querying SAP and Databricks.</div>");
-    }, 1000);
-}
+        function hideLoading() {
+            const loader = document.getElementById('loading');
+            if(loader) loader.remove();
+        }
 
-function handleSend() {
-    const text = chatInput.value.trim();
-    if(!text) return;
-    chatInput.value = '';
-    handleSendText(text);
-}
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
 
-function handleEnter(e) {
-    if(e.key === 'Enter') handleSend();
-}
+        // Map scenarios to their specific HTML payloads
+        const scenarioData = {
+            // QUESTION 1 SCENARIOS
+            'q1_1': {
+                title: 'Cancelled / Rejected',
+                badge: 'CANCELLED',
+                badgeClass: 'delayed',
+                text: 'Order 123456 has been cancelled - all line items were rejected.',
+                table: \`
+                    <tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Customer requested cancellation (Z01)</td></tr>
+                    <tr><td class="label">Status</td><td class="value">Cancelled</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q1_2': {
+                title: 'Blocked (Credit Hold)',
+                badge: 'BLOCKED',
+                badgeClass: 'delayed',
+                text: 'Order 123456 is currently on credit hold and cannot proceed until released by the Credit team.',
+                table: \`
+                    <tr><td class="label">Credit Status</td><td class="value" style="color: #fca5a5;">Not Approved (Hold)</td></tr>
+                    <tr><td class="label">Delivery Block</td><td class="value">Z1 - Credit Block</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q1_4': {
+                title: 'Open - Not Yet Allocated',
+                badge: 'OPEN',
+                badgeClass: 'neutral',
+                text: 'Order 123456 is open; no delivery exists yet.',
+                table: \`
+                    <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
+                    <tr><td class="label">Credit Status</td><td class="value">Released</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q1_5': {
+                title: 'Delivery Created (No PGI)',
+                badge: 'PROCESSING',
+                badgeClass: 'neutral',
+                text: 'Order 123456 has delivery 0080012345.',
+                table: \`
+                    <tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr>
+                    <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
+                    <tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q1_6': {
+                title: 'Shipment Created (No PGI)',
+                badge: 'PROCESSING',
+                badgeClass: 'neutral',
+                text: 'Order 123456 has delivery 0080012345, shipment 7891011.',
+                table: \`
+                    <tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr>
+                    <tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr>
+                    <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q1_7': {
+                title: 'Loaded / Shipped - Not Yet Billed',
+                badge: 'SHIPPED',
+                badgeClass: 'healthy',
+                text: 'Order 123456 was shipped on April 16, 2026. Invoicing is still pending.',
+                table: \`
+                    <tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>
+                    <tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q1_8': {
+                title: 'Loaded & Billed - Complete',
+                badge: 'COMPLETE',
+                badgeClass: 'healthy',
+                text: 'Order 123456 was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.',
+                table: \`
+                    <tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>
+                    <tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr>
+                    <tr><td class="label">Billing Date</td><td class="value">April 17, 2026</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q1_9': {
+                title: 'Not Found',
+                badge: 'NO MATCH',
+                badgeClass: 'delayed',
+                text: 'Sorry, I couldn\'t find that order.',
+                table: \`
+                    <tr><td class="label">Search Criteria</td><td class="value">Order #123456</td></tr>
+                    <tr><td class="label">Authorized Sales Orgs</td><td class="value">Checked</td></tr>
+                    <tr><td class="label">Result</td><td class="value">No record found matching the criteria. Please check the order number and try again.</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
 
-</script>
+            // QUESTION 2 SCENARIOS
+            'q2_1': {
+                title: 'Inventory Analysis · SKU 123',
+                badge: 'STOCK FOUND',
+                badgeClass: 'healthy',
+                text: 'Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.',
+                table: \`
+                    <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
+                    <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value">1,250 cases</td></tr>
+                    <tr><td class="label">Open Sales Orders (Count)</td><td class="value">8 orders</td></tr>
+                    <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
+                \`,
+                source: 'Global Inventory Dashboard'
+            },
+            'q2_2': {
+                title: 'Inventory Analysis · SKU 123',
+                badge: 'ZERO STOCK',
+                badgeClass: 'delayed',
+                text: 'Plant 4010 currently has 0 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.',
+                table: \`
+                    <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
+                    <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value" style="color: #fca5a5;">0 cases</td></tr>
+                    <tr><td class="label">Open Sales Orders (Count)</td><td class="value">8 orders</td></tr>
+                    <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
+                \`,
+                source: 'Global Inventory Dashboard'
+            },
+            'q2_4': {
+                title: 'Inventory Analysis · SKU 123',
+                badge: 'NOT FOUND',
+                badgeClass: 'delayed',
+                text: 'Sorry, I couldn\'t find stock data for that plant and SKU combination. Please confirm the plant and product ID.',
+                table: \`
+                    <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
+                    <tr><td class="label">Product ID</td><td class="value">SKU 123</td></tr>
+                    <tr><td class="label">Error</td><td class="value">Material is not set up at the requested plant, or plant is outside user authorization.</td></tr>
+                \`,
+                source: 'Global Inventory Dashboard'
+            },
 
+            // QUESTION 3 SCENARIOS
+            'q3_1': {
+                title: 'Shortage Analysis · Sales Org 1234',
+                badge: 'SHORTAGES FOUND',
+                badgeClass: 'delayed',
+                text: 'I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.',
+                table: \`
+                    <tr><td class="label">SAP # 450012</td><td class="value">SKU 999 (Ordered: 100, Confirmed: 50)</td></tr>
+                    <tr><td class="label">SAP # 450018</td><td class="value">SKU 888 (Ordered: 200, Confirmed: 0)</td></tr>
+                    <tr><td class="label">SAP # 450022</td><td class="value">SKU 777 (Ordered: 150, Confirmed: 140)</td></tr>
+                    <tr><td class="label">...and 11 more</td><td class="value" style="color: var(--primary); cursor: pointer;">View full list</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q3_2': {
+                title: 'Shortage Analysis · Sales Org 1234',
+                badge: 'NO SHORTAGES',
+                badgeClass: 'healthy',
+                text: 'Good news - I didn\'t find any orders with shortages that haven\'t shipped for the criteria you gave.',
+                table: \`
+                    <tr><td class="label">Sales Org</td><td class="value">1234</td></tr>
+                    <tr><td class="label">Orders Checked</td><td class="value">245</td></tr>
+                    <tr><td class="label">Orders with Shortages</td><td class="value">0</td></tr>
+                \`,
+                source: 'ERP Order Management System'
+            },
+            'q3_3': {
+                title: 'Shortage Analysis · Sales Org 9999',
+                badge: 'NOT AUTHORIZED',
+                badgeClass: 'delayed',
+                text: 'Sorry, I couldn\'t run that search - the sales organization provided isn\'t recognized or isn\'t one you have access to.',
+                table: \`
+                    <tr><td class="label">Sales Org</td><td class="value">9999</td></tr>
+                    <tr><td class="label">Error</td><td class="value">Invalid or unauthorized sales org supplied.</td></tr>
+                \`,
+                source: 'System Security Matrix'
+            },
+        };
+
+        function askMainQuestion(qType) {
+            if(initialState) initialState.style.display = 'none';
+            
+            let userText = '';
+            let chipsHtml = '';
+            
+            if (qType === 'Q1') {
+                userText = 'What is the status of order 123456?';
+                chipsHtml = \`
+                    <button class="chip demo-chip" onclick="renderScenario('q1_1')">Simulate: Cancelled/Rejected</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q1_2')">Simulate: Blocked (Credit/Delivery)</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q1_4')">Simulate: Open (Not Allocated)</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q1_5')">Simulate: Delivery Created (No PGI)</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q1_6')">Simulate: Shipment Created (No PGI)</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q1_7')">Simulate: Shipped (Not Billed)</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q1_8')">Simulate: Completed (Shipped & Billed)</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q1_9')">Simulate: Not Found / No Match</button>
+                \`;
+            } else if (qType === 'Q2') {
+                userText = 'What is the current on-hand stock for SKU 123 at plant 4010, and how many open orders exist against it?';
+                chipsHtml = \`
+                    <button class="chip demo-chip" onclick="renderScenario('q2_1')">Simulate: Stock Found</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q2_2')">Simulate: Stock Found but Zero</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q2_4')">Simulate: Not Found / Not Authorized</button>
+                \`;
+            } else if (qType === 'Q3') {
+                userText = 'Show orders with shortages that have not yet shipped, for Sales Org 1234 between Jan 1 and Jan 31.';
+                chipsHtml = \`
+                    <button class="chip demo-chip" onclick="renderScenario('q3_1')">Simulate: Shortage Orders Found</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q3_2')">Simulate: No Shortages Found</button>
+                    <button class="chip demo-chip" onclick="renderScenario('q3_3')">Simulate: Sales Org Not Authorized</button>
+                \`;
+            }
+
+            appendUserMessage(userText);
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                let aiResponse = \`
+                    <div class="ai-text-content">
+                        <strong>[DEMO MODE]</strong> Which scenario would you like to simulate for this question?
+                    </div>
+                    <div class="follow-up-chips">
+                        \${chipsHtml}
+                    </div>
+                \`;
+                appendAIMessage(aiResponse);
+            }, 800);
+        }
+
+        function renderScenario(scenarioId) {
+            const data = scenarioData[scenarioId];
+            if (!data) return;
+
+            showLoading();
+
+            setTimeout(() => {
+                hideLoading();
+                
+                let aiResponse = \`
+                    <div class="ai-text-content">\${data.text}</div>
+                    <div class="data-card" style="width: 100%;">
+                        <div class="data-card-header">
+                            <span class="data-card-title">\${data.title}</span>
+                            <span class="status-badge \${data.badgeClass}">\${data.badge}</span>
+                        </div>
+                        <div class="data-card-body">
+                            <table class="data-table">
+                                \${data.table}
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ai-text-content" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
+                        <strong>Source: \${data.source}</strong>
+                    </div>
+                \`;
+                
+                appendAIMessage(aiResponse);
+            }, 800);
+        }
+
+        function handleSendText(text) {
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage(text);
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage("<div class='ai-text-content' style='margin-bottom:0;'>I am an interactive prototype. Please use the Quick Prompts to run the simulator.</div>");
+            }, 1000);
+        }
+
+        function handleSend() {
+            const text = chatInput.value.trim();
+            if(!text) return;
+            chatInput.value = '';
+            handleSendText(text);
+        }
+
+        function handleEnter(e) {
+            if(e.key === 'Enter') handleSend();
+        }
+    </script>
 </body>
 </html>
