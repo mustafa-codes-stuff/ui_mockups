@@ -928,9 +928,101 @@
 
         function buildFollowUpActions(actions = ['Why is it delayed?', 'Get full tracking history', 'Contact Carrier', 'Alternative routes?', 'View order items', 'Update notifications']) {
             if (!actions || actions.length === 0) return '';
-            let buttonsHtml = actions.map(action => `<button class="follow-up-btn">${action}</button>`).join('');
+            let buttonsHtml = actions.map(action => `<button class="follow-up-btn" onclick="handleFollowUpClick('${action}')">${action}</button>`).join('');
             return `<div class="follow-up-container">${buttonsHtml}</div>`;
         }
+
+        window.handleFollowUpClick = function(action) {
+            appendUserMessage(action);
+            
+            const allFollowUps = document.querySelectorAll('.follow-up-container');
+            if(allFollowUps.length > 0) {
+                allFollowUps[allFollowUps.length - 1].style.display = 'none';
+            }
+            
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                let responseHtml = '';
+                switch(action) {
+                    case 'Why is it delayed?':
+                        responseHtml = '<div class="ai-text-content">The delay was caused by a temporary inventory shortage at the fulfillment center. The stock has been replenished, and the order will ship shortly.</div>';
+                        break;
+                    case 'Get full tracking history':
+                        responseHtml = `
+                            <div class="ai-text-content">Here is the full tracking history:</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        <tr><td class="label">April 15, 10:00 AM</td><td class="value">Package departed facility (New York, NY)</td></tr>
+                                        <tr><td class="label">April 14, 08:30 PM</td><td class="value">Package arrived at facility (New York, NY)</td></tr>
+                                        <tr><td class="label">April 14, 04:15 PM</td><td class="value">Shipping label created (Warehouse)</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'Contact Carrier':
+                        responseHtml = '<div class="ai-text-content">The carrier for this shipment is <strong>DHL Express</strong>. Their support number is 1-800-CALL-DHL. Would you like me to open a support ticket on your behalf?</div>';
+                        break;
+                    case 'Alternative routes?':
+                        responseHtml = '<div class="ai-text-content">We can re-route this shipment via Air Freight (estimated +$150) to arrive tomorrow. Shall I authorize the change?</div>';
+                        break;
+                    case 'View order items':
+                    case 'View all items':
+                        responseHtml = `
+                            <div class="ai-text-content">Here are the items for this order:</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body">
+                                    <table class="data-table" style="text-align: left; padding: 16px;">
+                                        <thead><tr style="border-bottom: 1px solid var(--border-color);"><th style="padding: 12px 16px; font-weight: 500;">Item</th><th style="padding: 12px 16px; font-weight: 500;">Qty</th></tr></thead>
+                                        <tbody>
+                                            <tr><td style="padding: 12px 16px;">Premium Potatoes (50lb bag)</td><td style="padding: 12px 16px;">120</td></tr>
+                                            <tr><td style="padding: 12px 16px;">Crinkle Cut Fries (Case)</td><td style="padding: 12px 16px;">80</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'Update notifications':
+                        responseHtml = `<div class="ai-text-content">Sure! I have updated your notification preferences. You will now receive SMS alerts for this order's tracking events.</div>`;
+                        break;
+                    case 'Export to Excel':
+                        responseHtml = '<div class="ai-text-content">I have generated the Excel report. <a href="#" style="color: var(--accent-color); font-weight: 500;">Click here to download report.xlsx</a></div>';
+                        break;
+                    case 'Contact Warehouse':
+                        responseHtml = '<div class="ai-text-content">I am pinging the warehouse manager (Plant 4010) on Teams. What message would you like to send them?</div>';
+                        break;
+                    case 'Check production schedule':
+                        responseHtml = '<div class="ai-text-content">The next production run for this SKU is scheduled for tomorrow at 06:00 AM. Expected yield is 5,000 cases.</div>';
+                        break;
+                    case 'Check credit hold details':
+                        responseHtml = '<div class="ai-text-content">The credit block (Z1) was placed because the customer has exceeded their credit limit of $50,000. Current outstanding balance is $52,340.</div>';
+                        break;
+                    case 'Review delivery blocks':
+                        responseHtml = '<div class="ai-text-content">The delivery block (Z2) was placed due to incomplete routing information on the customer profile.</div>';
+                        break;
+                    case 'Contact Sales':
+                        responseHtml = '<div class="ai-text-content">I can draft an email to the Account Executive handling this customer. Would you like me to include the current credit standing?</div>';
+                        break;
+                    case 'Escalate to Management':
+                        responseHtml = '<div class="ai-text-content">I have flagged this order for review by the Regional Sales Director. Ticket #99281 has been created.</div>';
+                        break;
+                    case 'Download Invoices':
+                        responseHtml = '<div class="ai-text-content">Retrieving invoice documents... <br><br><a href="#" style="color: var(--accent-color); font-weight: 500;">📄 Click here to view PDF Invoice #009000111</a></div>';
+                        break;
+                    case 'Check payment status':
+                        responseHtml = '<div class="ai-text-content">The invoice is currently <strong>Pending Payment</strong>. It is due in 15 days (Net 30 terms). No past due amounts are present.</div>';
+                        break;
+                    default:
+                        responseHtml = '<div class="ai-text-content">I have processed your request for: ' + action + '. Let me know if you need anything else!</div>';
+                        break;
+                }
+                appendAIMessage(responseHtml);
+            }, 600);
+        };
+
 
         // Timeline Builder
         function buildTimeline(stage, assignees = {}) {
