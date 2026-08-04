@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Ops Chatbot</title>
+    <title>Customer Support Chatbot</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -711,34 +711,14 @@
                 <div class="logo-text">McCain.</div>
             </div>
             
-            <div class="sidebar-nav">
-                <div class="nav-item"><span class="nav-icon">⬡</span> AI Hub</div>
-                <div class="nav-item" onclick="location.reload()"><span class="nav-icon">＋</span> New Chat</div>
-                <div class="nav-item"><span class="nav-icon">🔍</span> Search chats...</div>
-                <div class="nav-item"><span class="nav-icon">⚡</span> Activity</div>
-                <div class="nav-item"><span class="nav-icon">⚡</span> Actions</div>
-                <div class="nav-item"><span class="nav-icon">💬</span> My feedback</div>
-                <div class="nav-item"><span class="nav-icon">🧭</span> Explore Agents</div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-title"><span>AGENTS</span><span>+</span></div>
-                <div class="sidebar-nav" style="padding:0; margin:0;">
-                    <div class="nav-item"><span class="nav-icon" style="color:var(--primary);">⬡</span> Manufacturing Assistant</div>
-                    <div class="nav-item active"><span class="nav-icon" style="color:var(--primary);">⬡</span> Sales Ops Chatbot</div>
+            <div class="sidebar-section" style="margin-top: 16px;">
+                <div class="sidebar-title" style="margin-bottom: 12px; padding-left: 4px;"><span>QUICK PROMPTS</span></div>
+                <div class="sidebar-nav" style="padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
+                    <div class="nav-item" onclick="startOrderFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the status of a specific order?</div>
+                    <div class="nav-item" onclick="pullAllOrdersInStatus()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders for a product and their status</div>
+                    <div class="nav-item" onclick="startInventoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</div>
+                    <div class="nav-item" onclick="startShortageFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with shortages for [sales org]</div>
                 </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-title"><span>TEAMS</span><span>+</span></div>
-            </div>
-            
-            <div class="sidebar-section">
-                <div class="sidebar-title"><span>PROJECTS</span><span>+</span></div>
-            </div>
-            
-            <div class="sidebar-section">
-                <div class="sidebar-title"><span>GROUP PROJECTS</span><span>+</span></div>
             </div>
 
             <div class="user-profile">
@@ -752,7 +732,7 @@
             <div class="chat-header">
                 <div class="header-left">
                     <span style="cursor:pointer;" onclick="location.reload()">←</span>
-                    Sales Ops Chatbot
+                    Customer Support Chatbot
                 </div>
                 <div style="display:flex; gap:16px; color:var(--text-secondary);">
                     <span>👍</span><span>👎</span><span>🔗</span><span>•••</span>
@@ -762,41 +742,10 @@
             <div class="chat-container" id="chat-container">
                 <!-- Initial State inside chat area for dark theme -->
                 <div class="initial-state" id="initial-state">
-                    <div class="initial-header">
-                        <div class="ai-icon">SO</div>
-                        <div class="initial-title">Sales Ops Chatbot</div>
-                    </div>
-
-                    <!-- Input moved inside initial state visually -->
-                    <div class="input-wrapper" style="margin-bottom: 24px; width: 100%;">
-                        <button class="icon-btn">📎</button>
-                        <input type="text" placeholder="Ask anything about this agent..." readonly style="cursor: pointer;" onclick="document.getElementById('chat-input').focus()">
-                        <button class="send-btn">↑</button>
-                    </div>
-
-                    <div class="quick-prompts-title">QUICK PROMPTS</div>
-                    <button class="quick-prompt-btn" onclick="startOrderFlow()">
-                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> What is the status of a specific order?</span>
-                        <span style="opacity:0.5;">></span>
-                    </button>
-                    <button class="quick-prompt-btn" onclick="pullAllOrdersInStatus()">
-                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> Give me a list of all orders for a product and their status</span>
-                        <span style="opacity:0.5;">></span>
-                    </button>
-                    <button class="quick-prompt-btn" onclick="startInventoryFlow()">
-                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</span>
-                        <span style="opacity:0.5;">></span>
-                    </button>
-                    <button class="quick-prompt-btn" onclick="startShortageFlow()">
-                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> Show orders with shortages for [sales org]</span>
-                        <span style="opacity:0.5;">></span>
-                    </button>
-
-                    <div class="quick-prompts-title" style="margin-top: 32px;">CONVERSATIONS</div>
-                    <div style="text-align:center; padding: 32px 0;">
-                        <div style="font-size:24px; opacity:0.3; margin-bottom:8px;">💬</div>
-                        <div style="font-size:13px; font-weight:600;">No conversations yet</div>
-                        <div style="font-size:11px; color:var(--text-secondary);">Start a conversation to see it here</div>
+                    <div style="text-align: center; margin-top: 120px;">
+                        <div class="ai-icon" style="width: 80px; height: 80px; font-size: 32px; margin: 0 auto 32px auto;">CS</div>
+                        <div class="initial-title" style="font-size: 32px; margin-bottom: 16px;">Customer Support Chatbot</div>
+                        <div style="color: var(--text-secondary); font-size: 15px;">Welcome! Please select a quick prompt from the sidebar to begin.</div>
                     </div>
                 </div>
             </div>
