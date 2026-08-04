@@ -388,6 +388,76 @@
             margin-bottom: 16px;
         }
 
+        /* Timeline Component */
+        .timeline-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 24px 0;
+            padding: 0 12px;
+            position: relative;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            top: 12px;
+            left: 24px;
+            right: 24px;
+            height: 2px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+
+        .timeline-step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 80px;
+        }
+
+        .step-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-dot.completed {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #000;
+        }
+
+        .step-dot.active {
+            border-color: var(--primary);
+            border-width: 4px;
+            background-color: var(--bg-card);
+        }
+
+        .step-dot.error {
+            background-color: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .step-label.active, .step-label.completed {
+            color: var(--text-main);
+        }
+
         /* Data Card */
         .data-card {
             background-color: var(--bg-card);
@@ -523,6 +593,19 @@
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1); }
         }
+        
+        .footer-metadata {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        .footer-metadata strong {
+            color: #d1d5db;
+        }
     </style>
 </head>
 <body>
@@ -537,7 +620,7 @@
             
             <div class="sidebar-nav">
                 <div class="nav-item"><span class="nav-icon">⬡</span> AI Hub</div>
-                <div class="nav-item"><span class="nav-icon">＋</span> New Chat</div>
+                <div class="nav-item" onclick="location.reload()"><span class="nav-icon">＋</span> New Chat</div>
                 <div class="nav-item"><span class="nav-icon">🔍</span> Search chats...</div>
                 <div class="nav-item"><span class="nav-icon">⚡</span> Activity</div>
                 <div class="nav-item"><span class="nav-icon">⚡</span> Actions</div>
@@ -575,7 +658,7 @@
         <main class="chat-main">
             <div class="chat-header">
                 <div class="header-left">
-                    <span style="cursor:pointer;">←</span>
+                    <span style="cursor:pointer;" onclick="location.reload()">←</span>
                     Sales Ops Chatbot >
                     <span>Interactive Order Scenario Simulator</span>
                 </div>
@@ -588,7 +671,7 @@
                 <!-- Initial State inside chat area for dark theme -->
                 <div class="initial-state" id="initial-state">
                     <div class="initial-header">
-                        <div class="ai-icon">MC</div>
+                        <div class="ai-icon">SO</div>
                         <div class="initial-title">Sales Ops Chatbot</div>
                     </div>
 
@@ -598,26 +681,26 @@
                         <input type="text" placeholder="Ask anything about this agent..." readonly style="cursor: pointer;" onclick="document.getElementById('chat-input').focus()">
                         <button class="send-btn">↑</button>
                     </div>
-                    
-                    <div style="text-align:center; font-size: 11px; color: var(--text-secondary); margin-bottom: 24px;">
-                        📍 Upload files to get summaries, insights, and answers
-                    </div>
 
-                    <div class="quick-prompts-title">QUICK PROMPTS 3</div>
-                    <button class="quick-prompt-btn" onclick="askMainQuestion('Q1')">
-                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> What is the status of order [ID]?</span>
+                    <div class="quick-prompts-title">QUICK PROMPTS</div>
+                    <button class="quick-prompt-btn" onclick="startOrderFlow()">
+                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> What is the status of a specific order?</span>
                         <span style="opacity:0.5;">></span>
                     </button>
-                    <button class="quick-prompt-btn" onclick="askMainQuestion('Q2')">
+                    <button class="quick-prompt-btn" onclick="pullAllOrdersInStatus()">
+                        <span><span style="opacity:0.5; margin-right:8px;">💬</span> Pull all orders in a particular status (Tabular View)</span>
+                        <span style="opacity:0.5;">></span>
+                    </button>
+                    <button class="quick-prompt-btn" onclick="startInventoryFlow()">
                         <span><span style="opacity:0.5; margin-right:8px;">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</span>
                         <span style="opacity:0.5;">></span>
                     </button>
-                    <button class="quick-prompt-btn" onclick="askMainQuestion('Q3')">
+                    <button class="quick-prompt-btn" onclick="startShortageFlow()">
                         <span><span style="opacity:0.5; margin-right:8px;">💬</span> Show orders with shortages for [sales org]</span>
                         <span style="opacity:0.5;">></span>
                     </button>
 
-                    <div class="quick-prompts-title" style="margin-top: 32px;">CONVERSATIONS 0</div>
+                    <div class="quick-prompts-title" style="margin-top: 32px;">CONVERSATIONS</div>
                     <div style="text-align:center; padding: 32px 0;">
                         <div style="font-size:24px; opacity:0.3; margin-bottom:8px;">💬</div>
                         <div style="font-size:13px; font-weight:600;">No conversations yet</div>
@@ -644,6 +727,9 @@
         const chatContainer = document.getElementById('chat-container');
         const initialState = document.getElementById('initial-state');
         const chatInput = document.getElementById('chat-input');
+        
+        // Wait for specific input states
+        let waitingForInput = null;
 
         function appendUserMessage(text) {
             const msgDiv = document.createElement('div');
@@ -657,7 +743,7 @@
             const msgDiv = document.createElement('div');
             msgDiv.className = 'message ai-message';
             msgDiv.innerHTML = \`
-                <div class="avatar-ai">MC</div>
+                <div class="avatar-ai">SO</div>
                 <div class="bubble-ai">\${htmlContent}</div>
             \`;
             chatContainer.appendChild(msgDiv);
@@ -669,7 +755,7 @@
             loader.id = 'loading';
             loader.className = 'message ai-message';
             loader.innerHTML = \`
-                <div class="avatar-ai">MC</div>
+                <div class="avatar-ai">SO</div>
                 <div class="bubble-ai" style="padding: 12px 20px; max-width: 80px;">
                     <div class="typing-indicator">
                         <div class="dot"></div>
@@ -691,271 +777,318 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Map scenarios to their specific HTML payloads
-        const scenarioData = {
-            // QUESTION 1 SCENARIOS
-            'q1_1': {
-                title: 'Cancelled / Rejected',
-                badge: 'CANCELLED',
-                badgeClass: 'delayed',
-                text: 'Order 123456 has been cancelled - all line items were rejected.',
-                table: \`
-                    <tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Customer requested cancellation (Z01)</td></tr>
-                    <tr><td class="label">Status</td><td class="value">Cancelled</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q1_2': {
-                title: 'Blocked (Credit Hold)',
-                badge: 'BLOCKED',
-                badgeClass: 'delayed',
-                text: 'Order 123456 is currently on credit hold and cannot proceed until released by the Credit team.',
-                table: \`
-                    <tr><td class="label">Credit Status</td><td class="value" style="color: #fca5a5;">Not Approved (Hold)</td></tr>
-                    <tr><td class="label">Delivery Block</td><td class="value">Z1 - Credit Block</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q1_4': {
-                title: 'Open - Not Yet Allocated',
-                badge: 'OPEN',
-                badgeClass: 'neutral',
-                text: 'Order 123456 is open; no delivery exists yet.',
-                table: \`
-                    <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
-                    <tr><td class="label">Credit Status</td><td class="value">Released</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q1_5': {
-                title: 'Delivery Created (No PGI)',
-                badge: 'PROCESSING',
-                badgeClass: 'neutral',
-                text: 'Order 123456 has delivery 0080012345.',
-                table: \`
-                    <tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr>
-                    <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
-                    <tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q1_6': {
-                title: 'Shipment Created (No PGI)',
-                badge: 'PROCESSING',
-                badgeClass: 'neutral',
-                text: 'Order 123456 has delivery 0080012345, shipment 7891011.',
-                table: \`
-                    <tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr>
-                    <tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr>
-                    <tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q1_7': {
-                title: 'Loaded / Shipped - Not Yet Billed',
-                badge: 'SHIPPED',
-                badgeClass: 'healthy',
-                text: 'Order 123456 was shipped on April 16, 2026. Invoicing is still pending.',
-                table: \`
-                    <tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>
-                    <tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q1_8': {
-                title: 'Loaded & Billed - Complete',
-                badge: 'COMPLETE',
-                badgeClass: 'healthy',
-                text: 'Order 123456 was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.',
-                table: \`
-                    <tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>
-                    <tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr>
-                    <tr><td class="label">Billing Date</td><td class="value">April 17, 2026</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q1_9': {
-                title: 'Not Found',
-                badge: 'NO MATCH',
-                badgeClass: 'delayed',
-                text: 'Sorry, I couldn\'t find that order.',
-                table: \`
-                    <tr><td class="label">Search Criteria</td><td class="value">Order #123456</td></tr>
-                    <tr><td class="label">Authorized Sales Orgs</td><td class="value">Checked</td></tr>
-                    <tr><td class="label">Result</td><td class="value">No record found matching the criteria. Please check the order number and try again.</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
+        function getTimestamp() {
+            const d = new Date();
+            const pad = (n) => n.toString().padStart(2, '0');
+            return \`\${d.getFullYear()}-\${pad(d.getMonth()+1)}-\${pad(d.getDate())} \${pad(d.getHours())}:\${pad(d.getMinutes())}:\${pad(d.getSeconds())}\`;
+        }
 
-            // QUESTION 2 SCENARIOS
-            'q2_1': {
-                title: 'Inventory Analysis · SKU 123',
-                badge: 'STOCK FOUND',
-                badgeClass: 'healthy',
-                text: 'Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.',
-                table: \`
-                    <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
-                    <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value">1,250 cases</td></tr>
-                    <tr><td class="label">Open Sales Orders (Count)</td><td class="value">8 orders</td></tr>
-                    <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
-                \`,
-                source: 'Global Inventory Dashboard'
-            },
-            'q2_2': {
-                title: 'Inventory Analysis · SKU 123',
-                badge: 'ZERO STOCK',
-                badgeClass: 'delayed',
-                text: 'Plant 4010 currently has 0 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.',
-                table: \`
-                    <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
-                    <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value" style="color: #fca5a5;">0 cases</td></tr>
-                    <tr><td class="label">Open Sales Orders (Count)</td><td class="value">8 orders</td></tr>
-                    <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
-                \`,
-                source: 'Global Inventory Dashboard'
-            },
-            'q2_4': {
-                title: 'Inventory Analysis · SKU 123',
-                badge: 'NOT FOUND',
-                badgeClass: 'delayed',
-                text: 'Sorry, I couldn\'t find stock data for that plant and SKU combination. Please confirm the plant and product ID.',
-                table: \`
-                    <tr><td class="label">Plant / Warehouse</td><td class="value">Plant 4010</td></tr>
-                    <tr><td class="label">Product ID</td><td class="value">SKU 123</td></tr>
-                    <tr><td class="label">Error</td><td class="value">Material is not set up at the requested plant, or plant is outside user authorization.</td></tr>
-                \`,
-                source: 'Global Inventory Dashboard'
-            },
-
-            // QUESTION 3 SCENARIOS
-            'q3_1': {
-                title: 'Shortage Analysis · Sales Org 1234',
-                badge: 'SHORTAGES FOUND',
-                badgeClass: 'delayed',
-                text: 'I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.',
-                table: \`
-                    <tr><td class="label">SAP # 450012</td><td class="value">SKU 999 (Ordered: 100, Confirmed: 50)</td></tr>
-                    <tr><td class="label">SAP # 450018</td><td class="value">SKU 888 (Ordered: 200, Confirmed: 0)</td></tr>
-                    <tr><td class="label">SAP # 450022</td><td class="value">SKU 777 (Ordered: 150, Confirmed: 140)</td></tr>
-                    <tr><td class="label">...and 11 more</td><td class="value" style="color: var(--primary); cursor: pointer;">View full list</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q3_2': {
-                title: 'Shortage Analysis · Sales Org 1234',
-                badge: 'NO SHORTAGES',
-                badgeClass: 'healthy',
-                text: 'Good news - I didn\'t find any orders with shortages that haven\'t shipped for the criteria you gave.',
-                table: \`
-                    <tr><td class="label">Sales Org</td><td class="value">1234</td></tr>
-                    <tr><td class="label">Orders Checked</td><td class="value">245</td></tr>
-                    <tr><td class="label">Orders with Shortages</td><td class="value">0</td></tr>
-                \`,
-                source: 'ERP Order Management System'
-            },
-            'q3_3': {
-                title: 'Shortage Analysis · Sales Org 9999',
-                badge: 'NOT AUTHORIZED',
-                badgeClass: 'delayed',
-                text: 'Sorry, I couldn\'t run that search - the sales organization provided isn\'t recognized or isn\'t one you have access to.',
-                table: \`
-                    <tr><td class="label">Sales Org</td><td class="value">9999</td></tr>
-                    <tr><td class="label">Error</td><td class="value">Invalid or unauthorized sales org supplied.</td></tr>
-                \`,
-                source: 'System Security Matrix'
-            },
-        };
-
-        function askMainQuestion(qType) {
-            if(initialState) initialState.style.display = 'none';
+        // Timeline Builder
+        function buildTimeline(stage) {
+            // Stages: 1=Placed, 2=Processed, 3=Shipped, 4=Billed, Error=Cancelled/Blocked
+            let c1 = '', c2 = '', c3 = '', c4 = '';
+            let isError = false;
             
-            let userText = '';
-            let chipsHtml = '';
-            
-            if (qType === 'Q1') {
-                userText = 'What is the status of order 123456?';
-                chipsHtml = \`
-                    <button class="chip demo-chip" onclick="renderScenario('q1_1')">Simulate: Cancelled/Rejected</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q1_2')">Simulate: Blocked (Credit/Delivery)</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q1_4')">Simulate: Open (Not Allocated)</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q1_5')">Simulate: Delivery Created (No PGI)</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q1_6')">Simulate: Shipment Created (No PGI)</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q1_7')">Simulate: Shipped (Not Billed)</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q1_8')">Simulate: Completed (Shipped & Billed)</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q1_9')">Simulate: Not Found / No Match</button>
-                \`;
-            } else if (qType === 'Q2') {
-                userText = 'What is the current on-hand stock for SKU 123 at plant 4010, and how many open orders exist against it?';
-                chipsHtml = \`
-                    <button class="chip demo-chip" onclick="renderScenario('q2_1')">Simulate: Stock Found</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q2_2')">Simulate: Stock Found but Zero</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q2_4')">Simulate: Not Found / Not Authorized</button>
-                \`;
-            } else if (qType === 'Q3') {
-                userText = 'Show orders with shortages that have not yet shipped, for Sales Org 1234 between Jan 1 and Jan 31.';
-                chipsHtml = \`
-                    <button class="chip demo-chip" onclick="renderScenario('q3_1')">Simulate: Shortage Orders Found</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q3_2')">Simulate: No Shortages Found</button>
-                    <button class="chip demo-chip" onclick="renderScenario('q3_3')">Simulate: Sales Org Not Authorized</button>
-                \`;
+            if (stage === 'CANCELLED' || stage === 'BLOCKED') isError = true;
+
+            if (!isError) {
+                if (stage >= 1) c1 = 'completed';
+                if (stage === 1) c1 = 'active';
+                if (stage >= 2) c2 = 'completed';
+                if (stage === 2) c2 = 'active';
+                if (stage >= 3) c3 = 'completed';
+                if (stage === 3) c3 = 'active';
+                if (stage >= 4) c4 = 'completed';
             }
 
-            appendUserMessage(userText);
+            return \`
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <div class="timeline-step">
+                    <div class="step-dot \${isError ? 'error' : c1}">\${isError ? '!' : (stage > 1 ? '✓' : '')}</div>
+                    <div class="step-label \${isError ? '' : c1}">\${isError ? stage : 'Placed'}</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot \${c2}">\${stage > 2 ? '✓' : ''}</div>
+                    <div class="step-label \${c2}">Processing</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot \${c3}">\${stage > 3 ? '✓' : ''}</div>
+                    <div class="step-label \${c3}">Shipped</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot \${c4}">\${stage > 4 ? '✓' : ''}</div>
+                    <div class="step-label \${c4}">Billed</div>
+                </div>
+            </div>
+            \`;
+        }
+
+        // ORDER SCENARIOS MAP
+        const orderScenarios = {
+            '10001': {
+                title: 'Cancelled / Rejected',
+                badge: 'CANCELLED', badgeClass: 'delayed',
+                timeline: buildTimeline('CANCELLED'),
+                text: 'Order 10001 has been cancelled - all line items were rejected.',
+                table: \`<tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Customer requested cancellation (Z01)</td></tr>\`,
+                tables: 'SAP.VBAK, SAP.VBAP'
+            },
+            '10002': {
+                title: 'Blocked (Credit Hold)',
+                badge: 'BLOCKED', badgeClass: 'delayed',
+                timeline: buildTimeline('BLOCKED'),
+                text: 'Order 10002 is currently on credit hold and cannot proceed until released by the Credit team.',
+                table: \`<tr><td class="label">Credit Status</td><td class="value" style="color: #fca5a5;">Not Approved (Hold)</td></tr>\`,
+                tables: 'SAP.VBAK, SAP.VBUK'
+            },
+            '10004': {
+                title: 'Open - Not Yet Allocated',
+                badge: 'OPEN', badgeClass: 'neutral',
+                timeline: buildTimeline(1),
+                text: 'Order 10004 is open; no delivery exists yet.',
+                table: \`<tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>\`,
+                tables: 'SAP.VBAK'
+            },
+            '10005': {
+                title: 'Delivery Created (No PGI)',
+                badge: 'PROCESSING', badgeClass: 'neutral',
+                timeline: buildTimeline(2),
+                text: 'Order 10005 has delivery 0080012345.',
+                table: \`<tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>\`,
+                tables: 'SAP.VBAK, SAP.LIKP'
+            },
+            '10006': {
+                title: 'Shipment Created (No PGI)',
+                badge: 'PROCESSING', badgeClass: 'neutral',
+                timeline: buildTimeline(2),
+                text: 'Order 10006 has delivery 0080012345, shipment 7891011.',
+                table: \`<tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr>\`,
+                tables: 'SAP.LIKP, SAP.VTTK'
+            },
+            '10007': {
+                title: 'Loaded / Shipped - Not Yet Billed',
+                badge: 'SHIPPED', badgeClass: 'healthy',
+                timeline: buildTimeline(3),
+                text: 'Order 10007 was shipped on April 16, 2026. Invoicing is still pending.',
+                table: \`<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>\`,
+                tables: 'SAP.LIKP, SAP.VBRK'
+            },
+            '10008': {
+                title: 'Loaded & Billed - Complete',
+                badge: 'COMPLETE', badgeClass: 'healthy',
+                timeline: buildTimeline(4),
+                text: 'Order 10008 was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.',
+                table: \`<tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr>\`,
+                tables: 'SAP.VBRK'
+            },
+            '10009': {
+                title: 'Not Found',
+                badge: 'NO MATCH', badgeClass: 'delayed',
+                timeline: '',
+                text: 'Sorry, I couldn\'t find that order.',
+                table: \`<tr><td class="label">Result</td><td class="value">No record found matching the criteria.</td></tr>\`,
+                tables: 'SAP.VBAK'
+            }
+        };
+
+        // FLOW: Order Status
+        function startOrderFlow() {
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("What is the status of a specific order?");
             showLoading();
-            
             setTimeout(() => {
                 hideLoading();
-                let aiResponse = \`
-                    <div class="ai-text-content">
-                        <strong>[DEMO MODE]</strong> Which scenario would you like to simulate for this question?
+                waitingForInput = 'ORDER_ID';
+                
+                appendAIMessage(\`
+                    <div class="ai-text-content">Please provide the Order ID or PO Number you would like me to check.</div>
+                    <div class="ai-text-content" style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; margin-top: 16px;">
+                        <em>(For this demo, click one of the dummy IDs below to test different scenarios)</em>
                     </div>
                     <div class="follow-up-chips">
-                        \${chipsHtml}
+                        <button class="chip demo-chip" onclick="handleSendText('10001')">10001 (Cancelled)</button>
+                        <button class="chip demo-chip" onclick="handleSendText('10002')">10002 (Blocked)</button>
+                        <button class="chip demo-chip" onclick="handleSendText('10004')">10004 (Open)</button>
+                        <button class="chip demo-chip" onclick="handleSendText('10005')">10005 (Deliv. Created)</button>
+                        <button class="chip demo-chip" onclick="handleSendText('10006')">10006 (Ship. Created)</button>
+                        <button class="chip demo-chip" onclick="handleSendText('10007')">10007 (Shipped)</button>
+                        <button class="chip demo-chip" onclick="handleSendText('10008')">10008 (Complete)</button>
+                        <button class="chip demo-chip" onclick="handleSendText('10009')">10009 (Not Found)</button>
                     </div>
-                \`;
-                appendAIMessage(aiResponse);
+                \`);
             }, 800);
         }
 
-        function renderScenario(scenarioId) {
-            const data = scenarioData[scenarioId];
-            if (!data) return;
-
+        // FLOW: Pull all orders in status
+        function pullAllOrdersInStatus() {
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Pull all orders in a particular status (Tabular View)");
             showLoading();
-
             setTimeout(() => {
                 hideLoading();
                 
-                let aiResponse = \`
-                    <div class="ai-text-content">\${data.text}</div>
+                appendAIMessage(\`
+                    <div class="ai-text-content">I found 4 orders that are currently blocked (Credit Hold) across your authorized plants. Here is the tabular view:</div>
                     <div class="data-card" style="width: 100%;">
                         <div class="data-card-header">
-                            <span class="data-card-title">\${data.title}</span>
-                            <span class="status-badge \${data.badgeClass}">\${data.badge}</span>
+                            <span class="data-card-title">All Blocked Orders (Credit Hold)</span>
+                            <span class="status-badge delayed">4 RECORDS</span>
                         </div>
-                        <div class="data-card-body">
-                            <table class="data-table">
-                                \${data.table}
+                        <div class="data-card-body" style="padding: 0;">
+                            <table class="data-table" style="text-align: left; padding: 16px;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
+                                        <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
+                                        <th style="padding: 12px 16px; font-weight: 500;">Product</th>
+                                        <th style="padding: 12px 16px; font-weight: 500;">Customer</th>
+                                        <th style="padding: 12px 16px; font-weight: 500;">Plant</th>
+                                        <th style="padding: 12px 16px; font-weight: 500;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 12px 16px;"><strong>4500123</strong></td>
+                                        <td style="padding: 12px 16px;">SKU 123 (Fries)</td>
+                                        <td style="padding: 12px 16px;">Sysco (GB)</td>
+                                        <td style="padding: 12px 16px;">4010</td>
+                                        <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px 16px;"><strong>4500198</strong></td>
+                                        <td style="padding: 12px 16px;">SKU 444 (Wedges)</td>
+                                        <td style="padding: 12px 16px;">Tesco</td>
+                                        <td style="padding: 12px 16px;">4010</td>
+                                        <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px 16px;"><strong>4500244</strong></td>
+                                        <td style="padding: 12px 16px;">SKU 123 (Fries)</td>
+                                        <td style="padding: 12px 16px;">Asda</td>
+                                        <td style="padding: 12px 16px;">4020</td>
+                                        <td style="padding: 12px 16px; color: #fca5a5;">Credit Hold</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="ai-text-content" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 0; margin-top: 12px;">
-                        <strong>Source: \${data.source}</strong>
+                    <div class="footer-metadata">
+                        <span><strong>Source Tables:</strong> SAP.VBAK, SAP.VBAP, SAP.KNA1</span>
+                        <span><strong>Last Updated:</strong> \${getTimestamp()}</span>
                     </div>
-                \`;
-                
-                appendAIMessage(aiResponse);
-            }, 800);
+                \`);
+            }, 1000);
         }
 
-        function handleSendText(text) {
+        // FLOW: Inventory (Keep simple for now)
+        function startInventoryFlow() {
             if(initialState) initialState.style.display = 'none';
-            appendUserMessage(text);
+            appendUserMessage("What is the on-hand stock for SKU 123 at plant 4010?");
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                appendAIMessage("<div class='ai-text-content' style='margin-bottom:0;'>I am an interactive prototype. Please use the Quick Prompts to run the simulator.</div>");
-            }, 1000);
+                appendAIMessage(\`
+                    <div class="ai-text-content">Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
+                    <div class="data-card" style="width: 100%;">
+                        <div class="data-card-header">
+                            <span class="data-card-title">Inventory Analysis</span>
+                            <span class="status-badge healthy">STOCK FOUND</span>
+                        </div>
+                        <div class="data-card-body">
+                            <table class="data-table">
+                                <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value">1,250 cases</td></tr>
+                                <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="footer-metadata">
+                        <span><strong>Source Tables:</strong> SAP.MARD, SAP.VBEP</span>
+                        <span><strong>Last Updated:</strong> \${getTimestamp()}</span>
+                    </div>
+                \`);
+            }, 800);
+        }
+
+        // FLOW: Shortage (Keep simple for now)
+        function startShortageFlow() {
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Show orders with shortages for Sales Org 1234");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(\`
+                    <div class="ai-text-content">I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.</div>
+                    <div class="data-card" style="width: 100%;">
+                        <div class="data-card-header">
+                            <span class="data-card-title">Shortage Analysis</span>
+                            <span class="status-badge delayed">SHORTAGES FOUND</span>
+                        </div>
+                        <div class="data-card-body">
+                            <table class="data-table">
+                                <tr><td class="label">SAP # 450012</td><td class="value">SKU 999 (Ordered: 100, Confirmed: 50)</td></tr>
+                                <tr><td class="label">SAP # 450018</td><td class="value">SKU 888 (Ordered: 200, Confirmed: 0)</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="footer-metadata">
+                        <span><strong>Source Tables:</strong> SAP.VBAK, SAP.VBAP, SAP.VBEP</span>
+                        <span><strong>Last Updated:</strong> \${getTimestamp()}</span>
+                    </div>
+                \`);
+            }, 800);
+        }
+
+        // Handle generic text sending
+        function handleSendText(text) {
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage(text);
+            
+            if (waitingForInput === 'ORDER_ID') {
+                const id = text.trim();
+                waitingForInput = null;
+                
+                if (orderScenarios[id]) {
+                    const data = orderScenarios[id];
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(\`
+                            <div class="ai-text-content">\${data.text}</div>
+                            
+                            \${data.timeline}
+
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Order \${id} · \${data.title}</span>
+                                    <span class="status-badge \${data.badgeClass}">\${data.badge}</span>
+                                </div>
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        \${data.table}
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Source Tables:</strong> \${data.tables}</span>
+                                <span><strong>Last Updated:</strong> \${getTimestamp()}</span>
+                            </div>
+                        \`);
+                    }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage("<div class='ai-text-content'>I'm sorry, I don't recognize that Order ID in my demo database. Please try one of the dummy IDs provided.</div>");
+                        waitingForInput = 'ORDER_ID';
+                    }, 800);
+                }
+            } else {
+                showLoading();
+                setTimeout(() => {
+                    hideLoading();
+                    appendAIMessage("<div class='ai-text-content' style='margin-bottom:0;'>I am an interactive prototype. Please use the Quick Prompts to run the simulator.</div>");
+                }, 1000);
+            }
         }
 
         function handleSend() {
