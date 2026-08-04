@@ -804,10 +804,10 @@
                     modalHtml = `
                     <div id="${idForModal}" class="helper-modal">
                         <h4>Demo Helper: Valid Inputs</h4>
-                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">For this demo, just type the following keyword to trigger the list view:</div>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">For this demo, please type both a product and status to trigger the list view:</div>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>potatoes</td><td>Shows table of 5 potato orders</td></tr>
+                            <tr><td>potatoes, all</td><td>Shows table of 5 potato orders across all statuses</td></tr>
                         </table>
                     </div>
                     `;
@@ -825,11 +825,13 @@
             scrollToBottom();
         }
 
-        function toggleHelperModal(modalId) {
+        function showHelperModal(modalId) {
             const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.toggle('visible');
-            }
+            if (modal) modal.classList.add('visible');
+        }
+        function hideHelperModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.remove('visible');
         }
 
         function showLoading() {
@@ -996,7 +998,7 @@
                 appendAIMessage(`
                     <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
                         Please provide the Order ID or PO Number you would like me to check.
-                        <span class="helper-icon" onclick="toggleHelperModal('${modalId}')">i</span>
+                        <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                     </div>
                 `, modalId);
             }, 800);
@@ -1015,7 +1017,7 @@
                 appendAIMessage(`
                     <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
                         Which product and what status would you like me to check?
-                        <span class="helper-icon" onclick="toggleHelperModal('${modalId}')">i</span>
+                        <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                     </div>
                 `, modalId, 'PRODUCT_STATUS');
             }, 800);
@@ -1139,7 +1141,7 @@
                         appendAIMessage(`
                             <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
                                 I'm sorry, I don't recognize that Order ID in my demo database. Please try one of the dummy IDs provided.
-                                <span class="helper-icon" onclick="toggleHelperModal('${modalId}')">i</span>
+                                <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                             </div>
                         `, modalId, 'ORDER_ID');
                         waitingForInput = 'ORDER_ID';
@@ -1149,7 +1151,7 @@
                 const input = text.trim().toLowerCase();
                 waitingForInput = null;
                 
-                if (input.includes('potato')) {
+                if (input.includes('potato') && input.includes('all')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
@@ -1222,7 +1224,7 @@
                         appendAIMessage(`
                             <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
                                 I'm sorry, I couldn't find any recent data for that input in this demo. Try the dummy keyword.
-                                <span class="helper-icon" onclick="toggleHelperModal('${modalId}')">i</span>
+                                <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                             </div>
                         `, modalId, 'PRODUCT_STATUS');
                         waitingForInput = 'PRODUCT_STATUS';
