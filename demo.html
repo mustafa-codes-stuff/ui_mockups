@@ -1252,8 +1252,8 @@
                             <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                         </div>
                         <div class="inline-input-container">
-                            <input type="text" id="inline-input-ORDER_ID" placeholder="Enter Order ID..." class="inline-input" onkeypress="handleInlineEnter(event, 'ORDER_ID')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('ORDER_ID')">Submit</button>
+                            <input type="text" placeholder="Enter Order ID..." class="inline-input" onkeypress="handleInlineEnter(event, \'ORDER_ID\')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend(\'ORDER_ID\', this)">Submit</button>
                         </div>
                     </div>
                 `, modalId, 'ORDER_ID');
@@ -1276,8 +1276,9 @@
                             <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                         </div>
                         <div class="inline-input-container">
-                            <input type="text" id="inline-input-PRODUCT_STATUS" placeholder="Enter product and status..." class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS')">Submit</button>
+                            <input type="text" placeholder="Product (e.g. potatoes)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
+                                    <input type="text" placeholder="Status (e.g. shipped)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS', this)">Submit</button>
                         </div>
                     </div>
                 `, modalId, 'PRODUCT_STATUS');
@@ -1300,8 +1301,9 @@
                             <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                         </div>
                         <div class="inline-input-container">
-                            <input type="text" id="inline-input-INVENTORY_CHECK" placeholder="Enter SKU and Plant..." class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK')">Submit</button>
+                            <input type="text" placeholder="SKU (e.g. 123)" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <input type="text" placeholder="Plant (e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK', this)">Submit</button>
                         </div>
                     </div>
                 `, modalId, 'INVENTORY_CHECK');
@@ -1324,8 +1326,12 @@
                             <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                         </div>
                         <div class="inline-input-container">
-                            <input type="text" id="inline-input-SHORTAGE_CHECK" placeholder="Enter criteria..." class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('SHORTAGE_CHECK')">Submit</button>
+                            <select class="inline-input" style="flex: 0.5; appearance: auto;" onkeypress="handleInlineEnter(event, 'SHORTAGE_CHECK')">
+                                        <option value="Loading Date">Loading Date</option>
+                                        <option value="Order Date">Order Date</option>
+                                    </select>
+                                    <input type="text" placeholder="Sales Org (e.g. 1234)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_CHECK')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('SHORTAGE_CHECK', this)">Submit</button>
                         </div>
                     </div>
                 `, modalId, 'SHORTAGE_CHECK');
@@ -1398,8 +1404,8 @@
                                     <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                                 </div>
                                 <div class="inline-input-container">
-                                    <input type="text" id="inline-input-ORDER_ID" placeholder="Enter Order ID..." class="inline-input" onkeypress="handleInlineEnter(event, 'ORDER_ID')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('ORDER_ID')">Submit</button>
+                                    <input type="text" placeholder="Enter Order ID..." class="inline-input" onkeypress="handleInlineEnter(event, \'ORDER_ID\')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend(\'ORDER_ID\', this)">Submit</button>
                                 </div>
                             </div>
                         `, modalId, 'ORDER_ID');
@@ -1568,8 +1574,9 @@
                                     <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                                 </div>
                                 <div class="inline-input-container">
-                                    <input type="text" id="inline-input-PRODUCT_STATUS" placeholder="Enter product and status..." class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS')">Submit</button>
+                                    <input type="text" placeholder="Product (e.g. potatoes)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
+                                    <input type="text" placeholder="Status (e.g. shipped)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS', this)">Submit</button>
                                 </div>
                             </div>
                         `, modalId, 'PRODUCT_STATUS');
@@ -1645,8 +1652,9 @@
                                     <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                                 </div>
                                 <div class="inline-input-container">
-                                    <input type="text" id="inline-input-INVENTORY_CHECK" placeholder="Enter SKU and Plant..." class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK')">Submit</button>
+                                    <input type="text" placeholder="SKU (e.g. 123)" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <input type="text" placeholder="Plant (e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK', this)">Submit</button>
                                 </div>
                             </div>
                         `, modalId, 'INVENTORY_CHECK');
@@ -1706,8 +1714,12 @@
                                     <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                                 </div>
                                 <div class="inline-input-container">
-                                    <input type="text" id="inline-input-SHORTAGE_CHECK" placeholder="Enter criteria..." class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_CHECK')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('SHORTAGE_CHECK')">Submit</button>
+                                    <select class="inline-input" style="flex: 0.5; appearance: auto;" onkeypress="handleInlineEnter(event, 'SHORTAGE_CHECK')">
+                                        <option value="Loading Date">Loading Date</option>
+                                        <option value="Order Date">Order Date</option>
+                                    </select>
+                                    <input type="text" placeholder="Sales Org (e.g. 1234)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_CHECK')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('SHORTAGE_CHECK', this)">Submit</button>
                                 </div>
                             </div>
                         `, modalId, 'SHORTAGE_CHECK');
@@ -1724,20 +1736,30 @@
         }
 
 
-        window.handleInlineSend = function(state) {
-            const inputEl = document.getElementById('inline-input-' + state);
-            if(!inputEl) return;
-            const text = inputEl.value.trim();
-            if(!text) return;
+        window.handleInlineSend = function(state, btnEl) {
+            const container = btnEl.closest('.inline-input-container');
+            const inputs = container.querySelectorAll('.inline-input');
+            let values = [];
+            let allEmpty = true;
+            inputs.forEach(el => {
+                if (el.value.trim()) allEmpty = false;
+                values.push(el.value.trim());
+                el.disabled = true;
+            });
             
-            inputEl.disabled = true;
-            inputEl.nextElementSibling.disabled = true;
+            if(allEmpty) {
+                inputs.forEach(el => el.disabled = false);
+                return;
+            }
             
+            btnEl.disabled = true;
+            const text = values.join(', ');
             handleSendText(text);
         };
         window.handleInlineEnter = function(event, state) {
             if(event.key === 'Enter') {
-                handleInlineSend(state);
+                const btnEl = event.target.closest('.inline-input-container').querySelector('.inline-submit-btn');
+                handleInlineSend(state, btnEl);
             }
         };
 
