@@ -463,59 +463,74 @@
         /* Timeline Component */
         .timeline-container {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            margin: 24px 0;
+            margin: 24px 0 16px;
             padding: 0 12px;
             position: relative;
         }
         
         .timeline-line {
             position: absolute;
-            top: 12px;
-            left: 24px;
-            right: 24px;
-            height: 2px;
+            top: 14px;
+            left: 36px;
+            right: 36px;
+            height: 4px;
             background-color: var(--border-color);
             z-index: 1;
+            border-radius: 2px;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 14px;
+            left: 36px;
+            height: 4px;
+            background-color: #fcd34d;
+            z-index: 2;
+            border-radius: 2px;
+            transition: width 0.3s ease;
         }
 
         .timeline-step {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
             width: 80px;
         }
 
         .step-dot {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            background-color: var(--bg-card);
-            border: 2px solid var(--border-color);
+            background-color: var(--border-color);
+            border: 2px solid var(--bg-card);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 14px;
+            color: transparent;
         }
 
         .step-dot.completed {
-            background-color: var(--primary);
-            border-color: var(--primary);
+            background-color: #fcd34d;
             color: #000;
         }
 
         .step-dot.active {
-            border-color: var(--primary);
-            border-width: 4px;
-            background-color: var(--bg-card);
+            background-color: #fcd34d;
+            color: #000;
+            width: 36px;
+            height: 36px;
+            margin-top: -4px; /* compensate for larger size */
+            font-size: 16px;
         }
 
         .step-dot.error {
             background-color: var(--danger);
-            border-color: var(--danger);
             color: white;
         }
 
@@ -523,11 +538,24 @@
             font-size: 11px;
             font-weight: 600;
             text-align: center;
-            color: var(--text-secondary);
+            color: var(--text-main);
+            margin-top: 4px;
+            line-height: 1.3;
         }
 
-        .step-label.active, .step-label.completed {
-            color: var(--text-main);
+        .step-subtitle {
+            font-size: 10px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        
+        .step-assignee {
+            font-size: 10px;
+            font-weight: 400;
+            color: #93c5fd;
+            text-align: center;
+            margin-top: 2px;
         }
 
         /* Data Card */
@@ -871,40 +899,85 @@
         }
 
         // Timeline Builder
-        function buildTimeline(stage) {
-            let c1 = '', c2 = '', c3 = '', c4 = '';
-            let isError = false;
-            
-            if (stage === 'CANCELLED' || stage === 'BLOCKED') isError = true;
+        function buildTimeline(stage, assignees = {}) {
+            let classes = ['', '', '', '', '', ''];
+            let isError = (stage === 'CANCELLED' || stage === 'BLOCKED');
+            let numericStage = isError ? 1 : stage;
 
             if (!isError) {
-                if (stage >= 1) c1 = 'completed';
-                if (stage === 1) c1 = 'active';
-                if (stage >= 2) c2 = 'completed';
-                if (stage === 2) c2 = 'active';
-                if (stage >= 3) c3 = 'completed';
-                if (stage === 3) c3 = 'active';
-                if (stage >= 4) c4 = 'completed';
+                for (let i = 1; i <= 5; i++) {
+                    if (i < numericStage) classes[i] = 'completed';
+                    if (i === numericStage) classes[i] = 'active';
+                }
+            }
+
+            const getIcon = (i) => {
+                if (isError && i === 1) return '!';
+                if (classes[i] === 'completed') return '✓';
+                if (classes[i] === 'active') {
+                    if (i === 1) return '🛒';
+                    if (i === 2) return '⚙️';
+                    if (i === 3) return '📦';
+                    if (i === 4) return '🚚';
+                    if (i === 5) return '🎉';
+                }
+                return '';
+            };
+
+            const getSubtitle = (i) => {
+                if (isError && i === 1) return 'Stopped';
+                if (classes[i] === 'active') return 'Current State';
+                if (classes[i] === '') return 'Pending';
+                return '';
+            };
+
+            const getLabel = (i) => {
+                if (isError && i === 1) return stage;
+                const labels = ['', 'Order Placed', 'Processing', 'Shipped', 'In Transit', 'Delivered'];
+                return labels[i];
+            };
+
+            // Progress bar width based on active/completed stages
+            // 5 stages = 4 segments. Each segment is 25% of the total width.
+            let progressWidth = 0;
+            if (!isError) {
+                progressWidth = (numericStage - 1) * 25;
             }
 
             return `
             <div class="timeline-container">
                 <div class="timeline-line"></div>
+                <div class="timeline-progress" style="width: ${progressWidth}%;"></div>
+                
                 <div class="timeline-step">
-                    <div class="step-dot ${isError ? 'error' : c1}">${isError ? '!' : (stage > 1 ? '✓' : '')}</div>
-                    <div class="step-label ${isError ? '' : c1}">${isError ? stage : 'Placed'}</div>
+                    <div class="step-dot ${isError ? 'error' : classes[1]}">${getIcon(1)}</div>
+                    <div class="step-label ${isError ? '' : classes[1]}">${getLabel(1)}</div>
+                    <div class="step-subtitle">${getSubtitle(1)}</div>
+                    ${assignees[1] ? `<div class="step-assignee">👤 ${assignees[1]}</div>` : ''}
                 </div>
                 <div class="timeline-step">
-                    <div class="step-dot ${c2}">${stage > 2 ? '✓' : ''}</div>
-                    <div class="step-label ${c2}">Processing</div>
+                    <div class="step-dot ${classes[2]}">${getIcon(2)}</div>
+                    <div class="step-label ${classes[2]}">${getLabel(2)}</div>
+                    <div class="step-subtitle">${getSubtitle(2)}</div>
+                    ${assignees[2] ? `<div class="step-assignee">👤 ${assignees[2]}</div>` : ''}
                 </div>
                 <div class="timeline-step">
-                    <div class="step-dot ${c3}">${stage > 3 ? '✓' : ''}</div>
-                    <div class="step-label ${c3}">Shipped</div>
+                    <div class="step-dot ${classes[3]}">${getIcon(3)}</div>
+                    <div class="step-label ${classes[3]}">${getLabel(3)}</div>
+                    <div class="step-subtitle">${getSubtitle(3)}</div>
+                    ${assignees[3] ? `<div class="step-assignee">👤 ${assignees[3]}</div>` : ''}
                 </div>
                 <div class="timeline-step">
-                    <div class="step-dot ${c4}">${stage > 4 ? '✓' : ''}</div>
-                    <div class="step-label ${c4}">Billed</div>
+                    <div class="step-dot ${classes[4]}">${getIcon(4)}</div>
+                    <div class="step-label ${classes[4]}">${getLabel(4)}</div>
+                    <div class="step-subtitle">${getSubtitle(4)}</div>
+                    ${assignees[4] ? `<div class="step-assignee">👤 ${assignees[4]}</div>` : ''}
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot ${classes[5]}">${getIcon(5)}</div>
+                    <div class="step-label ${classes[5]}">${getLabel(5)}</div>
+                    <div class="step-subtitle">${getSubtitle(5)}</div>
+                    ${assignees[5] ? `<div class="step-assignee">👤 ${assignees[5]}</div>` : ''}
                 </div>
             </div>
             `;
@@ -914,76 +987,76 @@
         const orderScenarios = {
             // Cancelled
             '10001': {
-                title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED'),
+                title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED', {1: 'Customer Serv.'}),
                 text: 'Order 10001 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: #fca5a5;">April 11, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Customer requested cancellation (Z01)</td></tr>`, tables: 'SAP.VBAK, SAP.VBAP'
             },
             '10002': {
-                title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED'),
+                title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED', {1: 'System API'}),
                 text: 'Order 10002 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: #fca5a5;">April 14, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Out of Stock - Cannot Fulfill (Z04)</td></tr>`, tables: 'SAP.VBAK, SAP.VBAP'
             },
             
             // Blocked
             '20001': {
-                title: 'Blocked (Credit Hold)', badge: 'BLOCKED', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED'),
+                title: 'Blocked (Credit Hold)', badge: 'BLOCKED', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Finance Team'}),
                 text: 'Order 20001 is currently on credit hold and cannot proceed until released by the Credit team.', table: `<tr><td class="label">Order Placed</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Credit Check Date</td><td class="value" style="color: #fca5a5;">April 15, 2026</td></tr><tr><td class="label">Credit Status</td><td class="value" style="color: #fca5a5;">Not Approved (Hold)</td></tr>`, tables: 'SAP.VBAK, SAP.VBUK'
             },
             '20002': {
-                title: 'Blocked (Delivery Block)', badge: 'BLOCKED', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED'),
+                title: 'Blocked (Delivery Block)', badge: 'BLOCKED', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Export Control'}),
                 text: 'Order 20002 has a delivery block.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Delivery Block Applied</td><td class="value" style="color: #fca5a5;">April 16, 2026</td></tr><tr><td class="label">Delivery Block</td><td class="value" style="color: #fca5a5;">Z2 - Export Papers Missing</td></tr>`, tables: 'SAP.VBAK'
             },
 
             // Open
             '30001': {
-                title: 'Open - Not Yet Allocated', badge: 'OPEN', badgeClass: 'neutral', timeline: buildTimeline(1),
+                title: 'Open - Not Yet Allocated', badge: 'OPEN', badgeClass: 'neutral', timeline: buildTimeline(1, {1: 'System API'}),
                 text: 'Order 30001 is open; no delivery exists yet.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Order Processing</td><td class="value">In Progress</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">Tomorrow</td></tr>`, tables: 'SAP.VBAK'
             },
             '30002': {
-                title: 'Open - Not Yet Allocated', badge: 'OPEN', badgeClass: 'neutral', timeline: buildTimeline(1),
+                title: 'Open - Not Yet Allocated', badge: 'OPEN', badgeClass: 'neutral', timeline: buildTimeline(1, {1: 'Sales Rep'}),
                 text: 'Order 30002 is open; no delivery exists yet.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Order Processing</td><td class="value">In Progress</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">Next Week</td></tr>`, tables: 'SAP.VBAK'
             },
 
             // Delivery Created
             '40001': {
-                title: 'Delivery Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2),
+                title: 'Delivery Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2, {1: 'Sales Rep', 2: 'Warehouse'}),
                 text: 'Order 40001 has delivery 008001111.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.VBAK, SAP.LIKP'
             },
             '40002': {
-                title: 'Delivery Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2),
+                title: 'Delivery Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2, {1: 'System API', 2: 'Warehouse'}),
                 text: 'Order 40002 has delivery 008001112.', table: `<tr><td class="label">Order Placed</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.VBAK, SAP.LIKP'
             },
 
             // Shipment Created
             '50001': {
-                title: 'Shipment Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2),
+                title: 'Shipment Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2, {1: 'Sales Rep', 2: 'Logistics'}),
                 text: 'Order 50001 has delivery 008001222, shipment 789111.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipment Number</td><td class="value">789111 (Created April 15)</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VTTK'
             },
             '50002': {
-                title: 'Shipment Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2),
+                title: 'Shipment Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2, {1: 'System API', 2: 'Logistics'}),
                 text: 'Order 50002 has delivery 008001223, shipment 789112.', table: `<tr><td class="label">Order Placed</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Shipment Number</td><td class="value">789112 (Created April 16)</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VTTK'
             },
 
             // Shipped
             '60001': {
-                title: 'Loaded / Shipped - Not Yet Billed', badge: 'SHIPPED', badgeClass: 'healthy', timeline: buildTimeline(3),
-                text: 'Order 60001 was shipped yesterday. Invoicing is still pending.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 11, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VBRK'
+                title: 'Loaded / Shipped - In Transit', badge: 'SHIPPED', badgeClass: 'healthy', timeline: buildTimeline(4, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'DHL Express'}),
+                text: 'Order 60001 is currently in transit with DHL Express.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 11, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VBRK'
             },
             '60002': {
-                title: 'Loaded / Shipped - Not Yet Billed', badge: 'SHIPPED', badgeClass: 'healthy', timeline: buildTimeline(3),
-                text: 'Order 60002 was shipped today. Invoicing is still pending.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VBRK'
+                title: 'Loaded / Shipped - In Transit', badge: 'SHIPPED', badgeClass: 'healthy', timeline: buildTimeline(4, {1: 'Sales Rep', 2: 'Warehouse', 3: 'Logistics', 4: 'FedEx'}),
+                text: 'Order 60002 is currently in transit with FedEx.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VBRK'
             },
 
             // Completed
             '70001': {
-                title: 'Loaded & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(4),
-                text: 'Order 70001 was shipped and invoice 009000111 was issued. This order is complete.', table: `<tr><td class="label">Order Placed</td><td class="value">April 01, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 02, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 04, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 06, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000111 (Issued April 07)</td></tr>`, tables: 'SAP.VBRK'
+                title: 'Delivered & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(5, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'DHL', 5: 'Finance'}),
+                text: 'Order 70001 was delivered and invoice 009000111 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 01, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 02, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 04, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 06, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000111 (Issued April 07)</td></tr>`, tables: 'SAP.VBRK'
             },
             '70002': {
-                title: 'Loaded & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(4),
-                text: 'Order 70002 was shipped and invoice 009000112 was issued. This order is complete.', table: `<tr><td class="label">Order Placed</td><td class="value">April 05, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 06, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 08, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000112 (Issued April 11)</td></tr>`, tables: 'SAP.VBRK'
+                title: 'Delivered & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(5, {1: 'Sales Rep', 2: 'Warehouse', 3: 'Logistics', 4: 'FedEx', 5: 'Finance'}),
+                text: 'Order 70002 was delivered and invoice 009000112 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 05, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 06, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 08, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000112 (Issued April 11)</td></tr>`, tables: 'SAP.VBRK'
             },
             '70003': {
-                title: 'Loaded & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(4),
-                text: 'Order 70003 was shipped and invoice 009000113 was issued. This order is complete.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 11, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000113 (Issued April 15)</td></tr>`, tables: 'SAP.VBRK'
+                title: 'Delivered & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(5, {1: 'System API', 2: 'Warehouse', 3: 'Logistics', 4: 'UPS', 5: 'Finance'}),
+                text: 'Order 70003 was delivered and invoice 009000113 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 11, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000113 (Issued April 15)</td></tr>`, tables: 'SAP.VBRK'
             }
         };
 
@@ -999,7 +1072,7 @@
                 const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
                     <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
-                        Please provide the Order ID or PO Number you would like me to check.
+                        Please provide the Order ID you would like me to check.
                         <span class="helper-icon" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
                     </div>
                 `, modalId);
