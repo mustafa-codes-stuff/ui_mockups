@@ -777,28 +777,41 @@
             scrollToBottom();
         }
 
-        function appendAIMessage(htmlContent, idForModal = null) {
+        function appendAIMessage(htmlContent, idForModal = null, modalType = 'ORDER_ID') {
             const msgDiv = document.createElement('div');
             msgDiv.className = 'message ai-message';
             
             let modalHtml = '';
             if (idForModal) {
-                modalHtml = `
-                <div id="${idForModal}" class="helper-modal">
-                    <h4>Demo Helper: Valid Dummy IDs</h4>
-                    <table class="helper-table">
-                        <tr><th>ID</th><th>Scenario</th></tr>
-                        <tr><td>10001, 10002</td><td>Cancelled / Rejected</td></tr>
-                        <tr><td>20001, 20002</td><td>Blocked (Credit Hold)</td></tr>
-                        <tr><td>30001, 30002</td><td>Open (Not Allocated)</td></tr>
-                        <tr><td>40001, 40002</td><td>Delivery Created (No PGI)</td></tr>
-                        <tr><td>50001, 50002</td><td>Shipment Created (No PGI)</td></tr>
-                        <tr><td>60001, 60002</td><td>Loaded/Shipped (Not Billed)</td></tr>
-                        <tr><td>70001, 70002, 70003</td><td>Loaded & Billed (Complete)</td></tr>
-                        <tr><td>99999</td><td>Not Found</td></tr>
-                    </table>
-                </div>
-                `;
+                if (modalType === 'ORDER_ID') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Dummy IDs</h4>
+                        <table class="helper-table">
+                            <tr><th>ID</th><th>Scenario</th></tr>
+                            <tr><td>10001, 10002</td><td>Cancelled / Rejected</td></tr>
+                            <tr><td>20001, 20002</td><td>Blocked (Credit Hold)</td></tr>
+                            <tr><td>30001, 30002</td><td>Open (Not Allocated)</td></tr>
+                            <tr><td>40001, 40002</td><td>Delivery Created (No PGI)</td></tr>
+                            <tr><td>50001, 50002</td><td>Shipment Created (No PGI)</td></tr>
+                            <tr><td>60001, 60002</td><td>Loaded/Shipped (Not Billed)</td></tr>
+                            <tr><td>70001, 70002, 70003</td><td>Loaded & Billed (Complete)</td></tr>
+                            <tr><td>99999</td><td>Not Found</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'PRODUCT_STATUS') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">For this demo, just type the following keyword to trigger the list view:</div>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>potatoes</td><td>Shows table of 5 potato orders</td></tr>
+                        </table>
+                    </div>
+                    `;
+                }
             }
 
             msgDiv.innerHTML = `
@@ -996,68 +1009,16 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
+                waitingForInput = 'PRODUCT_STATUS';
                 
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
-                    <div class="ai-text-content">Here are the recent orders for <strong>Potatoes</strong> and their current statuses:</div>
-                    <div class="data-card" style="width: 100%;">
-                        <div class="data-card-header">
-                            <span class="data-card-title">Order Status List: Potatoes</span>
-                            <span class="status-badge neutral">5 RECORDS</span>
-                        </div>
-                        <div class="data-card-body" style="padding: 0;">
-                            <table class="data-table" style="text-align: left; padding: 16px;">
-                                <thead>
-                                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
-                                        <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
-                                        <th style="padding: 12px 16px; font-weight: 500;">Customer</th>
-                                        <th style="padding: 12px 16px; font-weight: 500;">Plant</th>
-                                        <th style="padding: 12px 16px; font-weight: 500;">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="padding: 12px 16px;"><strong>10022</strong></td>
-                                        <td style="padding: 12px 16px;">Sysco (GB)</td>
-                                        <td style="padding: 12px 16px;">4010</td>
-                                        <td style="padding: 12px 16px; color: #6ee7b7;">Shipped</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 12px 16px;"><strong>10023</strong></td>
-                                        <td style="padding: 12px 16px;">Tesco</td>
-                                        <td style="padding: 12px 16px;">4010</td>
-                                        <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block (Credit Hold)</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 12px 16px;"><strong>10024</strong></td>
-                                        <td style="padding: 12px 16px;">Asda</td>
-                                        <td style="padding: 12px 16px;">4020</td>
-                                        <td style="padding: 12px 16px; color: var(--text-secondary);">Processing (No PGI)</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 12px 16px;"><strong>10025</strong></td>
-                                        <td style="padding: 12px 16px;">Aldi</td>
-                                        <td style="padding: 12px 16px;">4010</td>
-                                        <td style="padding: 12px 16px; color: #6ee7b7;">Complete (Billed)</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 12px 16px;"><strong>10026</strong></td>
-                                        <td style="padding: 12px 16px;">Morrisons</td>
-                                        <td style="padding: 12px 16px;">4030</td>
-                                        <td style="padding: 12px 16px; color: #fca5a5;">Cancelled</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
+                        Which product and what status would you like me to check?
+                        <span class="helper-icon" onclick="toggleHelperModal('${modalId}')">i</span>
                     </div>
-                    <div class="footer-metadata">
-                        <span><strong>Source Tables:</strong> 
-                            <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                            <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAP - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                            <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                        </span>
-                    </div>
-                `);
-            }, 1000);
+                `, modalId, 'PRODUCT_STATUS');
+            }, 800);
         }
 
         // FLOW: Inventory (Keep simple for now)
@@ -1136,27 +1097,38 @@
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
-                        appendAIMessage(`
-                            <div class="ai-text-content">${data.text}</div>
+                        
+                        let tableSplit = data.tables.split(',');
+                        let sourceTablesHtml = '';
+                        if (tableSplit.length > 1) {
+                            sourceTablesHtml = \`<strong>Source Tables:</strong>\`;
+                            tableSplit.forEach((table, index) => {
+                                sourceTablesHtml += \`<div style="margin-top: 4px; margin-left: 8px;">\${table.trim()} - <em>Last Updated: \${getTimestamp(index * 4 + 2)}</em></div>\`;
+                            });
+                        } else {
+                            sourceTablesHtml = \`<strong>Source Tables:</strong> \${data.tables} - <em>Last Updated: \${getTimestamp()}</em>\`;
+                        }
+
+                        appendAIMessage(\`
+                            <div class="ai-text-content">\${data.text}</div>
                             
-                            ${data.timeline}
+                            \${data.timeline}
 
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-header">
-                                    <span class="data-card-title">Order ${id} · ${data.title}</span>
-                                    <span class="status-badge ${data.badgeClass}">${data.badge}</span>
+                                    <span class="data-card-title">Order \${id} · \${data.title}</span>
+                                    <span class="status-badge \${data.badgeClass}">\${data.badge}</span>
                                 </div>
                                 <div class="data-card-body">
                                     <table class="data-table">
-                                        ${data.table}
+                                        \${data.table}
                                     </table>
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span><strong>Source Tables:</strong> ${data.tables}</span>
-                                <span><strong>Last Updated:</strong> ${getTimestamp()}</span>
+                                <span>\${sourceTablesHtml}</span>
                             </div>
-                        `);
+                        \`);
                     }, 800);
                 } else {
                     showLoading();
@@ -1164,13 +1136,96 @@
                         hideLoading();
                         
                         const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                        appendAIMessage(`
+                        appendAIMessage(\`
                             <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
                                 I'm sorry, I don't recognize that Order ID in my demo database. Please try one of the dummy IDs provided.
-                                <span class="helper-icon" onclick="toggleHelperModal('${modalId}')">i</span>
+                                <span class="helper-icon" onclick="toggleHelperModal('\${modalId}')">i</span>
                             </div>
-                        `, modalId);
+                        \`, modalId, 'ORDER_ID');
                         waitingForInput = 'ORDER_ID';
+                    }, 800);
+                }
+            } else if (waitingForInput === 'PRODUCT_STATUS') {
+                const input = text.trim().toLowerCase();
+                waitingForInput = null;
+                
+                if (input.includes('potato')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(\`
+                            <div class="ai-text-content">Here are the recent orders for <strong>Potatoes</strong> and their current statuses:</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Order Status List: Potatoes</span>
+                                    <span class="status-badge neutral">5 RECORDS</span>
+                                </div>
+                                <div class="data-card-body" style="padding: 0;">
+                                    <table class="data-table" style="text-align: left; padding: 16px;">
+                                        <thead>
+                                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
+                                                <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Customer</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Plant</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>10022</strong></td>
+                                                <td style="padding: 12px 16px;">Sysco (GB)</td>
+                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px; color: #6ee7b7;">Shipped</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>10023</strong></td>
+                                                <td style="padding: 12px 16px;">Tesco</td>
+                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block (Credit Hold)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>10024</strong></td>
+                                                <td style="padding: 12px 16px;">Asda</td>
+                                                <td style="padding: 12px 16px;">4020</td>
+                                                <td style="padding: 12px 16px; color: var(--text-secondary);">Processing (No PGI)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>10025</strong></td>
+                                                <td style="padding: 12px 16px;">Aldi</td>
+                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px; color: #6ee7b7;">Complete (Billed)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>10026</strong></td>
+                                                <td style="padding: 12px 16px;">Morrisons</td>
+                                                <td style="padding: 12px 16px;">4030</td>
+                                                <td style="padding: 12px 16px; color: #fca5a5;">Cancelled</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Source Tables:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: \${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAP - <em>Last Updated: \${getTimestamp(5)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: \${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                        \`);
+                    }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                        appendAIMessage(\`
+                            <div class="ai-text-content" style="display: flex; align-items: center; margin-bottom: 0;">
+                                I'm sorry, I couldn't find any recent data for that input in this demo. Try the dummy keyword.
+                                <span class="helper-icon" onclick="toggleHelperModal('\${modalId}')">i</span>
+                            </div>
+                        \`, modalId, 'PRODUCT_STATUS');
+                        waitingForInput = 'PRODUCT_STATUS';
                     }, 800);
                 }
             } else {
