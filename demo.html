@@ -807,7 +807,9 @@
                         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">For this demo, please type both a product and status to trigger the list view:</div>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>potatoes, all</td><td>Shows table of 5 potato orders across all statuses</td></tr>
+                            <tr><td>potatoes, shipped</td><td>Shows table of shipped potato orders</td></tr>
+                            <tr><td>fries, blocked</td><td>Shows table of blocked fries orders</td></tr>
+                            <tr><td>wedges, complete</td><td>Shows table of completed wedges orders</td></tr>
                         </table>
                     </div>
                     `;
@@ -1151,16 +1153,16 @@
                 const input = text.trim().toLowerCase();
                 waitingForInput = null;
                 
-                if (input.includes('potato') && input.includes('all')) {
+                if (input.includes('potato') && input.includes('shipped')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">Here are the recent orders for <strong>Potatoes</strong> and their current statuses:</div>
+                            <div class="ai-text-content">Here are the recently shipped orders for <strong>Potatoes</strong>:</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-header">
-                                    <span class="data-card-title">Order Status List: Potatoes</span>
-                                    <span class="status-badge neutral">5 RECORDS</span>
+                                    <span class="data-card-title">Order Status List: Potatoes (Shipped)</span>
+                                    <span class="status-badge healthy">2 RECORDS</span>
                                 </div>
                                 <div class="data-card-body" style="padding: 0;">
                                     <table class="data-table" style="text-align: left; padding: 16px;">
@@ -1180,28 +1182,10 @@
                                                 <td style="padding: 12px 16px; color: #6ee7b7;">Shipped</td>
                                             </tr>
                                             <tr>
-                                                <td style="padding: 12px 16px;"><strong>10023</strong></td>
-                                                <td style="padding: 12px 16px;">Tesco</td>
-                                                <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block (Credit Hold)</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 12px 16px;"><strong>10024</strong></td>
-                                                <td style="padding: 12px 16px;">Asda</td>
+                                                <td style="padding: 12px 16px;"><strong>10034</strong></td>
+                                                <td style="padding: 12px 16px;">Sainsburys</td>
                                                 <td style="padding: 12px 16px;">4020</td>
-                                                <td style="padding: 12px 16px; color: var(--text-secondary);">Processing (No PGI)</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 12px 16px;"><strong>10025</strong></td>
-                                                <td style="padding: 12px 16px;">Aldi</td>
-                                                <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: #6ee7b7;">Complete (Billed)</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 12px 16px;"><strong>10026</strong></td>
-                                                <td style="padding: 12px 16px;">Morrisons</td>
-                                                <td style="padding: 12px 16px;">4030</td>
-                                                <td style="padding: 12px 16px; color: #fca5a5;">Cancelled</td>
+                                                <td style="padding: 12px 16px; color: #6ee7b7;">Shipped</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1210,8 +1194,104 @@
                             <div class="footer-metadata">
                                 <span><strong>Source Tables:</strong> 
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAP - <em>Last Updated: ${getTimestamp(5)}</em></div>
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                        `);
+                    }, 800);
+                } else if (input.includes('fries') && input.includes('blocked')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Here are the currently blocked orders for <strong>Fries</strong>:</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Order Status List: Fries (Blocked)</span>
+                                    <span class="status-badge delayed">3 RECORDS</span>
+                                </div>
+                                <div class="data-card-body" style="padding: 0;">
+                                    <table class="data-table" style="text-align: left; padding: 16px;">
+                                        <thead>
+                                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
+                                                <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Customer</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Plant</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>20088</strong></td>
+                                                <td style="padding: 12px 16px;">Tesco</td>
+                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block (Credit Hold)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>20089</strong></td>
+                                                <td style="padding: 12px 16px;">Asda</td>
+                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px; color: #fca5a5;">Z2 Block (Delivery)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>20090</strong></td>
+                                                <td style="padding: 12px 16px;">Morrisons</td>
+                                                <td style="padding: 12px 16px;">4030</td>
+                                                <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block (Credit Hold)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Source Tables:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                        `);
+                    }, 800);
+                } else if (input.includes('wedges') && input.includes('complete')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Here are the completed orders for <strong>Wedges</strong>:</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Order Status List: Wedges (Complete)</span>
+                                    <span class="status-badge healthy">2 RECORDS</span>
+                                </div>
+                                <div class="data-card-body" style="padding: 0;">
+                                    <table class="data-table" style="text-align: left; padding: 16px;">
+                                        <thead>
+                                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
+                                                <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Customer</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Plant</th>
+                                                <th style="padding: 12px 16px; font-weight: 500;">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>30044</strong></td>
+                                                <td style="padding: 12px 16px;">Aldi</td>
+                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px; color: #6ee7b7;">Complete (Billed)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 16px;"><strong>30045</strong></td>
+                                                <td style="padding: 12px 16px;">Lidl</td>
+                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px; color: #6ee7b7;">Complete (Billed)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Source Tables:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBRK - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
                         `);
