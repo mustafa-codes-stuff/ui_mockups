@@ -734,7 +734,7 @@
         function appendUserMessage(text) {
             const msgDiv = document.createElement('div');
             msgDiv.className = 'message user-message';
-            msgDiv.innerHTML = \`<div class="bubble-user">\${text}</div>\`;
+            msgDiv.innerHTML = `<div class="bubble-user">${text}</div>`;
             chatContainer.appendChild(msgDiv);
             scrollToBottom();
         }
@@ -742,10 +742,10 @@
         function appendAIMessage(htmlContent) {
             const msgDiv = document.createElement('div');
             msgDiv.className = 'message ai-message';
-            msgDiv.innerHTML = \`
+            msgDiv.innerHTML = `
                 <div class="avatar-ai">SO</div>
-                <div class="bubble-ai">\${htmlContent}</div>
-            \`;
+                <div class="bubble-ai">${htmlContent}</div>
+            `;
             chatContainer.appendChild(msgDiv);
             scrollToBottom();
         }
@@ -754,7 +754,7 @@
             const loader = document.createElement('div');
             loader.id = 'loading';
             loader.className = 'message ai-message';
-            loader.innerHTML = \`
+            loader.innerHTML = `
                 <div class="avatar-ai">SO</div>
                 <div class="bubble-ai" style="padding: 12px 20px; max-width: 80px;">
                     <div class="typing-indicator">
@@ -763,7 +763,7 @@
                         <div class="dot"></div>
                     </div>
                 </div>
-            \`;
+            `;
             chatContainer.appendChild(loader);
             scrollToBottom();
         }
@@ -780,7 +780,7 @@
         function getTimestamp() {
             const d = new Date();
             const pad = (n) => n.toString().padStart(2, '0');
-            return \`\${d.getFullYear()}-\${pad(d.getMonth()+1)}-\${pad(d.getDate())} \${pad(d.getHours())}:\${pad(d.getMinutes())}:\${pad(d.getSeconds())}\`;
+            return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
         }
 
         // Timeline Builder
@@ -801,27 +801,27 @@
                 if (stage >= 4) c4 = 'completed';
             }
 
-            return \`
+            return `
             <div class="timeline-container">
                 <div class="timeline-line"></div>
                 <div class="timeline-step">
-                    <div class="step-dot \${isError ? 'error' : c1}">\${isError ? '!' : (stage > 1 ? '✓' : '')}</div>
-                    <div class="step-label \${isError ? '' : c1}">\${isError ? stage : 'Placed'}</div>
+                    <div class="step-dot ${isError ? 'error' : c1}">${isError ? '!' : (stage > 1 ? '✓' : '')}</div>
+                    <div class="step-label ${isError ? '' : c1}">${isError ? stage : 'Placed'}</div>
                 </div>
                 <div class="timeline-step">
-                    <div class="step-dot \${c2}">\${stage > 2 ? '✓' : ''}</div>
-                    <div class="step-label \${c2}">Processing</div>
+                    <div class="step-dot ${c2}">${stage > 2 ? '✓' : ''}</div>
+                    <div class="step-label ${c2}">Processing</div>
                 </div>
                 <div class="timeline-step">
-                    <div class="step-dot \${c3}">\${stage > 3 ? '✓' : ''}</div>
-                    <div class="step-label \${c3}">Shipped</div>
+                    <div class="step-dot ${c3}">${stage > 3 ? '✓' : ''}</div>
+                    <div class="step-label ${c3}">Shipped</div>
                 </div>
                 <div class="timeline-step">
-                    <div class="step-dot \${c4}">\${stage > 4 ? '✓' : ''}</div>
-                    <div class="step-label \${c4}">Billed</div>
+                    <div class="step-dot ${c4}">${stage > 4 ? '✓' : ''}</div>
+                    <div class="step-label ${c4}">Billed</div>
                 </div>
             </div>
-            \`;
+            `;
         }
 
         // ORDER SCENARIOS MAP
@@ -831,7 +831,7 @@
                 badge: 'CANCELLED', badgeClass: 'delayed',
                 timeline: buildTimeline('CANCELLED'),
                 text: 'Order 10001 has been cancelled - all line items were rejected.',
-                table: \`<tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Customer requested cancellation (Z01)</td></tr>\`,
+                table: `<tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Customer requested cancellation (Z01)</td></tr>`,
                 tables: 'SAP.VBAK, SAP.VBAP'
             },
             '10002': {
@@ -839,7 +839,7 @@
                 badge: 'BLOCKED', badgeClass: 'delayed',
                 timeline: buildTimeline('BLOCKED'),
                 text: 'Order 10002 is currently on credit hold and cannot proceed until released by the Credit team.',
-                table: \`<tr><td class="label">Credit Status</td><td class="value" style="color: #fca5a5;">Not Approved (Hold)</td></tr>\`,
+                table: `<tr><td class="label">Credit Status</td><td class="value" style="color: #fca5a5;">Not Approved (Hold)</td></tr>`,
                 tables: 'SAP.VBAK, SAP.VBUK'
             },
             '10004': {
@@ -847,7 +847,7 @@
                 badge: 'OPEN', badgeClass: 'neutral',
                 timeline: buildTimeline(1),
                 text: 'Order 10004 is open; no delivery exists yet.',
-                table: \`<tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>\`,
+                table: `<tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`,
                 tables: 'SAP.VBAK'
             },
             '10005': {
@@ -855,7 +855,7 @@
                 badge: 'PROCESSING', badgeClass: 'neutral',
                 timeline: buildTimeline(2),
                 text: 'Order 10005 has delivery 0080012345.',
-                table: \`<tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>\`,
+                table: `<tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`,
                 tables: 'SAP.VBAK, SAP.LIKP'
             },
             '10006': {
@@ -863,7 +863,7 @@
                 badge: 'PROCESSING', badgeClass: 'neutral',
                 timeline: buildTimeline(2),
                 text: 'Order 10006 has delivery 0080012345, shipment 7891011.',
-                table: \`<tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr>\`,
+                table: `<tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr>`,
                 tables: 'SAP.LIKP, SAP.VTTK'
             },
             '10007': {
@@ -871,7 +871,7 @@
                 badge: 'SHIPPED', badgeClass: 'healthy',
                 timeline: buildTimeline(3),
                 text: 'Order 10007 was shipped on April 16, 2026. Invoicing is still pending.',
-                table: \`<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>\`,
+                table: `<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr>`,
                 tables: 'SAP.LIKP, SAP.VBRK'
             },
             '10008': {
@@ -879,7 +879,7 @@
                 badge: 'COMPLETE', badgeClass: 'healthy',
                 timeline: buildTimeline(4),
                 text: 'Order 10008 was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.',
-                table: \`<tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr>\`,
+                table: `<tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr>`,
                 tables: 'SAP.VBRK'
             },
             '10009': {
@@ -887,7 +887,7 @@
                 badge: 'NO MATCH', badgeClass: 'delayed',
                 timeline: '',
                 text: 'Sorry, I couldn\'t find that order.',
-                table: \`<tr><td class="label">Result</td><td class="value">No record found matching the criteria.</td></tr>\`,
+                table: `<tr><td class="label">Result</td><td class="value">No record found matching the criteria.</td></tr>`,
                 tables: 'SAP.VBAK'
             }
         };
@@ -901,7 +901,7 @@
                 hideLoading();
                 waitingForInput = 'ORDER_ID';
                 
-                appendAIMessage(\`
+                appendAIMessage(`
                     <div class="ai-text-content">Please provide the Order ID or PO Number you would like me to check.</div>
                     <div class="ai-text-content" style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; margin-top: 16px;">
                         <em>(For this demo, click one of the dummy IDs below to test different scenarios)</em>
@@ -916,7 +916,7 @@
                         <button class="chip demo-chip" onclick="handleSendText('10008')">10008 (Complete)</button>
                         <button class="chip demo-chip" onclick="handleSendText('10009')">10009 (Not Found)</button>
                     </div>
-                \`);
+                `);
             }, 800);
         }
 
@@ -928,7 +928,7 @@
             setTimeout(() => {
                 hideLoading();
                 
-                appendAIMessage(\`
+                appendAIMessage(`
                     <div class="ai-text-content">I found 4 orders that are currently blocked (Credit Hold) across your authorized plants. Here is the tabular view:</div>
                     <div class="data-card" style="width: 100%;">
                         <div class="data-card-header">
@@ -974,9 +974,9 @@
                     </div>
                     <div class="footer-metadata">
                         <span><strong>Source Tables:</strong> SAP.VBAK, SAP.VBAP, SAP.KNA1</span>
-                        <span><strong>Last Updated:</strong> \${getTimestamp()}</span>
+                        <span><strong>Last Updated:</strong> ${getTimestamp()}</span>
                     </div>
-                \`);
+                `);
             }, 1000);
         }
 
@@ -987,7 +987,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                appendAIMessage(\`
+                appendAIMessage(`
                     <div class="ai-text-content">Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
                     <div class="data-card" style="width: 100%;">
                         <div class="data-card-header">
@@ -1003,9 +1003,9 @@
                     </div>
                     <div class="footer-metadata">
                         <span><strong>Source Tables:</strong> SAP.MARD, SAP.VBEP</span>
-                        <span><strong>Last Updated:</strong> \${getTimestamp()}</span>
+                        <span><strong>Last Updated:</strong> ${getTimestamp()}</span>
                     </div>
-                \`);
+                `);
             }, 800);
         }
 
@@ -1016,7 +1016,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                appendAIMessage(\`
+                appendAIMessage(`
                     <div class="ai-text-content">I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.</div>
                     <div class="data-card" style="width: 100%;">
                         <div class="data-card-header">
@@ -1032,9 +1032,9 @@
                     </div>
                     <div class="footer-metadata">
                         <span><strong>Source Tables:</strong> SAP.VBAK, SAP.VBAP, SAP.VBEP</span>
-                        <span><strong>Last Updated:</strong> \${getTimestamp()}</span>
+                        <span><strong>Last Updated:</strong> ${getTimestamp()}</span>
                     </div>
-                \`);
+                `);
             }, 800);
         }
 
@@ -1052,27 +1052,27 @@
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
-                        appendAIMessage(\`
-                            <div class="ai-text-content">\${data.text}</div>
+                        appendAIMessage(`
+                            <div class="ai-text-content">${data.text}</div>
                             
-                            \${data.timeline}
+                            ${data.timeline}
 
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-header">
-                                    <span class="data-card-title">Order \${id} · \${data.title}</span>
-                                    <span class="status-badge \${data.badgeClass}">\${data.badge}</span>
+                                    <span class="data-card-title">Order ${id} · ${data.title}</span>
+                                    <span class="status-badge ${data.badgeClass}">${data.badge}</span>
                                 </div>
                                 <div class="data-card-body">
                                     <table class="data-table">
-                                        \${data.table}
+                                        ${data.table}
                                     </table>
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span><strong>Source Tables:</strong> \${data.tables}</span>
-                                <span><strong>Last Updated:</strong> \${getTimestamp()}</span>
+                                <span><strong>Source Tables:</strong> ${data.tables}</span>
+                                <span><strong>Last Updated:</strong> ${getTimestamp()}</span>
                             </div>
-                        \`);
+                        `);
                     }, 800);
                 } else {
                     showLoading();
