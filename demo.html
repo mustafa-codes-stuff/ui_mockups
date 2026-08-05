@@ -871,6 +871,8 @@
                     <div class="nav-item" onclick="startSKUMasterDataFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What are the cases-per-pallet, weights, and EAN/UPC for SKU [XXXX]?</div>
                     <div class="nav-item" onclick="startOpenOrdersWeightFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List open orders with pallets, cases, and weight, for a customer.</div>
                     <div class="nav-item" onclick="startShortageImpactFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which customers are most impacted by shortages for [sales org], [time period]?</div>
+                    <div class="nav-item" onclick="startDeliveryNoShipmentFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with a delivery created but no shipment for a destination country.</div>
+                    <div class="nav-item" onclick="startAmendOrderFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Can order/PO [X] still be amended?</div>
                 </div>
             </div>
 
@@ -1108,6 +1110,31 @@
                             <tr><th>Input (Customer ID)</th><th>Result</th></tr>
                             <tr><td>100234</td><td>5 orders found</td></tr>
                             <tr><td>100235</td><td>No open orders</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                                } else if (modalType === 'DELIVERY_NO_SHIPMENT_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input (Country)</th><th>Result</th></tr>
+                            <tr><td>CA</td><td>3 deliveries found</td></tr>
+                            <tr><td>US</td><td>None found</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'AMEND_ORDER_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input (Order/PO)</th><th>Result</th></tr>
+                            <tr><td>123456</td><td>Fully open</td></tr>
+                            <tr><td>123457</td><td>Delivery created</td></tr>
+                            <tr><td>123458</td><td>Loaded/Shipped</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -1708,6 +1735,54 @@
                     </div>
                 `, modalId, 'OPEN_ORDERS_WEIGHT_CHECK');
                 waitingForInput = 'OPEN_ORDERS_WEIGHT_CHECK';
+            }, 600);
+        }
+
+        function startDeliveryNoShipmentFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("Show orders with a delivery created but no shipment.");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can find deliveries without shipments. Please provide the Destination Country.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Country (e.g. CA)" class="inline-input" onkeypress="handleInlineEnter(event, 'DELIVERY_NO_SHIPMENT_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('DELIVERY_NO_SHIPMENT_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'DELIVERY_NO_SHIPMENT_CHECK');
+                waitingForInput = 'DELIVERY_NO_SHIPMENT_CHECK';
+            }, 600);
+        }
+
+        function startAmendOrderFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("Can order/PO [X] still be amended?");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can check if an order can still be amended. Please provide the SAP Order Number or PO Number.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Order/PO (e.g. 123456)" class="inline-input" onkeypress="handleInlineEnter(event, 'AMEND_ORDER_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('AMEND_ORDER_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'AMEND_ORDER_CHECK');
+                waitingForInput = 'AMEND_ORDER_CHECK';
             }, 600);
         }
 
@@ -2389,6 +2464,59 @@
                 } else {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that customer. Please confirm the customer ID or name.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'DELIVERY_NO_SHIPMENT_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('ca')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 3 deliveries for destination country CA with no shipment yet created.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>Delivery #</th><th>Customer</th><th>Plant</th></tr>
+                                        <tr><td>80099201</td><td>100234 (Acme Corp)</td><td>4010</td></tr>
+                                        <tr><td>80099202</td><td>100456 (Global Tech)</td><td>4020</td></tr>
+                                        <tr><td>80099203</td><td>100789 (Initech)</td><td>4010</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Full List', 'Check Logistics']);
+                    }, 800);
+                } else if (input.includes('us')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">All deliveries for that country currently have a shipment created.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find any data for that destination country. Please confirm the country name.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'AMEND_ORDER_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('123456')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`<div class="ai-text-content">Yes, order 123456 is still fully open - and can be amended.</div>`);
+                        appendFollowUpActions(['Amend Quantity', 'Change Delivery Date']);
+                    }, 800);
+                } else if (input.includes('123457')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`<div class="ai-text-content">Order 123457 already has a delivery in progress. Low chances for changes to still be possible, please contact Customer Service representative.</div>`);
+                        appendFollowUpActions(['Contact CS']);
+                    }, 800);
+                } else if (input.includes('123458')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Order 123458 has already been shipped, changes are no longer possible.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that order. Please check the order number/PO number and try again.</div>`); }, 800);
                 }
             } else if (waitingForInput === 'SHORTAGE_IMPACT_CHECK') {
                 waitingForInput = null;
