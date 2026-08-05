@@ -867,6 +867,8 @@
                     <div class="nav-item" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (or any time frame) for a customer.</div>
                     <div class="nav-item" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].</div>
                     <div class="nav-item" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
+                    <div class="nav-item" onclick="startEstimatedShippingFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of orders that have an estimated shipping date of [date].</div>
+                    <div class="nav-item" onclick="startSKUMasterDataFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What are the cases-per-pallet, weights, and EAN/UPC for SKU [XXXX]?</div>
                 </div>
             </div>
 
@@ -1084,7 +1086,31 @@
                         </table>
                     </div>
                     `;
-                                } else if (modalType === 'UNSHIPPED_PRODUCT_CHECK') {
+                                                } else if (modalType === 'EST_SHIPPING_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>April 16, 2026, 3010</td><td>8 orders found</td></tr>
+                            <tr><td>April 17, 2026, 3010</td><td>None found</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'SKU_MASTER_DATA_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input (Product ID)</th><th>Result</th></tr>
+                            <tr><td>456789</td><td>SKU found</td></tr>
+                            <tr><td>456790</td><td>SKU found but missing data</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'UNSHIPPED_PRODUCT_CHECK') {
                     modalHtml = `
                     <div id="${idForModal}" class="helper-modal">
                         <h4>Demo Helper: Valid Inputs</h4>
@@ -1632,6 +1658,55 @@
                     </div>
                 `, modalId, 'SHIP_SHORT_CHECK');
                 waitingForInput = 'SHIP_SHORT_CHECK';
+            }, 600);
+        }
+
+        function startEstimatedShippingFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("Give me a list of orders that have an estimated shipping date of [date].");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can check orders by estimated shipping date. What loading date (or date range) would you like me to check?
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Time Frame (e.g. April 16, 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'EST_SHIPPING_CHECK')">
+                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'EST_SHIPPING_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('EST_SHIPPING_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'EST_SHIPPING_CHECK');
+                waitingForInput = 'EST_SHIPPING_CHECK';
+            }, 600);
+        }
+
+        function startSKUMasterDataFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("What are the cases-per-pallet, gross weight, net weight, and EAN/UPC for SKU [XXXX]?");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can look up Master Data for a product. Please provide the McCain Product ID (SKU).
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Product ID (e.g. 456789)" class="inline-input" onkeypress="handleInlineEnter(event, 'SKU_MASTER_DATA_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('SKU_MASTER_DATA_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'SKU_MASTER_DATA_CHECK');
+                waitingForInput = 'SKU_MASTER_DATA_CHECK';
             }, 600);
         }
 
@@ -2209,6 +2284,69 @@
                 } else {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that customer or sales organization.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'EST_SHIPPING_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('16') && input.includes('3010')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 8 orders with a planned shipping date of April 16, 2026 for Sales Org 3010.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>Status</th><th>Shipping Plant</th></tr>
+                                        <tr><td>10099301</td><td>Open Order</td><td>4010 - Plant Alpha</td></tr>
+                                        <tr><td>10099302</td><td>Delivery Note Created</td><td>4010 - Plant Alpha</td></tr>
+                                        <tr><td>10099303</td><td>Open Order</td><td>4020 - Plant Beta</td></tr>
+                                    </table>
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 5 more orders</div>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Full List', 'Check Plant Capacity']);
+                    }, 800);
+                } else if (input.includes('17') && input.includes('3010')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No orders are currently planned shipping date for the criteria given.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'SKU_MASTER_DATA_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('456789')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">SKU 456789: 80 cases/pallet, gross weight 22.5 kg/case, net weight 20.0 kg/case, EAN 06 12345 67890 1.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">SKU 456789 Master Data</span>
+                                    <span class="status-badge healthy">ACTIVE</span>
+                                </div>
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        <tr><td class="label">Cases / Pallet</td><td class="value">80</td></tr>
+                                        <tr><td class="label">Gross Weight</td><td class="value">22.5 kg/case</td></tr>
+                                        <tr><td class="label">Net Weight</td><td class="value">20.0 kg/case</td></tr>
+                                        <tr><td class="label">EAN/UPC</td><td class="value">06 12345 67890 1</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['View Inventory', 'Check Pending Orders']);
+                    }, 800);
+                } else if (input.includes('456790')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">I found SKU 456790 but pallet configuration data isn't maintained for it - please check with Master Data.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that SKU. Please confirm the product ID.</div>`); }, 800);
                 }
             } else if (waitingForInput === 'UNSHIPPED_PRODUCT_CHECK') {
                 waitingForInput = null;
