@@ -40,6 +40,7 @@
         }
 
         /* Main App Container */
+        
         .app-container {
             width: 100%;
             max-width: 1400px;
@@ -50,9 +51,10 @@
             display: flex;
             overflow: hidden;
             border: 1px solid #333;
+            position: relative; /* Added for absolute positioning of collapse btn */
         }
 
-        /* Sidebar */
+        /* Sidebar updates for collapse */
         .sidebar {
             width: 260px;
             background-color: var(--bg-sidebar);
@@ -60,6 +62,136 @@
             display: flex;
             flex-direction: column;
             padding: 16px 0;
+            transition: width 0.3s, padding 0.3s, opacity 0.3s;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .sidebar.collapsed {
+            width: 0;
+            padding: 16px 0;
+            border-right: none;
+        }
+        
+        .sidebar.collapsed > * {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .sidebar > * {
+            transition: opacity 0.2s;
+        }
+
+        .collapse-btn {
+            position: absolute;
+            left: 260px;
+            top: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: left 0.3s, transform 0.3s;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        
+        .collapse-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .sidebar.collapsed ~ .collapse-btn {
+            left: 0;
+            transform: translateY(-50%) translateX(50%);
+        }
+
+        /* Right Sidebar updates */
+        .right-sidebar {
+            width: 0;
+            background-color: var(--bg-sidebar);
+            border-left: none;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s, border 0.3s;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .right-sidebar.open {
+            width: 300px;
+            border-left: 1px solid var(--border-color);
+        }
+        
+        .right-sidebar-content {
+            padding: 24px;
+            width: 300px; /* fixed to prevent reflow */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .right-sidebar.open .right-sidebar-content {
+            opacity: 1;
+        }
+        
+        .user-details-card {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .user-details-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-details-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .user-details-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-details-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+        
+        .user-details-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .user-details-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 8px;
         }
 
         .sidebar-header {
@@ -744,7 +876,7 @@
 
     <div class="app-container">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div style="width:16px; height:16px; border:2px solid var(--primary); border-radius:2px;"></div>
                 <div class="logo-text">McCain.</div>
@@ -766,6 +898,12 @@
             </div>
         </aside>
 
+        
+        <!-- Collapse Button -->
+        <div class="collapse-btn" id="collapse-btn" onclick="toggleSidebar()">
+            ◀
+        </div>
+        
         <!-- Chat Area -->
         <main class="chat-main">
             <div class="chat-header">
@@ -797,6 +935,13 @@
             
             <div class="beta-ribbon">BETA</div>
         </main>
+
+        <!-- Right Sidebar for User Details -->
+        <aside class="right-sidebar" id="right-sidebar">
+            <div class="right-sidebar-content" id="right-sidebar-content">
+                <!-- Content injected dynamically -->
+            </div>
+        </aside>
     </div>
 
     <!-- Script Logic -->
@@ -807,6 +952,68 @@
         
         // Wait for specific input states
         let waitingForInput = null;
+
+        const rightSidebar = document.getElementById('right-sidebar');
+        const rightSidebarContent = document.getElementById('right-sidebar-content');
+        const sidebar = document.getElementById('sidebar');
+        const collapseBtn = document.getElementById('collapse-btn');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            if(sidebar.classList.contains('collapsed')) {
+                collapseBtn.innerText = '▶';
+            } else {
+                collapseBtn.innerText = '◀';
+            }
+        }
+
+        function showUserDetails(orderId) {
+            // Generate dummy details based on orderId
+            let name = "Jane Doe";
+            let initials = "JD";
+            let role = "Sales Representative";
+            let dept = "North America Sales";
+            let phone = "+1 (555) 123-4567";
+            
+            if (orderId.startsWith('2')) {
+                name = "Michael Smith"; initials = "MS"; role = "Account Manager";
+            } else if (orderId.startsWith('4') || orderId.startsWith('5')) {
+                name = "Sarah Johnson"; initials = "SJ"; role = "Logistics Coordinator"; dept = "Global Logistics";
+            } else if (orderId.startsWith('7')) {
+                name = "David Chen"; initials = "DC"; role = "Finance Analyst"; dept = "Accounts Receivable";
+            }
+
+            rightSidebarContent.innerHTML = `
+                <div style="font-weight: 600; font-size: 16px; margin-bottom: 8px;">Order Details</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Information about the creator of Order ${orderId}.</div>
+                
+                <div class="user-details-card">
+                    <div class="user-details-header">
+                        <div class="user-details-avatar">${initials}</div>
+                        <div class="user-details-info">
+                            <div class="user-details-name">${name}</div>
+                            <div class="user-details-role">${role}</div>
+                        </div>
+                    </div>
+                    <div class="user-details-row">
+                        <span style="color: var(--text-secondary);">Department</span>
+                        <span style="color: var(--text-main); font-weight: 500;">${dept}</span>
+                    </div>
+                    <div class="user-details-row">
+                        <span style="color: var(--text-secondary);">Contact</span>
+                        <span style="color: var(--text-main); font-weight: 500;">${phone}</span>
+                    </div>
+                    <button class="inline-submit-btn" style="width: 100%; margin-top: 8px; padding: 8px;">Message User</button>
+                </div>
+            `;
+            
+            rightSidebar.classList.add('open');
+        }
+
+        function hideUserDetails() {
+            rightSidebar.classList.remove('open');
+        }
+
 
         function appendUserMessage(text) {
             const msgDiv = document.createElement('div');
@@ -962,6 +1169,7 @@
         }
 
         window.handleFollowUpClick = function(action) {
+            hideUserDetails();
             if (action === 'Ask something else') {
                 const globalInput = document.getElementById('global-input-area');
                 if (globalInput) {
@@ -1239,6 +1447,7 @@
 
         // FLOW: Order Status
         function startOrderFlow() {
+            hideUserDetails();
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("What is the status of a specific order?");
             showLoading();
@@ -1263,6 +1472,7 @@
 
         // FLOW: Pull all orders in status
         function pullAllOrdersInStatus() {
+            hideUserDetails();
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Give me a list of all orders for a product and their status");
             showLoading();
@@ -1288,6 +1498,7 @@
 
         // FLOW: Inventory
         function startInventoryFlow() {
+            hideUserDetails();
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Check Inventory Status");
             showLoading();
@@ -1313,6 +1524,7 @@
 
         // FLOW: Shortage
         function startShortageFlow() {
+            hideUserDetails();
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Check Shortage Orders");
             showLoading();
