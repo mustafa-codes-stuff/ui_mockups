@@ -82,35 +82,6 @@
             transition: opacity 0.2s;
         }
 
-        .collapse-btn {
-            position: absolute;
-            left: 260px;
-            top: 50%;
-            transform: translateY(-50%) translateX(-50%);
-            width: 24px;
-            height: 24px;
-            background: var(--bg-sidebar);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: left 0.3s, transform 0.3s;
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
-        
-        .collapse-btn:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-        
-        .sidebar.collapsed ~ .collapse-btn {
-            left: 0;
-            transform: translateY(-50%) translateX(50%);
-        }
 
         /* Right Sidebar updates */
         .right-sidebar {
@@ -898,17 +869,13 @@
             </div>
         </aside>
 
-        
-        <!-- Collapse Button -->
-        <div class="collapse-btn" id="collapse-btn" onclick="toggleSidebar()">
-            ◀
-        </div>
+
         
         <!-- Chat Area -->
         <main class="chat-main">
             <div class="chat-header">
                 <div class="header-left">
-                    <span style="cursor:pointer;" onclick="location.reload()">←</span>
+                    <span id="header-collapse-btn" style="cursor:pointer; display:inline-block; width:24px; text-align:center; transition: transform 0.3s;" onclick="toggleSidebar()">←</span>
                     Customer Support Chatbot
                 </div>
             </div>
@@ -956,14 +923,14 @@
         const rightSidebar = document.getElementById('right-sidebar');
         const rightSidebarContent = document.getElementById('right-sidebar-content');
         const sidebar = document.getElementById('sidebar');
-        const collapseBtn = document.getElementById('collapse-btn');
 
         function toggleSidebar() {
             sidebar.classList.toggle('collapsed');
+            const btn = document.getElementById('header-collapse-btn');
             if(sidebar.classList.contains('collapsed')) {
-                collapseBtn.innerText = '▶';
+                btn.style.transform = 'rotate(180deg)';
             } else {
-                collapseBtn.innerText = '◀';
+                btn.style.transform = 'rotate(0deg)';
             }
         }
 
