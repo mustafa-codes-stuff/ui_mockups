@@ -860,6 +860,7 @@
                     <div class="nav-item" onclick="pullAllOrdersInStatus()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders for a product and their status</div>
                     <div class="nav-item" onclick="startInventoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</div>
                     <div class="nav-item" onclick="startShortageFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with shortages for [sales org]</div>
+                    <div class="nav-item" onclick="startFillRateFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?</div>
                 </div>
             </div>
 
@@ -1036,6 +1037,19 @@
                             <tr><td>SKU 123, Plant 4010</td><td>Stock found (1,250 cases)</td></tr>
                             <tr><td>SKU 124, Plant 4010</td><td>Zero stock (0 cases)</td></tr>
                             <tr><td>Any other</td><td>Not found</td></tr>
+                        </table>
+                    </div>
+                    `;
+                                } else if (modalType === 'FILL_RATE_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>100234, 4010, June 2026</td><td>Fill rate calculated</td></tr>
+                            <tr><td>100234, 4010, May 2026</td><td>No orders in period</td></tr>
+                            <tr><td>Any other</td><td>Not found / No match</td></tr>
                         </table>
                     </div>
                     `;
@@ -1488,6 +1502,38 @@
         }
 
         // FLOW: Shortage
+        function startFillRateFlow() {
+            hideUserDetails();
+            if(initialState) {
+                initialState.style.display = 'none';
+                document.getElementById('global-input-area').style.display = 'none';
+            }
+            
+            appendUserMessage("What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?");
+            
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I calculated the fill rate based on actual shipping date. What period are you looking for? (e.g., June 2026). Also, please provide the Customer ID and optionally the Plant.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Customer ID (e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
+                            <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
+                            <input type="text" placeholder="Time Frame (e.g. June 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('FILL_RATE_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'FILL_RATE_CHECK');
+                waitingForInput = 'FILL_RATE_CHECK';
+            }, 600);
+        }
+
         function startShortageFlow() {
             hideUserDetails();
             if(initialState) initialState.style.display = 'none';
@@ -1837,6 +1883,63 @@
                             </div>
                         `, modalId, 'INVENTORY_CHECK');
                         waitingForInput = 'INVENTORY_CHECK';
+                    }, 800);
+                }
+            } else if (waitingForInput === 'FILL_RATE_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('100234') && input.includes('4010') && input.includes('june 2026')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Customer 100234's fill rate at plant 4010 for June 2026 was 94.2% (10,456 of 11,100 cases shipped).</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Fill Rate Analysis</span>
+                                    <span class="status-badge healthy">CALCULATED</span>
+                                </div>
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        <tr><td class="label">Time Frame</td><td class="value">June 2026</td></tr>
+                                        <tr><td class="label">Ordered Qty</td><td class="value">11,100 cases</td></tr>
+                                        <tr><td class="label">Shipped Qty</td><td class="value">10,456 cases</td></tr>
+                                        <tr><td class="label">Fill Rate</td><td class="value">94.2%</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export to Excel', 'View unfulfilled orders', 'Check July 2026']);
+                    }, 800);
+                } else if (input.includes('100234') && input.includes('4010') && input.includes('may 2026')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I didn't find any orders for customer 100234 at plant 4010 in the period you selected (May 2026), so a fill rate can't be calculated.</div>
+                        `);
+                        appendFollowUpActions(['Check June 2026', 'View all customer activity']);
+                    }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                        appendAIMessage(`
+                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                                <div style="display: flex; align-items: center;">
+                                    Sorry, I couldn't find that customer/plant combination. Please confirm the customer ID and plant.
+                                    <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                                </div>
+                                <div class="inline-input-container">
+                                    <input type="text" placeholder="Customer ID (e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
+                                    <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
+                                    <input type="text" placeholder="Time Frame (e.g. June 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('FILL_RATE_CHECK', this)">Submit</button>
+                                </div>
+                            </div>
+                        `, modalId, 'FILL_RATE_CHECK');
+                        waitingForInput = 'FILL_RATE_CHECK';
                     }, 800);
                 }
             } else if (waitingForInput === 'SHORTAGE_CHECK') {
