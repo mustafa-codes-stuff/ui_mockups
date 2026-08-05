@@ -869,6 +869,8 @@
                     <div class="nav-item" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
                     <div class="nav-item" onclick="startEstimatedShippingFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of orders that have an estimated shipping date of [date].</div>
                     <div class="nav-item" onclick="startSKUMasterDataFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What are the cases-per-pallet, weights, and EAN/UPC for SKU [XXXX]?</div>
+                    <div class="nav-item" onclick="startOpenOrdersWeightFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List open orders with pallets, cases, and weight, for a customer.</div>
+                    <div class="nav-item" onclick="startShortageImpactFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which customers are most impacted by shortages for [sales org], [time period]?</div>
                 </div>
             </div>
 
@@ -1094,6 +1096,30 @@
                             <tr><th>Input</th><th>Result</th></tr>
                             <tr><td>April 16, 2026, 3010</td><td>8 orders found</td></tr>
                             <tr><td>April 17, 2026, 3010</td><td>None found</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                                } else if (modalType === 'OPEN_ORDERS_WEIGHT_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input (Customer ID)</th><th>Result</th></tr>
+                            <tr><td>100234</td><td>5 orders found</td></tr>
+                            <tr><td>100235</td><td>No open orders</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'SHORTAGE_IMPACT_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>This Month, 3010</td><td>Ranked list found</td></tr>
+                            <tr><td>Last Month, 3010</td><td>No shortages found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -1658,6 +1684,55 @@
                     </div>
                 `, modalId, 'SHIP_SHORT_CHECK');
                 waitingForInput = 'SHIP_SHORT_CHECK';
+            }, 600);
+        }
+
+        function startOpenOrdersWeightFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("List open orders with pallets, cases, and weight, for a customer.");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can list open orders with logistics details. Please provide the Customer ID/Name.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Customer (e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'OPEN_ORDERS_WEIGHT_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('OPEN_ORDERS_WEIGHT_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'OPEN_ORDERS_WEIGHT_CHECK');
+                waitingForInput = 'OPEN_ORDERS_WEIGHT_CHECK';
+            }, 600);
+        }
+
+        function startShortageImpactFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("Which customers are most impacted by shortages for [sales org], [time period]?");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can rank customers by shortage impact. Please provide the Time Period and optionally the Sales Organization.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Time Frame (e.g. This Month)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_IMPACT_CHECK')">
+                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_IMPACT_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('SHORTAGE_IMPACT_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'SHORTAGE_IMPACT_CHECK');
+                waitingForInput = 'SHORTAGE_IMPACT_CHECK';
             }, 600);
         }
 
@@ -2284,6 +2359,65 @@
                 } else {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that customer or sales organization.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'OPEN_ORDERS_WEIGHT_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('100234')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Customer 100234 has 5 open orders totaling 40 pallets / 3,200 cases / 64,000 kg.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>Pallets</th><th>Cases</th><th>Weight</th></tr>
+                                        <tr><td>10099201</td><td>10</td><td>800</td><td>16,000 kg</td></tr>
+                                        <tr><td>10099202</td><td>15</td><td>1200</td><td>24,000 kg</td></tr>
+                                        <tr><td>10099203</td><td>5</td><td>400</td><td>8,000 kg</td></tr>
+                                    </table>
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 2 more orders</div>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Full List', 'Check Pallet Config']);
+                    }, 800);
+                } else if (input.includes('100235')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Customer 100234 has no open orders at this time.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that customer. Please confirm the customer ID or name.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'SHORTAGE_IMPACT_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('this month') && input.includes('3010')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Top customers impacted by shortages in Sales Org 3010:<br>1) Customer 100234 (1,200 cases)<br>2) Customer 100456 (850 cases)</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>Rank</th><th>Customer</th><th>Shortage Impact</th><th>Hierarchy Node</th></tr>
+                                        <tr><td>1</td><td>100234 (Acme Corp)</td><td>1,200 cases</td><td>H_NA_EAST</td></tr>
+                                        <tr><td>2</td><td>100456 (Global Tech)</td><td>850 cases</td><td>H_NA_WEST</td></tr>
+                                        <tr><td>3</td><td>100789 (Initech)</td><td>420 cases</td><td>H_NA_SOUTH</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Rankings', 'Investigate Acme Corp']);
+                    }, 800);
+                } else if (input.includes('last month') && input.includes('3010')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No customers currently show shortage impact for the criteria you gave.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.</div>`); }, 800);
                 }
             } else if (waitingForInput === 'EST_SHIPPING_CHECK') {
                 waitingForInput = null;
