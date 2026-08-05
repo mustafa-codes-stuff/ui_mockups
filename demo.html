@@ -52,7 +52,7 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
             display: flex;
             overflow: hidden;
-            border: 1px solid #333;
+            border: 1px solid var(--border-color);
             position: relative; /* Added for absolute positioning of collapse btn */
         }
 
@@ -523,8 +523,8 @@
             left: 50px;
             top: 60px;
             width: 380px;
-            background-color: #1a1a1a;
-            border: 1px solid #444;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             z-index: 100;
@@ -552,7 +552,7 @@
 
         .helper-table td, .helper-table th {
             padding: 6px 4px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid var(--border-color);
             text-align: left;
         }
         
@@ -562,7 +562,7 @@
         
         .helper-table td:first-child {
             font-family: monospace;
-            color: #93c5fd;
+            color: var(--primary);
         }
 
         /* Timeline Component */
@@ -591,7 +591,7 @@
             top: 14px;
             left: 36px;
             height: 4px;
-            background-color: #fcd34d;
+            background-color: var(--primary);
             z-index: 2;
             border-radius: 2px;
             transition: width 0.3s ease;
@@ -621,12 +621,12 @@
         }
 
         .step-dot.completed {
-            background-color: #fcd34d;
+            background-color: var(--primary);
             color: #000;
         }
 
         .step-dot.active {
-            background-color: #fcd34d;
+            background-color: var(--primary);
             color: #000;
             width: 36px;
             height: 36px;
@@ -658,7 +658,7 @@
         .step-assignee {
             font-size: 10px;
             font-weight: 400;
-            color: #93c5fd;
+            color: var(--primary);
             text-align: center;
             margin-top: 2px;
         }
@@ -672,7 +672,7 @@
         }
 
         .follow-up-btn {
-            background-color: #facc15;
+            background-color: var(--primary);
             color: #000;
             border: none;
             border-radius: 20px;
@@ -684,7 +684,7 @@
         }
 
         .follow-up-btn:hover {
-            background-color: #eab308;
+            background-color: var(--primary);
         }
 
         .follow-up-btn:active {
@@ -714,15 +714,7 @@
             font-size: 13px;
         }
 
-        .status-badge {
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid;
-            letter-spacing: 0.5px;
-        }
-        
+
         .status-badge.delayed {
             color: var(--danger);
             background-color: rgba(220, 38, 38, 0.1);
@@ -730,15 +722,42 @@
         }
         
         .status-badge.healthy {
-            color: #6ee7b7;
-            background-color: rgba(5, 150, 105, 0.2);
-            border-color: #059669;
+            color: var(--success);
+            background-color: rgba(5, 150, 105, 0.1);
+            border-color: var(--success);
         }
         
         .status-badge.neutral {
-            color: #9ca3af;
-            background-color: rgba(75, 85, 99, 0.2);
-            border-color: #4b5563;
+            color: var(--text-main);
+            background-color: var(--bg-input);
+            border-color: var(--border-color);
+        }
+        
+        .status-badge.open {
+            color: var(--text-main);
+            background-color: var(--bg-input);
+            border-color: var(--border-color);
+        }
+        
+        .status-badge.complete {
+            color: var(--success);
+            background-color: rgba(5, 150, 105, 0.1);
+            border-color: var(--success);
+        }
+        
+        .status-badge.blocked {
+            color: var(--danger);
+            background-color: rgba(220, 38, 38, 0.1);
+            border-color: var(--danger);
+        }
+
+        .status-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid;
+            letter-spacing: 0.5px;
         }
 
         .data-card-body {
@@ -779,7 +798,7 @@
         .dot {
             width: 6px;
             height: 6px;
-            background-color: #9ca3af;
+            background-color: var(--text-secondary);
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out both;
         }
@@ -1350,7 +1369,7 @@
             }
 
 
-            const needsFeedback = showFeedback && !htmlContent.includes('inline-input-container');
+            const needsFeedback = showFeedback && !htmlContent.includes('inline-input-container') && !htmlContent.includes('Please provide') && !htmlContent.includes('What is') && !htmlContent.includes('Enter ');
             const feedbackHtml = needsFeedback ? `
                     <div class="feedback-container">
                         <button class="feedback-btn" onclick="handleFeedback(this, 'up')" title="Good response">
@@ -1648,21 +1667,21 @@
             // Cancelled
             '10001': {
                 title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED', {1: 'Customer Serv.'}),
-                text: 'Order 10001 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: #fca5a5;">April 11, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Customer requested cancellation (Z01)</td></tr>`, tables: 'SAP.VBAK, SAP.VBAP'
+                text: 'Order 10001 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: var(--danger);">April 11, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: var(--danger);">Customer requested cancellation (Z01)</td></tr>`, tables: 'SAP.VBAK, SAP.VBAP'
             },
             '10002': {
                 title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED', {1: 'System API'}),
-                text: 'Order 10002 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: #fca5a5;">April 14, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: #fca5a5;">Out of Stock - Cannot Fulfill (Z04)</td></tr>`, tables: 'SAP.VBAK, SAP.VBAP'
+                text: 'Order 10002 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: var(--danger);">April 14, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: var(--danger);">Out of Stock - Cannot Fulfill (Z04)</td></tr>`, tables: 'SAP.VBAK, SAP.VBAP'
             },
             
             // Blocked
             '20001': {
                 title: 'Blocked (Credit Hold)', badge: 'BLOCKED', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Finance Team'}),
-                text: 'Order 20001 is currently on credit hold and cannot proceed until released by the Credit team.', table: `<tr><td class="label">Order Placed</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Credit Check Date</td><td class="value" style="color: #fca5a5;">April 15, 2026</td></tr><tr><td class="label">Credit Status</td><td class="value" style="color: #fca5a5;">Not Approved (Hold)</td></tr>`, tables: 'SAP.VBAK, SAP.VBUK'
+                text: 'Order 20001 is currently on credit hold and cannot proceed until released by the Credit team.', table: `<tr><td class="label">Order Placed</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Credit Check Date</td><td class="value" style="color: var(--danger);">April 15, 2026</td></tr><tr><td class="label">Credit Status</td><td class="value" style="color: var(--danger);">Not Approved (Hold)</td></tr>`, tables: 'SAP.VBAK, SAP.VBUK'
             },
             '20002': {
                 title: 'Blocked (Delivery Block)', badge: 'BLOCKED', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Export Control'}),
-                text: 'Order 20002 has a delivery block.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Delivery Block Applied</td><td class="value" style="color: #fca5a5;">April 16, 2026</td></tr><tr><td class="label">Delivery Block</td><td class="value" style="color: #fca5a5;">Z2 - Export Papers Missing</td></tr>`, tables: 'SAP.VBAK'
+                text: 'Order 20002 has a delivery block.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Delivery Block Applied</td><td class="value" style="color: var(--danger);">April 16, 2026</td></tr><tr><td class="label">Delivery Block</td><td class="value" style="color: var(--danger);">Z2 - Export Papers Missing</td></tr>`, tables: 'SAP.VBAK'
             },
 
             // Open
@@ -2260,13 +2279,13 @@
                                                 <td style="padding: 12px 16px;"><strong>10022</strong></td>
                                                 <td style="padding: 12px 16px;">Sysco (GB)</td>
                                                 <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: #6ee7b7;">Shipped</td>
+                                                <td style="padding: 12px 16px; color: var(--success);">Shipped</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 12px 16px;"><strong>10034</strong></td>
                                                 <td style="padding: 12px 16px;">Sainsburys</td>
                                                 <td style="padding: 12px 16px;">4020</td>
-                                                <td style="padding: 12px 16px; color: #6ee7b7;">Shipped</td>
+                                                <td style="padding: 12px 16px; color: var(--success);">Shipped</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -2307,19 +2326,19 @@
                                                 <td style="padding: 12px 16px;"><strong>20088</strong></td>
                                                 <td style="padding: 12px 16px;">Tesco</td>
                                                 <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block (Credit Hold)</td>
+                                                <td style="padding: 12px 16px; color: var(--danger);">Z1 Block (Credit Hold)</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 12px 16px;"><strong>20089</strong></td>
                                                 <td style="padding: 12px 16px;">Asda</td>
                                                 <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: #fca5a5;">Z2 Block (Delivery)</td>
+                                                <td style="padding: 12px 16px; color: var(--danger);">Z2 Block (Delivery)</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 12px 16px;"><strong>20090</strong></td>
                                                 <td style="padding: 12px 16px;">Morrisons</td>
                                                 <td style="padding: 12px 16px;">4030</td>
-                                                <td style="padding: 12px 16px; color: #fca5a5;">Z1 Block (Credit Hold)</td>
+                                                <td style="padding: 12px 16px; color: var(--danger);">Z1 Block (Credit Hold)</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -2359,13 +2378,13 @@
                                                 <td style="padding: 12px 16px;"><strong>30044</strong></td>
                                                 <td style="padding: 12px 16px;">Aldi</td>
                                                 <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: #6ee7b7;">Complete (Billed)</td>
+                                                <td style="padding: 12px 16px; color: var(--success);">Complete (Billed)</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 12px 16px;"><strong>30045</strong></td>
                                                 <td style="padding: 12px 16px;">Lidl</td>
                                                 <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: #6ee7b7;">Complete (Billed)</td>
+                                                <td style="padding: 12px 16px; color: var(--success);">Complete (Billed)</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -2444,7 +2463,7 @@
                                 </div>
                                 <div class="data-card-body">
                                     <table class="data-table">
-                                        <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value" style="color: #ef4444;">0 cases</td></tr>
+                                        <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value" style="color: var(--danger);">0 cases</td></tr>
                                         <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
                                     </table>
                                 </div>
