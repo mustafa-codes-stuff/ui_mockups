@@ -861,6 +861,9 @@
                     <div class="nav-item" onclick="startInventoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</div>
                     <div class="nav-item" onclick="startShortageFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with shortages for [sales org]</div>
                     <div class="nav-item" onclick="startFillRateFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?</div>
+                    <div class="nav-item" onclick="startUnbilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show me orders that have been shipped but not yet billed, for [sales org], [time period].</div>
+                    <div class="nav-item" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed but shipped short, for [sales org], [time period].</div>
+                    <div class="nav-item" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
                 </div>
             </div>
 
@@ -1040,7 +1043,46 @@
                         </table>
                     </div>
                     `;
-                                } else if (modalType === 'FILL_RATE_CHECK') {
+                                                } else if (modalType === 'UNBILLED_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>3010, Last 7 days</td><td>9 orders found</td></tr>
+                            <tr><td>3010, Last 30 days</td><td>None found</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'SHIP_SHORT_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>3010, Last 7 days</td><td>4 orders found</td></tr>
+                            <tr><td>3010, Last 30 days</td><td>None found</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'BLOCKED_ORDERS_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>3010, Next 2 days</td><td>3 orders found</td></tr>
+                            <tr><td>3010, Next 5 days</td><td>None found</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'FILL_RATE_CHECK') {
                     modalHtml = `
                     <div id="${idForModal}" class="helper-modal">
                         <h4>Demo Helper: Valid Inputs</h4>
@@ -1502,6 +1544,81 @@
         }
 
         // FLOW: Shortage
+        function startUnbilledOrdersFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("Show me orders that have been shipped but not yet billed, for [sales org], [time period].");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can check for shipped but unbilled orders. Please provide the Time Period and optionally the Sales Organization.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'UNBILLED_CHECK')">
+                            <input type="text" placeholder="Time Period (e.g. Last 7 days)" class="inline-input" onkeypress="handleInlineEnter(event, 'UNBILLED_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('UNBILLED_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'UNBILLED_CHECK');
+                waitingForInput = 'UNBILLED_CHECK';
+            }, 600);
+        }
+
+        function startShipShortFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("List orders that were fully confirmed but shipped short, for [sales org], [time period].");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can find orders that shipped less than the confirmed quantity. Please provide the Time Period and optionally the Sales Organization.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHIP_SHORT_CHECK')">
+                            <input type="text" placeholder="Time Period (e.g. Last 7 days)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHIP_SHORT_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('SHIP_SHORT_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'SHIP_SHORT_CHECK');
+                waitingForInput = 'SHIP_SHORT_CHECK';
+            }, 600);
+        }
+
+        function startBlockedOrdersFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("List orders scheduled to load in the next 2 days that are currently on any block.");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can check for blocked orders scheduled to load soon. Please confirm the Time Period and optionally the Sales Organization.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'BLOCKED_ORDERS_CHECK')">
+                            <input type="text" placeholder="Time Period (e.g. Next 2 days)" class="inline-input" onkeypress="handleInlineEnter(event, 'BLOCKED_ORDERS_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('BLOCKED_ORDERS_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'BLOCKED_ORDERS_CHECK');
+                waitingForInput = 'BLOCKED_ORDERS_CHECK';
+            }, 600);
+        }
+
         function startFillRateFlow() {
             hideUserDetails();
             if(initialState) {
@@ -1884,6 +2001,95 @@
                         `, modalId, 'INVENTORY_CHECK');
                         waitingForInput = 'INVENTORY_CHECK';
                     }, 800);
+                }
+            } else if (waitingForInput === 'UNBILLED_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('3010') && input.includes('7')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 9 orders shipped but not yet billed for Sales Org 3010 in the selected period.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>Customer</th><th>Ship Date</th><th>Amount</th></tr>
+                                        <tr><td>10099882</td><td>Acme Corp</td><td>Yesterday</td><td>$1,250.00</td></tr>
+                                        <tr><td>10099883</td><td>Global Tech</td><td>Yesterday</td><td>$840.00</td></tr>
+                                        <tr><td>10099884</td><td>Initech</td><td>2 Days Ago</td><td>$4,100.00</td></tr>
+                                    </table>
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 6 more orders</div>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Full List', 'Send Reminders']);
+                    }, 800);
+                } else if (input.includes('3010') && input.includes('30')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">All shipped orders for that period and sales org have been billed - no exceptions found.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'SHIP_SHORT_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('3010') && input.includes('7')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 4 orders that shipped short (shipped qty is less than confirmed qty) for Sales Org 3010 in the selected period.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>Product</th><th>Shorted Qty</th></tr>
+                                        <tr><td>10099701</td><td>SKU-400 (Widget A)</td><td>-40 cases</td></tr>
+                                        <tr><td>10099701</td><td>SKU-401 (Widget B)</td><td>-10 cases</td></tr>
+                                        <tr><td>10099705</td><td>SKU-200 (Gadget)</td><td>-120 cases</td></tr>
+                                        <tr><td>10099712</td><td>SKU-800 (Thingamajig)</td><td>-5 cases</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Investigate Shortages', 'Notify Sales Reps']);
+                    }, 800);
+                } else if (input.includes('3010') && input.includes('30')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No fully-confirmed orders were shipped short for the criteria you gave.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find any orders matching that criteria - please double check the sales org, customer, or PO number.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'BLOCKED_ORDERS_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('3010') && input.includes('2')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 3 orders shipping in the next 2 days that are on credit hold for Sales Org 3010.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>PO#</th><th>Block Status</th></tr>
+                                        <tr><td>10099500</td><td>PO-9912</td><td>Credit Block: Not Approved</td></tr>
+                                        <tr><td>10099502</td><td>PO-9915</td><td>Credit Block: Not Performed</td></tr>
+                                        <tr><td>10099509</td><td>PO-9921</td><td>Credit Block: Not Approved</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Request Credit Release', 'Email Finance']);
+                    }, 800);
+                } else if (input.includes('3010') && input.includes('5')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No orders shipping in the selected period are currently on credit hold for that sales org.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.</div>`); }, 800);
                 }
             } else if (waitingForInput === 'FILL_RATE_CHECK') {
                 waitingForInput = null;
