@@ -864,6 +864,8 @@
                     <div class="nav-item" onclick="startUnbilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show me orders that have been shipped but not yet billed, for [sales org], [time period].</div>
                     <div class="nav-item" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed but shipped short, for [sales org], [time period].</div>
                     <div class="nav-item" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
+                    <div class="nav-item" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (or any time frame) for a customer.</div>
+                    <div class="nav-item" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].</div>
                 </div>
             </div>
 
@@ -1065,6 +1067,30 @@
                             <tr><th>Input</th><th>Result</th></tr>
                             <tr><td>3010, Last 7 days</td><td>4 orders found</td></tr>
                             <tr><td>3010, Last 30 days</td><td>None found</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                                } else if (modalType === 'BILLED_ORDERS_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>100234, Yesterday, 3010</td><td>12 orders found</td></tr>
+                            <tr><td>100234, Last Week, 3010</td><td>None found</td></tr>
+                            <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                } else if (modalType === 'SMALL_ORDERS_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input</th><th>Result</th></tr>
+                            <tr><td>200, This Week, 3010</td><td>27 orders found</td></tr>
+                            <tr><td>200, Last Week, 3010</td><td>None found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -1594,6 +1620,58 @@
             }, 600);
         }
 
+        function startBilledOrdersFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("List orders billed yesterday (or any time frame) for a customer.");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can look up billed orders. Please provide the Customer ID/Name and Time Frame.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Customer (e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'BILLED_ORDERS_CHECK')">
+                            <input type="text" placeholder="Time Frame (e.g. Yesterday)" class="inline-input" onkeypress="handleInlineEnter(event, 'BILLED_ORDERS_CHECK')">
+                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'BILLED_ORDERS_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('BILLED_ORDERS_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'BILLED_ORDERS_CHECK');
+                waitingForInput = 'BILLED_ORDERS_CHECK';
+            }, 600);
+        }
+
+        function startSmallOrdersFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can find orders under a specific quantity. What order creation date range should I check, and what is the quantity threshold?
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Max Qty (e.g. 200)" class="inline-input" onkeypress="handleInlineEnter(event, 'SMALL_ORDERS_CHECK')">
+                            <input type="text" placeholder="Time Frame (e.g. This week)" class="inline-input" onkeypress="handleInlineEnter(event, 'SMALL_ORDERS_CHECK')">
+                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'SMALL_ORDERS_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('SMALL_ORDERS_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'SMALL_ORDERS_CHECK');
+                waitingForInput = 'SMALL_ORDERS_CHECK';
+            }, 600);
+        }
+
         function startBlockedOrdersFlow() {
             hideUserDetails();
             if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
@@ -2061,6 +2139,66 @@
                 } else {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find any orders matching that criteria - please double check the sales org, customer, or PO number.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'BILLED_ORDERS_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('100234') && input.includes('yesterday')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">12 orders were billed yesterday for Sales Org 3010.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>Invoice#</th><th>SAP Order#</th><th>Amount</th></tr>
+                                        <tr><td>INV-80011</td><td>10099500</td><td>$12,450.00</td></tr>
+                                        <tr><td>INV-80012</td><td>10099501</td><td>$3,200.00</td></tr>
+                                        <tr><td>INV-80013</td><td>10099502</td><td>$8,900.00</td></tr>
+                                    </table>
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 9 more invoices</div>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Invoices', 'View Customer Account']);
+                    }, 800);
+                } else if (input.includes('100234') && input.includes('last week')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No orders were billed yesterday for that sales org/customer.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that customer or sales organization.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'SMALL_ORDERS_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('200') && input.includes('this week')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 27 orders with less than 200 cases.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>Customer</th><th>Total Qty</th></tr>
+                                        <tr><td>10099601</td><td>Acme Corp</td><td>150 cases</td></tr>
+                                        <tr><td>10099602</td><td>Global Tech</td><td>45 cases</td></tr>
+                                        <tr><td>10099603</td><td>Initech</td><td>195 cases</td></tr>
+                                    </table>
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 24 more orders</div>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Full List', 'Group by Customer']);
+                    }, 800);
+                } else if (input.includes('200') && input.includes('last week')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No orders under 200 cases were found for that period and sales org.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.</div>`); }, 800);
                 }
             } else if (waitingForInput === 'BLOCKED_ORDERS_CHECK') {
                 waitingForInput = null;
