@@ -840,6 +840,122 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+    
+        .feedback-container {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            display: flex;
+            gap: 4px;
+            opacity: 0.2;
+            transition: opacity 0.2s;
+        }
+        .bubble-ai:hover .feedback-container {
+            opacity: 1;
+        }
+        .feedback-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: opacity 0.2s, background-color 0.2s;
+        }
+        .feedback-btn:hover {
+            background-color: var(--bg-hover);
+            opacity: 1;
+        }
+        
+        .feedback-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .feedback-modal-overlay.active {
+            display: flex;
+        }
+        
+        .feedback-modal {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .feedback-modal h3 {
+            margin: 0;
+            color: var(--text-main);
+            font-size: 18px;
+        }
+        
+        .feedback-textarea {
+            width: 100%;
+            height: 100px;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-main);
+            font-family: inherit;
+            resize: vertical;
+        }
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .feedback-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .feedback-submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .feedback-submit-btn:hover {
+            background-color: #005bb5;
+        }
+        
+        .feedback-cancel-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .feedback-cancel-btn:hover {
+            background-color: var(--bg-hover);
+        }
+
     </style>
 
 </head>
@@ -1233,9 +1349,13 @@
 
             msgDiv.innerHTML = `
                 <div class="avatar-ai">SO</div>
-                <div class="bubble-ai">
+                <div class="bubble-ai" style="padding-bottom: 36px;">
                     ${htmlContent}
                     ${modalHtml}
+                    <div class="feedback-container">
+                        <button class="feedback-btn" onclick="handleFeedback(this, 'up')" title="Good response">👍</button>
+                        <button class="feedback-btn" onclick="handleFeedback(this, 'down')" title="Bad response">👎</button>
+                    </div>
                 </div>
             `;
             chatContainer.appendChild(msgDiv);
@@ -2905,6 +3025,45 @@
         function handleEnter(e) {
             if(e.key === 'Enter') handleSend();
         }
+    
+        function handleFeedback(btn, type) {
+            if (type === 'up') {
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '✅';
+                setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
+            } else if (type === 'down') {
+                document.getElementById('feedback-modal-overlay').classList.add('active');
+                document.getElementById('feedback-textarea').value = '';
+                document.getElementById('feedback-textarea').focus();
+            }
+        }
+        
+        function closeFeedbackModal() {
+            document.getElementById('feedback-modal-overlay').classList.remove('active');
+        }
+        
+        function submitFeedback() {
+            const text = document.getElementById('feedback-textarea').value;
+            // In a real app, we would send this feedback text and the message context to the backend
+            console.log("Feedback submitted:", text);
+            closeFeedbackModal();
+            
+            // Optional: show a quick toast or change the thumbs down icon
+        }
+
     </script>
+
+    <div class="feedback-modal-overlay" id="feedback-modal-overlay">
+        <div class="feedback-modal">
+            <h3>Provide Feedback</h3>
+            <div style="font-size: 14px; color: var(--text-secondary);">How can we improve this response?</div>
+            <textarea class="feedback-textarea" id="feedback-textarea" placeholder="Tell us more about your experience..."></textarea>
+            <div class="feedback-actions">
+                <button class="feedback-cancel-btn" onclick="closeFeedbackModal()">Cancel</button>
+                <button class="feedback-submit-btn" onclick="submitFeedback()">Submit</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
