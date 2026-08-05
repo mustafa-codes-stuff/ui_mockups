@@ -866,6 +866,7 @@
                     <div class="nav-item" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
                     <div class="nav-item" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (or any time frame) for a customer.</div>
                     <div class="nav-item" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].</div>
+                    <div class="nav-item" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
                 </div>
             </div>
 
@@ -1080,6 +1081,20 @@
                             <tr><td>100234, Yesterday, 3010</td><td>12 orders found</td></tr>
                             <tr><td>100234, Last Week, 3010</td><td>None found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
+                        </table>
+                    </div>
+                    `;
+                                } else if (modalType === 'UNSHIPPED_PRODUCT_CHECK') {
+                    modalHtml = `
+                    <div id="${idForModal}" class="helper-modal">
+                        <h4>Demo Helper: Valid Inputs</h4>
+                        <table class="helper-table">
+                            <tr><th>Input (Product ID)</th><th>Result Scenario</th></tr>
+                            <tr><td>456789</td><td>No delivery document exists</td></tr>
+                            <tr><td>456790</td><td>Delivery document exists</td></tr>
+                            <tr><td>456791</td><td>Shipment created, not PGI'd</td></tr>
+                            <tr><td>456792</td><td>None found (all shipped)</td></tr>
+                            <tr><td>Any other</td><td>Product not found</td></tr>
                         </table>
                     </div>
                     `;
@@ -1617,6 +1632,31 @@
                     </div>
                 `, modalId, 'SHIP_SHORT_CHECK');
                 waitingForInput = 'SHIP_SHORT_CHECK';
+            }, 600);
+        }
+
+        function startUnshippedProductFlow() {
+            hideUserDetails();
+            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            appendUserMessage("Give me a list of all orders with product xxx that have not shipped yet.");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
+                appendAIMessage(`
+                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center;">
+                            I can find unshipped orders for a specific product. Please provide the Product ID and optionally the Shipping Plant.
+                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                        </div>
+                        <div class="inline-input-container">
+                            <input type="text" placeholder="Product ID (e.g. 456789)" class="inline-input" onkeypress="handleInlineEnter(event, 'UNSHIPPED_PRODUCT_CHECK')">
+                            <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'UNSHIPPED_PRODUCT_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('UNSHIPPED_PRODUCT_CHECK', this)">Submit</button>
+                        </div>
+                    </div>
+                `, modalId, 'UNSHIPPED_PRODUCT_CHECK');
+                waitingForInput = 'UNSHIPPED_PRODUCT_CHECK';
             }, 600);
         }
 
@@ -2169,6 +2209,73 @@
                 } else {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that customer or sales organization.</div>`); }, 800);
+                }
+            } else if (waitingForInput === 'UNSHIPPED_PRODUCT_CHECK') {
+                waitingForInput = null;
+                const input = text.toLowerCase();
+                if (input.includes('456789')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 6 orders containing product 456789 that have not yet shipped. The order is on delivery block A01, billing block B02, credit hold.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>Product</th><th>Qty</th><th>Est. Ship Date</th></tr>
+                                        <tr><td>10099401</td><td>456789 (Fries)</td><td>100 cases</td><td>Tomorrow</td></tr>
+                                        <tr><td>10099402</td><td>456789 (Fries)</td><td>250 cases</td><td>Next Week</td></tr>
+                                    </table>
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 4 more orders</div>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Full List', 'Release Blocks']);
+                    }, 800);
+                } else if (input.includes('456790')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 6 orders containing product 456790 that have not yet shipped, but have already a delivery document created. The order is on billing block B02.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>Product</th><th>Qty</th><th>Est. Ship Date</th></tr>
+                                        <tr><td>10099411</td><td>456790 (Wedges)</td><td>50 cases</td><td>Tomorrow</td></tr>
+                                        <tr><td>10099412</td><td>456790 (Wedges)</td><td>300 cases</td><td>Next Week</td></tr>
+                                    </table>
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 4 more orders</div>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Full List', 'Check Delivery Status']);
+                    }, 800);
+                } else if (input.includes('456791')) {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">I found 6 orders containing product 456791 that have not yet shipped, but have already a delivery and shipment document created. The order is on billing block B02.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-body" style="padding-top: 12px;">
+                                    <table class="data-table" style="text-align: left;">
+                                        <tr><th>SAP#</th><th>Product</th><th>Qty</th><th>Est. Ship Date</th></tr>
+                                        <tr><td>10099421</td><td>456791 (Hash Browns)</td><td>75 cases</td><td>Today</td></tr>
+                                        <tr><td>10099422</td><td>456791 (Hash Browns)</td><td>120 cases</td><td>Tomorrow</td></tr>
+                                    </table>
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 4 more orders</div>
+                                </div>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Export Full List', 'Track Shipments']);
+                    }, 800);
+                } else if (input.includes('456792')) {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">All orders containing that product have already shipped, or none are currently open.</div>`); }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that product. Please confirm the product ID.</div>`); }, 800);
                 }
             } else if (waitingForInput === 'SMALL_ORDERS_CHECK') {
                 waitingForInput = null;
