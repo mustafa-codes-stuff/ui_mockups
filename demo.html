@@ -977,6 +977,68 @@
             background-color: var(--bg-hover);
         }
 
+    
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quick-suggestions {
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 16px;
+            text-align: left;
+        }
+
+        .suggestion-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .suggestion-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+        .suggestion-icon {
+            font-size: 24px;
+            background-color: rgba(255, 179, 0, 0.1);
+            color: var(--primary);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .suggestion-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .suggestion-text strong {
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .suggestion-text span {
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
     </style>
 
 </head>
@@ -1032,11 +1094,44 @@
 
             <div class="chat-container" id="chat-container">
                 <!-- Initial State inside chat area for dark theme -->
-                <div class="initial-state" id="initial-state">
-                    <div style="text-align: center; margin-top: 120px;">
-                        <div class="ai-icon" style="width: 80px; height: 80px; font-size: 32px; margin: 0 auto 32px auto;">CS</div>
-                        <div class="initial-title" style="font-size: 32px; margin-bottom: 16px;">Customer Support Chatbot</div>
-                        <div style="color: var(--text-secondary); font-size: 15px;">Welcome! Please select a quick prompt from the sidebar to begin.</div>
+                <div class="initial-state" id="initial-state" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; position: absolute; top: 0; left: 0;">
+                    <div class="welcome-container" style="text-align: center; max-width: 640px; padding: 40px; animation: fadeIn 0.8s ease-out; width: 100%;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/McCain-Logo.svg" alt="McCain Logo" style="height: 60px; margin-bottom: 32px;">
+                        
+                        <h1 class="welcome-title" id="dynamic-greeting" style="font-size: 36px; font-weight: 700; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px;">Welcome</h1>
+                        
+                        <p style="color: var(--text-secondary); font-size: 16px; margin-bottom: 48px; line-height: 1.5; max-width: 500px; margin-left: auto; margin-right: auto;">I'm your AI Customer Support Assistant. I can help you track orders, check inventory, analyze fill rates, and more.</p>
+                        
+                        <div class="quick-suggestions">
+                            <div class="suggestion-card" onclick="startOrderFlow()">
+                                <div class="suggestion-icon">📦</div>
+                                <div class="suggestion-text">
+                                    <strong>Track an Order</strong>
+                                    <span>Check status & delivery</span>
+                                </div>
+                            </div>
+                            <div class="suggestion-card" onclick="startInventoryFlow()">
+                                <div class="suggestion-icon">🏢</div>
+                                <div class="suggestion-text">
+                                    <strong>Check Inventory</strong>
+                                    <span>Look up SKU stock levels</span>
+                                </div>
+                            </div>
+                            <div class="suggestion-card" onclick="startFillRateFlow()">
+                                <div class="suggestion-icon">📊</div>
+                                <div class="suggestion-text">
+                                    <strong>Analyze Fill Rate</strong>
+                                    <span>View customer fill rates</span>
+                                </div>
+                            </div>
+                            <div class="suggestion-card" onclick="startShortageImpactFlow()">
+                                <div class="suggestion-icon">⚠️</div>
+                                <div class="suggestion-text">
+                                    <strong>Shortage Impact</strong>
+                                    <span>Rank shortage impacts</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
