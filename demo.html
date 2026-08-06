@@ -65,7 +65,8 @@
             flex-direction: column;
             padding: 16px 0;
             transition: width 0.3s, padding 0.3s, opacity 0.3s;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             white-space: nowrap;
         }
         
@@ -1086,21 +1087,21 @@
             // Generate dummy details based on orderId
             let name = "Jane Doe";
             let initials = "JD";
-            let role = "Sales Representative";
-            let dept = "North America Sales";
+            let role = "Purchasing Manager";
+            let dept = "Acme Corp";
             let phone = "+1 (555) 123-4567";
             
             if (orderId.startsWith('2')) {
-                name = "Michael Smith"; initials = "MS"; role = "Account Manager";
+                name = "Michael Smith"; initials = "MS"; role = "Procurement Lead"; dept = "Global Foods Inc.";
             } else if (orderId.startsWith('4') || orderId.startsWith('5')) {
-                name = "Sarah Johnson"; initials = "SJ"; role = "Logistics Coordinator"; dept = "Global Logistics";
+                name = "Sarah Johnson"; initials = "SJ"; role = "Supply Chain Buyer"; dept = "Fresh Market Ltd.";
             } else if (orderId.startsWith('7')) {
-                name = "David Chen"; initials = "DC"; role = "Finance Analyst"; dept = "Accounts Receivable";
+                name = "David Chen"; initials = "DC"; role = "Inventory Planner"; dept = "Gourmet Kitchens";
             }
 
             rightSidebarContent.innerHTML = `
-                <div style="font-weight: 600; font-size: 16px; margin-bottom: 8px;">Order Details</div>
-                <div style="font-size: 12px; color: var(--text-secondary);">Information about the creator of Order ${orderId}.</div>
+                <div style="font-weight: 600; font-size: 16px; margin-bottom: 8px;">Buyer Details</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Purchaser information for Order ${orderId}.</div>
                 
                 <div class="user-details-card">
                     <div class="user-details-header">
@@ -1111,7 +1112,7 @@
                         </div>
                     </div>
                     <div class="user-details-row">
-                        <span style="color: var(--text-secondary);">Department</span>
+                        <span style="color: var(--text-secondary);">Company</span>
                         <span style="color: var(--text-main); font-weight: 500;">${dept}</span>
                     </div>
                     <div class="user-details-row">
