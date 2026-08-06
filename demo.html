@@ -65,7 +65,8 @@
             flex-direction: column;
             padding: 16px 0 0 0; 
             transition: width 0.3s, padding 0.3s, opacity 0.3s;
-            overflow: hidden;
+            overflow: visible;
+            position: relative;
             white-space: nowrap;
         }
         
@@ -116,7 +117,7 @@
             border-right: none;
         }
         
-        .sidebar.collapsed > * {
+        .sidebar.collapsed > *:not(#sidebar-toggle-btn) {
             opacity: 0;
             pointer-events: none;
         }
@@ -134,7 +135,8 @@
             display: flex;
             flex-direction: column;
             transition: width 0.3s, border 0.3s;
-            overflow: hidden;
+            overflow: visible;
+            position: relative;
             white-space: nowrap;
         }
         
@@ -1079,6 +1081,36 @@
             line-height: 1.4;
         }
 
+    
+        #sidebar-toggle-btn {
+            position: absolute;
+            top: 24px;
+            left: 100%;
+            width: 28px;
+            height: 32px;
+            background-color: var(--bg-sidebar);
+            border: 1px solid var(--border-color);
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        #sidebar-toggle-btn:hover {
+            color: var(--text-main);
+            background-color: var(--bg-hover);
+        }
+        
+        .sidebar.collapsed #sidebar-toggle-btn {
+            border-left: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-left: 16px;
+        }
+
     </style>
 
 </head>
@@ -1087,6 +1119,12 @@
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
+            <div id="sidebar-toggle-btn" onclick="toggleSidebar()">
+                <svg id="sidebar-arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s;">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </div>
+            
             <div class="sidebar-header" style="flex-shrink: 0; padding-bottom: 16px;">
                 <div style="width:16px; height:16px; border:2px solid var(--primary); border-radius:2px;"></div>
                 <div class="logo-text">McCain.</div>
@@ -1133,7 +1171,7 @@
         <main class="chat-main">
             <div class="chat-header">
                 <div class="header-left">
-                    <span id="header-collapse-btn" style="cursor:pointer; display:inline-block; width:24px; text-align:center; transition: transform 0.3s;" onclick="toggleSidebar()">←</span>
+                    
                     Customer Support Chatbot
                 </div>
             </div>
@@ -1235,11 +1273,11 @@
 
         function toggleSidebar() {
             sidebar.classList.toggle('collapsed');
-            const btn = document.getElementById('header-collapse-btn');
+            const icon = document.getElementById('sidebar-arrow-icon');
             if(sidebar.classList.contains('collapsed')) {
-                btn.style.transform = 'rotate(180deg)';
+                icon.style.transform = 'rotate(180deg)';
             } else {
-                btn.style.transform = 'rotate(0deg)';
+                icon.style.transform = 'rotate(0deg)';
             }
         }
 
