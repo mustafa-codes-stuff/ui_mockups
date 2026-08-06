@@ -63,11 +63,51 @@
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            padding: 16px 0;
+            padding: 16px 0 0 0; 
             transition: width 0.3s, padding 0.3s, opacity 0.3s;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .sidebar-section {
+            flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            white-space: nowrap;
+            padding-top: 8px;
+            padding-bottom: 16px;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            padding: 0 16px;
+            margin-top: 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            overflow-x: auto;
+            scrollbar-width: none; 
+        }
+        .sidebar-tabs::-webkit-scrollbar {
+            display: none; 
+        }
+
+        .sidebar-tab {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding: 6px 10px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        
+        .sidebar-tab:hover {
+            color: var(--text-main);
+        }
+        
+        .sidebar-tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
         }
         
         .sidebar.collapsed {
@@ -1047,37 +1087,43 @@
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
+            <div class="sidebar-header" style="flex-shrink: 0; padding-bottom: 16px;">
                 <div style="width:16px; height:16px; border:2px solid var(--primary); border-radius:2px;"></div>
                 <div class="logo-text">McCain.</div>
             </div>
             
-            <div class="sidebar-section" style="margin-top: 16px;">
-                <div class="sidebar-title" style="margin-bottom: 12px; padding-left: 4px;"><span>QUICK PROMPTS</span></div>
-                <div class="sidebar-nav" style="padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
-                    <div class="nav-item" onclick="startOrderFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the status of a specific order?</div>
-                    <div class="nav-item" onclick="pullAllOrdersInStatus()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders for a product and their status</div>
-                    <div class="nav-item" onclick="startInventoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</div>
-                    <div class="nav-item" onclick="startShortageFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with shortages for [sales org]</div>
-                    <div class="nav-item" onclick="startFillRateFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?</div>
-                    <div class="nav-item" onclick="startUnbilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show me orders that have been shipped but not yet billed, for [sales org], [time period].</div>
-                    <div class="nav-item" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed but shipped short, for [sales org], [time period].</div>
-                    <div class="nav-item" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
-                    <div class="nav-item" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (or any time frame) for a customer.</div>
-                    <div class="nav-item" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].</div>
-                    <div class="nav-item" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
-                    <div class="nav-item" onclick="startEstimatedShippingFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of orders that have an estimated shipping date of [date].</div>
-                    <div class="nav-item" onclick="startSKUMasterDataFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What are the cases-per-pallet, weights, and EAN/UPC for SKU [XXXX]?</div>
-                    <div class="nav-item" onclick="startOpenOrdersWeightFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List open orders with pallets, cases, and weight, for a customer.</div>
-                    <div class="nav-item" onclick="startShortageImpactFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which customers are most impacted by shortages for [sales org], [time period]?</div>
-                    <div class="nav-item" onclick="startDeliveryNoShipmentFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with a delivery created but no shipment for a destination country.</div>
-                    <div class="nav-item" onclick="startAmendOrderFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Can order/PO [X] still be amended?</div>
+            <div class="sidebar-tabs">
+                <div class="sidebar-tab active" onclick="filterPrompts('orders', this)">Orders</div>
+                <div class="sidebar-tab" onclick="filterPrompts('logistics', this)">Logistics</div>
+                <div class="sidebar-tab" onclick="filterPrompts('inventory', this)">Inventory</div>
+                <div class="sidebar-tab" onclick="filterPrompts('analytics', this)">Analytics</div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-nav" style="padding:0; margin:0; display:flex; flex-direction:column; gap:8px;" id="sidebar-nav">
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startOrderFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the status of a specific order?</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="pullAllOrdersInStatus()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders for a product and their status</div>
+                    <div class="nav-item prompt-item" data-category="inventory" onclick="startInventoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</div>
+                    <div class="nav-item prompt-item" data-category="analytics" onclick="startShortageFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with shortages for [sales org]</div>
+                    <div class="nav-item prompt-item" data-category="analytics" onclick="startFillRateFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startUnbilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show me orders that have been shipped but not yet billed, for [sales org], [time period].</div>
+                    <div class="nav-item prompt-item" data-category="logistics" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed but shipped short, for [sales org], [time period].</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (or any time frame) for a customer.</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].</div>
+                    <div class="nav-item prompt-item" data-category="logistics" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
+                    <div class="nav-item prompt-item" data-category="logistics" onclick="startEstimatedShippingFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of orders that have an estimated shipping date of [date].</div>
+                    <div class="nav-item prompt-item" data-category="inventory" onclick="startSKUMasterDataFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What are the cases-per-pallet, weights, and EAN/UPC for SKU [XXXX]?</div>
+                    <div class="nav-item prompt-item" data-category="logistics" onclick="startOpenOrdersWeightFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List open orders with pallets, cases, and weight, for a customer.</div>
+                    <div class="nav-item prompt-item" data-category="analytics" onclick="startShortageImpactFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which customers are most impacted by shortages for [sales org], [time period]?</div>
+                    <div class="nav-item prompt-item" data-category="logistics" onclick="startDeliveryNoShipmentFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with a delivery created but no shipment for a destination country.</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startAmendOrderFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Can order/PO [X] still be amended?</div>
                 </div>
             </div>
 
-            <div class="user-profile">
-                <div class="avatar-small">SR</div>
-                <div style="font-size: 11px; font-weight: 600;">S, SUNDAR RAMAN</div>
+            <div class="user-profile" style="flex-shrink: 0; background-color: var(--bg-sidebar); z-index: 10;">
+                <div class="avatar-small">SM</div>
+                <div style="font-size: 11px; font-weight: 600;">S. Ahmad Mustafa</div>
             </div>
         </aside>
 
@@ -1166,6 +1212,26 @@
         const rightSidebar = document.getElementById('right-sidebar');
         const rightSidebarContent = document.getElementById('right-sidebar-content');
         const sidebar = document.getElementById('sidebar');
+
+
+        function filterPrompts(category, tabElement) {
+            document.querySelectorAll('.sidebar-tab').forEach(tab => tab.classList.remove('active'));
+            tabElement.classList.add('active');
+            
+            document.querySelectorAll('.prompt-item').forEach(item => {
+                if (item.getAttribute('data-category') === category || category === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Initial filter on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstTab = document.querySelector('.sidebar-tab.active');
+            if(firstTab) filterPrompts('orders', firstTab);
+        });
 
         function toggleSidebar() {
             sidebar.classList.toggle('collapsed');
