@@ -1090,13 +1090,19 @@
             let role = "Purchasing Manager";
             let dept = "Acme Corp";
             let phone = "+1 (555) 123-4567";
+            let totalOrders = "124";
+            let openOrders = "3";
+            let lastOrder = "June 15, 2026";
             
             if (orderId.startsWith('2')) {
                 name = "Michael Smith"; initials = "MS"; role = "Procurement Lead"; dept = "Global Foods Inc.";
+                totalOrders = "89"; openOrders = "1"; lastOrder = "July 02, 2026";
             } else if (orderId.startsWith('4') || orderId.startsWith('5')) {
                 name = "Sarah Johnson"; initials = "SJ"; role = "Supply Chain Buyer"; dept = "Fresh Market Ltd.";
+                totalOrders = "342"; openOrders = "12"; lastOrder = "Yesterday";
             } else if (orderId.startsWith('7')) {
                 name = "David Chen"; initials = "DC"; role = "Inventory Planner"; dept = "Gourmet Kitchens";
+                totalOrders = "45"; openOrders = "0"; lastOrder = "May 28, 2026";
             }
 
             rightSidebarContent.innerHTML = `
@@ -1119,7 +1125,22 @@
                         <span style="color: var(--text-secondary);">Contact</span>
                         <span style="color: var(--text-main); font-weight: 500;">${phone}</span>
                     </div>
-                    <button class="inline-submit-btn" style="width: 100%; margin-top: 8px; padding: 8px;">Message User</button>
+                </div>
+
+                <div class="user-details-card" style="margin-top: 12px; gap: 8px;">
+                    <div style="font-weight: 600; font-size: 11px; margin-bottom: 4px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Order History</div>
+                    <div class="user-details-row">
+                        <span style="color: var(--text-secondary);">Total Orders</span>
+                        <span style="color: var(--text-main); font-weight: 600;">${totalOrders}</span>
+                    </div>
+                    <div class="user-details-row">
+                        <span style="color: var(--text-secondary);">Open Orders</span>
+                        <span style="color: var(--text-main); font-weight: 600;">${openOrders}</span>
+                    </div>
+                    <div class="user-details-row">
+                        <span style="color: var(--text-secondary);">Last Order</span>
+                        <span style="color: var(--text-main); font-weight: 500;">${lastOrder}</span>
+                    </div>
                 </div>
             `;
             
