@@ -2064,41 +2064,59 @@
         }
         
         function resolveOrderStatus(orderId) {
+            const keys = Object.keys(orderScenarios);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const data = orderScenarios[randomKey];
+            
+            let tableSplit = data.tables.split(',');
+            let sourceTablesHtml = '';
+            if (tableSplit.length > 1) {
+                sourceTablesHtml = `<strong>Source Tables:</strong>`;
+                tableSplit.forEach((table, index) => {
+                    sourceTablesHtml += `<div style="margin-top: 4px; margin-left: 8px;">${table.trim()} - <em>Last Updated: ${getTimestamp(index * 4 + 2)}</em></div>`;
+                });
+            } else {
+                sourceTablesHtml = `<strong>Source Tables:</strong> ${data.tables} - <em>Last Updated: ${getTimestamp()}</em>`;
+            }
+
+            // Generate the dynamic text response
             const r = Math.random();
             let responseHtml = "";
             let needsEscalation = false;
             
             if (r < 0.15) {
-                // Cancelled
                 responseHtml = `Order ${orderId} has been cancelled - all line items were rejected.`;
             } else if (r < 0.30) {
-                // Blocked
                 responseHtml = `Order ${orderId} is currently on credit hold and cannot proceed until released by the Credit team.`;
                 needsEscalation = true;
             } else if (r < 0.45) {
-                // Open
                 responseHtml = `Order ${orderId} is open; no delivery exist yet. Estimated shipping date: April 16, 2026.`;
             } else if (r < 0.60) {
-                // Delivery Created
                 responseHtml = `Order ${orderId} has delivery 0080012345. Estimated shipping date: April 16, 2026.`;
             } else if (r < 0.70) {
-                // Shipment Created
                 responseHtml = `Order ${orderId} has delivery 0080012345, shipment 7891011. Estimated shipping date: April 16, 2026.`;
             } else if (r < 0.85) {
-                // Loaded / Shipped
                 responseHtml = `Order ${orderId} was shipped on April 16, 2026. Invoicing is still pending.`;
-            } else if (r < 0.95) {
-                // Complete
-                responseHtml = `Order ${orderId} was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.`;
             } else {
-                // Not found
-                responseHtml = `Sorry, I couldn't find order ${orderId}. Please check the order number/PO number and try again.`;
+                responseHtml = `Order ${orderId} was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.`;
             }
             
             const finalHtml = `
+                <div class="ai-text-content">${responseHtml}</div>
+                ${data.timeline}
                 <div class="data-card" style="width: 100%;">
-                    <div style="font-weight: 500; margin-bottom: 8px;">Order Status: ${orderId}</div>
-                    <div style="font-size: 13px; color: var(--text-secondary);">${responseHtml}</div>
+                    <div class="data-card-header">
+                        <span class="data-card-title">Order ${orderId} · ${data.title}</span>
+                        <span class="status-badge ${data.badgeClass}">${data.badge}</span>
+                    </div>
+                    <div class="data-card-body">
+                        <table class="data-table">
+                            ${data.table}
+                        </table>
+                    </div>
+                </div>
+                <div class="footer-metadata">
+                    <span>${sourceTablesHtml}</span>
                 </div>
             `;
             
