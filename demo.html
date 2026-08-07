@@ -1165,6 +1165,7 @@
                     <div class="nav-item prompt-item" data-category="orders" onclick="pullAllOrdersInStatus()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders for a product and their status</div>
                     <div class="nav-item prompt-item" data-category="inventory" onclick="startInventoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</div>
                     <div class="nav-item prompt-item" data-category="analytics" onclick="startShortageFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped.</div>
+                    <div class="nav-item prompt-item" data-category="analytics" onclick="startPurchaseHistoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List products purchased by customer [XXXX] and the producing plant for each, for [time frame].</div>
                     <div class="nav-item prompt-item" data-category="analytics" onclick="startFillRateFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startUnbilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show me orders that have been shipped but not yet billed, for [sales org], [time period].</div>
                     <div class="nav-item prompt-item" data-category="logistics" onclick="startNonFullPalletFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> For plant xx, give me a list of orders where SKUs are not ordered in full pallet quantities.</div>
@@ -2204,29 +2205,87 @@
         }
 
         // FLOW: Shortage
+        
+        function resolveUnbilledOrdersFlow(input) {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let org = input.match(/3010/i) ? '3010' : 'All Orgs';
+                
+                if (r < 0.6) {
+                    text = `I found 9 orders shipped but not yet billed for Sales Org ${org} in the selected period.`;
+                    badge = '<span class="status-badge delayed">UNBILLED ORDERS</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Shipped but Not Billed</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    <tr><th>SAP Order #</th><th>Shipped Date (PGI)</th><th>Customer</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">723456</a></td><td>Yesterday</td><td>100234</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">723457</a></td><td>2 Days Ago</td><td>100456</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">723458</a></td><td>2 Days Ago</td><td>100456</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">723459</a></td><td>3 Days Ago</td><td>220111</td></tr>
+                                    <tr><td colspan="3" style="text-align:center; color:var(--text-secondary);">5 more rows available in export</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'View billing block reasons']);
+                } else if (r < 0.9) {
+                    text = `All shipped orders for that period and sales org have been billed - no exceptions found.`;
+                    badge = '<span class="status-badge healthy">ALL BILLED</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
+                } else {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
         function startUnbilledOrdersFlow() {
             resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
+            if(initialState) initialState.style.display = 'none';
             appendUserMessage("Show me orders that have been shipped but not yet billed, for [sales org], [time period].");
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can check for shipped but unbilled orders. Please provide the Time Period and optionally the Sales Organization.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
-                        </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'UNBILLED_CHECK')">
-                            <input type="text" placeholder="Time Period (e.g. Last 7 days)" class="inline-input" onkeypress="handleInlineEnter(event, 'UNBILLED_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('UNBILLED_CHECK', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'UNBILLED_CHECK');
-                waitingForInput = 'UNBILLED_CHECK';
-            }, 600);
+                appendAIMessage(`I can check for shipped but unbilled orders. What Time Period should I look at (e.g. Last 7 Days), and do you want to specify a Sales Org?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Last 7 Days, Org 3010', 'Q8_UNBILLED')">Last 7 Days, Org 3010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('This Month, All Orgs', 'Q8_UNBILLED')">This Month, All Orgs</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q8_UNBILLED')">
+                                <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q8_UNBILLED')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q8_UNBILLED', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q8_UNBILLED';
+            }, 800);
         }
 
         function startShipShortFlow() {
@@ -2728,6 +2787,109 @@
             }, 800);
         }
 
+        
+        function startPurchaseHistoryFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("List products purchased by customer [XXXX] and the producing plant for each, for [time frame].");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can pull the purchase history. Please provide the Customer ID or Name. Do you want the last 12 months of purchase history, or a different time period?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Cust 100234, Last 12 Months', 'Q7_PURCHASE')">Cust 100234, Last 12 Months</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('ABC Foods, This Year', 'Q7_PURCHASE')">ABC Foods, This Year</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Customer ID or Name" class="inline-input" onkeypress="handleInlineEnter(event, 'Q7_PURCHASE')">
+                                <input type="text" placeholder="Time Frame (e.g. Last 12 Months)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q7_PURCHASE')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q7_PURCHASE', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q7_PURCHASE';
+            }, 800);
+        }
+
+        function resolvePurchaseHistoryFlow(input) {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                const isAmbiguous = input.toLowerCase().includes('abc');
+                
+                if (isAmbiguous) {
+                    text = `I found more than one customer named 'ABC Foods' - did you mean 100234 (Toronto) or 100456 (Montreal)?`;
+                    badge = '<span class="status-badge neutral">MULTIPLE FOUND</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="chat-options-container" style="margin-top: 8px;">
+                            <button class="chat-option-btn" onclick="handleOptionClick('100234', 'Q7_PURCHASE')">100234 (Toronto)</button>
+                            <button class="chat-option-btn" onclick="handleOptionClick('100456', 'Q7_PURCHASE')">100456 (Montreal)</button>
+                        </div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    waitingForInput = 'Q7_PURCHASE'; // Stay in the same state to handle the resolution
+                    return;
+                }
+                
+                if (r < 0.6) {
+                    text = `Customer 100234 purchased 12 SKUs in the last 12 months; here is each SKU and its producing plant.`;
+                    badge = '<span class="status-badge healthy">PURCHASE HISTORY</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>Product ID</th><th>Description</th><th>Producing Plant</th></tr>
+                        <tr><td>SKU 123</td><td>Premium Fries</td><td>4010 - Toronto</td></tr>
+                        <tr><td>SKU 999</td><td>Wedges</td><td>4010 - Toronto</td></tr>
+                        <tr><td>SKU 444</td><td>Hashbrowns</td><td>1000 - Montreal</td></tr>
+                        <tr><td>SKU 222</td><td>Onion Rings</td><td>3010 - Vancouver</td></tr>
+                        <tr><td colspan="3" style="text-align:center; color:var(--text-secondary);">8 more rows available in export</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Products Purchased</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'View order volumes']);
+                } else if (r < 0.9) {
+                    text = `I didn't find any purchases for customer 100234 in the selected period for the requested producer plant.`;
+                    badge = '<span class="status-badge neutral">NO PURCHASES</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different customer']);
+                } else {
+                    text = `Sorry, I couldn't find that customer. Please confirm the customer ID or name.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another search']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
         function startFillRateFlow() {
             resetChat();
             if(initialState) initialState.style.display = 'none';
@@ -2889,6 +3051,16 @@
                 const id = text.trim();
                 waitingForInput = null;
                 resolveNonFullPalletFlow(id);
+                return;
+            } else if (waitingForInput === 'Q7_PURCHASE') {
+                const id = text.trim();
+                waitingForInput = null; // Cleared in resolve if not ambiguous
+                resolvePurchaseHistoryFlow(id);
+                return;
+            } else if (waitingForInput === 'Q8_UNBILLED') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveUnbilledOrdersFlow(id);
                 return;
             } else if (waitingForInput === 'Q6_FILL_RATE') {
                 const id = text.trim();
