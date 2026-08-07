@@ -2489,28 +2489,124 @@
             }, 600);
         }
 
-        function startAmendOrderFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("Can order/PO [X] still be amended?");
+        
+        function resolveAmendOrderFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can check if an order can still be amended. Please provide the SAP Order Number or PO Number.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let order = input.match(/\d+/) ? input.match(/\d+/)[0] : '123456';
+                let isPo = input.toLowerCase().includes('po');
+                
+                // If it's a PO, sometimes it matches multiple orders (Scenario 1b)
+                if (isPo && r < 0.2) {
+                    text = `The PO number ${input} matches more than one sales order. Please confirm which order/plant or ship-to you are inquiring about.`;
+                    badge = '<span class="status-badge neutral">MULTIPLE MATCHES</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="chat-options-container" style="margin-top: 8px;">
+                            <button class="chat-option-btn" onclick="handleOptionClick('Order 123456 (Plant 4010)', 'Q19_AMEND')">Order 123456 (Plant 4010)</button>
+                            <button class="chat-option-btn" onclick="handleOptionClick('Order 123457 (Plant 1000)', 'Q19_AMEND')">Order 123457 (Plant 1000)</button>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Order/PO (e.g. 123456)" class="inline-input" onkeypress="handleInlineEnter(event, 'AMEND_ORDER_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('AMEND_ORDER_CHECK', this)">Submit</button>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    waitingForInput = 'Q19_AMEND'; // Stay in the same state
+                    return;
+                }
+                
+                if (r < 0.35) { // Scenario 1: Fully open
+                    text = `Yes, order ${order} is still fully open - and can be amended.`;
+                    badge = '<span class="status-badge healthy">AMENDMENT OK</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%; max-width: 400px;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Order Status: ${order}</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <div><strong>Status:</strong> Open Order (No delivery created)</div>
+                            </div>
                         </div>
-                    </div>
-                `, modalId, 'AMEND_ORDER_CHECK');
-                waitingForInput = 'AMEND_ORDER_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Make an amendment', 'View order details']);
+                } else if (r < 0.6) { // Scenario 2: Delivery created, not PGI'd
+                    text = `Order ${order} already has a delivery in process. Low chances for changes to still be possible, please contact Customer Service representative.`;
+                    badge = '<span class="status-badge neutral">WARNING</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%; max-width: 400px;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Order Status: ${order}</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <div><strong>Status:</strong> Delivery Created (Not yet PGI'd)</div>
+                            </div>
+                        </div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Contact Customer Service', 'View delivery document']);
+                } else if (r < 0.85) { // Scenario 3: Loaded, not billed (Shipped)
+                    text = `Order ${order} has already been shipped, changes are no longer possible.`;
+                    badge = '<span class="status-badge delayed">LOCKED</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%; max-width: 400px;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Order Status: ${order}</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <div><strong>Status:</strong> Shipped (Actual GI Date is set)</div>
+                            </div>
+                        </div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Track shipment', 'View invoice']);
+                } else { // Scenario 5: Not found
+                    text = `Sorry, I couldn't find that order. Please check the order number/PO number and try again.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check authorizations', 'Try another search']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startAmendOrderFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Can order/PO [X] still be amended? (quantity change, add/remove product, cancellation, or requested-delivery-date change)?");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can check the status of an order to see if it can be amended. Please provide the SAP Order Number or PO Number.
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Order 123456', 'Q19_AMEND')">Order 123456</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('PO-9999', 'Q19_AMEND')">PO-9999</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="SAP Order or PO Number" class="inline-input" onkeypress="handleInlineEnter(event, 'Q19_AMEND')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q19_AMEND', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q19_AMEND';
+            }, 800);
         }
 
         
@@ -3623,6 +3719,16 @@
                 const id = text.trim();
                 waitingForInput = null;
                 resolveOpenOrdersWeightFlow(id);
+                return;
+            } else if (waitingForInput === 'Q18_NO_SHIP') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveNoShipmentFlow(id);
+                return;
+            } else if (waitingForInput === 'Q19_AMEND') {
+                const id = text.trim();
+                waitingForInput = null; // Will remain if ambiguous PO
+                resolveAmendOrderFlow(id);
                 return;
             } else if (waitingForInput === 'Q17_SHORTAGE_IMPACT') {
                 const id = text.trim();
