@@ -2615,29 +2615,140 @@
             }, 800);
         }
 
-        function startUnshippedProductFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("Give me a list of all orders with product xxx that have not shipped yet.");
+        
+        function resolveUnshippedProductFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can find unshipped orders for a specific product. Please provide the Product ID and optionally the Shipping Plant.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let product = input.match(/456789/i) ? '456789' : 'SKU-FRIES';
+                
+                if (r < 0.25) {
+                    text = `I found 6 open orders containing product ${product} that have not yet shipped.`;
+                    badge = '<span class="status-badge delayed">NO DELIVERY</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Product</th><th>Qty</th><th>Est. Shipping Date</th><th>Block Status</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323456</a></td><td>${product}</td><td>100</td><td>Tomorrow</td><td style="color:var(--danger);">Credit Hold</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323457</a></td><td>${product}</td><td>50</td><td>Next Week</td><td style="color:var(--danger);">Delivery Block</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323458</a></td><td>${product}</td><td>200</td><td>Tomorrow</td><td style="color:var(--text-secondary);">None</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Open Orders (No Delivery Created)</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Product ID (e.g. 456789)" class="inline-input" onkeypress="handleInlineEnter(event, 'UNSHIPPED_PRODUCT_CHECK')">
-                            <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'UNSHIPPED_PRODUCT_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('UNSHIPPED_PRODUCT_CHECK', this)">Submit</button>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'View credit holds']);
+                } else if (r < 0.5) {
+                    text = `I found 6 orders containing product ${product} that have not yet shipped, but have already a delivery document created.`;
+                    badge = '<span class="status-badge neutral">DELIVERY CREATED</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Product</th><th>Qty</th><th>Est. Shipping Date</th><th>Block Status</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">423456</a></td><td>${product}</td><td>150</td><td>Tomorrow</td><td style="color:var(--danger);">Billing Block 01</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">423457</a></td><td>${product}</td><td>300</td><td>Next Week</td><td style="color:var(--text-secondary);">None</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Orders with Delivery Document</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                `, modalId, 'UNSHIPPED_PRODUCT_CHECK');
-                waitingForInput = 'UNSHIPPED_PRODUCT_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'View billing blocks']);
+                } else if (r < 0.75) {
+                    text = `I found 6 orders containing product ${product} that have not yet shipped, but have already a delivery and shipment document created.`;
+                    badge = '<span class="status-badge healthy">SHIPMENT CREATED</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Product</th><th>Qty</th><th>Est. Shipping Date</th><th>Block Status</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">523456</a></td><td>${product}</td><td>400</td><td>Today</td><td style="color:var(--text-secondary);">None</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Orders Pending PGI</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Track Shipments']);
+                } else if (r < 0.9) {
+                    text = `All orders containing that product have already shipped, or none are currently open.`;
+                    badge = '<span class="status-badge healthy">ALL SHIPPED</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different product', 'Check shipped orders']);
+                } else {
+                    text = `Sorry, I couldn't find that product. Please confirm the product ID.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Search product catalog', 'Try again']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startUnshippedProductFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Give me a list of all orders with product [product] that have not shipped yet.");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can find unshipped orders by product. Please provide the Product ID or Name. Do you want to narrow the search by Shipping Plant?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('SKU 456789, All Plants', 'Q13_UNSHIPPED')">SKU 456789, All Plants</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Premium Fries, Plant 4010', 'Q13_UNSHIPPED')">Premium Fries, Plant 4010</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Product ID or Name" class="inline-input" onkeypress="handleInlineEnter(event, 'Q13_UNSHIPPED')">
+                                <input type="text" placeholder="Shipping Plant (Optional)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q13_UNSHIPPED')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q13_UNSHIPPED', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q13_UNSHIPPED';
+            }, 800);
         }
 
         
@@ -3311,6 +3422,11 @@
                 const id = text.trim();
                 waitingForInput = null;
                 resolveBilledOrdersFlow(id);
+                return;
+            } else if (waitingForInput === 'Q13_UNSHIPPED') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveUnshippedProductFlow(id);
                 return;
             } else if (waitingForInput === 'Q12_SMALL') {
                 const id = text.trim();
