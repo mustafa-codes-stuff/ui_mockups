@@ -1271,6 +1271,10 @@
         
         // Wait for specific input states
         let waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
 
         const rightSidebar = document.getElementById('right-sidebar');
         const rightSidebarContent = document.getElementById('right-sidebar-content');
@@ -1375,9 +1379,9 @@
             const messages = document.getElementById('chat-container').querySelectorAll('.message');
             messages.forEach(msg => msg.remove());
             waitingForInput = null;
-            const globalInput = document.getElementById('global-input-area');
-            if (globalInput) {
-                globalInput.style.display = 'none';
+            {
+                const gi = document.getElementById('global-input-area');
+                if (gi) { gi.style.display = 'none'; }
             }
         }
 
@@ -2066,6 +2070,10 @@
                         appendAIMessage('Understood. Is there anything else I can help you with?', null, null, false);
                     }
                     waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 }
             }, 800);
         }
@@ -2138,6 +2146,10 @@
                 }, 1000);
             } else {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }
         }
 
@@ -2267,8 +2279,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -2355,8 +2369,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -2448,8 +2464,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -2595,8 +2613,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -2683,8 +2703,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -2776,8 +2798,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -2915,8 +2939,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3031,8 +3057,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3119,8 +3147,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3220,8 +3250,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3285,8 +3317,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3373,8 +3407,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3455,8 +3491,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3560,8 +3598,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3674,8 +3714,10 @@
                 }
                 
                 waitingForInput = null;
-                const globalInput = document.getElementById('global-input-area');
-                if (globalInput) globalInput.style.display = 'block';
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
             }, 800);
         }
 
@@ -3717,101 +3759,181 @@
             if (waitingForInput === 'Q2_SKU_PLANT') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveInventoryStatus(id);
                 return;
             } else if (waitingForInput === 'Q3_DATE_RANGE') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveShortageDateRange(id);
                 return;
             } else if (waitingForInput === 'Q5_NON_FULL') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveNonFullPalletFlow(id);
                 return;
             } else if (waitingForInput === 'Q7_PURCHASE') {
                 const id = text.trim();
-                waitingForInput = null; // Cleared in resolve if not ambiguous
+                waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                } // Cleared in resolve if not ambiguous
                 resolvePurchaseHistoryFlow(id);
                 return;
             } else if (waitingForInput === 'Q9_SHIP_SHORT') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveShipShortFlow(id);
                 return;
             } else if (waitingForInput === 'Q11_BILLED') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveBilledOrdersFlow(id);
                 return;
             } else if (waitingForInput === 'Q14_EST_SHIP') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveEstimatedShippingFlow(id);
                 return;
             } else if (waitingForInput === 'Q16_WEIGHT') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveOpenOrdersWeightFlow(id);
                 return;
             } else if (waitingForInput === 'Q18_NO_SHIP') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveNoShipmentFlow(id);
                 return;
             } else if (waitingForInput === 'Q19_AMEND') {
                 const id = text.trim();
-                waitingForInput = null; // Will remain if ambiguous PO
+                waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                } // Will remain if ambiguous PO
                 resolveAmendOrderFlow(id);
                 return;
             } else if (waitingForInput === 'Q17_SHORTAGE_IMPACT') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveShortageImpactFlow(id);
                 return;
             } else if (waitingForInput === 'Q15_SKU') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveSkuDetailsFlow(id);
                 return;
             } else if (waitingForInput === 'Q13_UNSHIPPED') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveUnshippedProductFlow(id);
                 return;
             } else if (waitingForInput === 'Q12_SMALL') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveSmallOrdersFlow(id);
                 return;
             } else if (waitingForInput === 'Q10_BLOCKED') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveBlockedOrdersFlow(id);
                 return;
             } else if (waitingForInput === 'Q8_UNBILLED') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveUnbilledOrdersFlow(id);
                 return;
             } else if (waitingForInput === 'Q6_FILL_RATE') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveFillRateFlow(id);
                 return;
             } else if (waitingForInput === 'Q4_PAST_DUE') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolvePastDueCPUFlow(id);
                 return;
             } else if (waitingForInput === 'Q3_NARROW') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 resolveShortageFinal(id);
                 return;
             } else if (waitingForInput === 'Q1_ORDER_ID' || waitingForInput === 'Q1_PO') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 showLoading();
                 setTimeout(() => {
                     hideLoading();
@@ -3827,6 +3949,10 @@
             if (waitingForInput === 'ORDER_ID') {
                 const id = text.trim();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 
                 if (orderScenarios[id]) {
                     const data = orderScenarios[id];
@@ -3892,6 +4018,10 @@
             } else if (waitingForInput === 'PRODUCT_STATUS') {
                 const input = text.trim().toLowerCase();
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 
                 if (input.includes('potato') && input.includes('shipped')) {
                     showLoading();
@@ -4062,6 +4192,10 @@
                 }
             } else if (waitingForInput === 'INVENTORY_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('123') && input.includes('4010')) {
                     showLoading();
@@ -4140,6 +4274,10 @@
                 }
             } else if (waitingForInput === 'UNBILLED_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('3010') && input.includes('7')) {
                     showLoading();
@@ -4170,6 +4308,10 @@
                 }
             } else if (waitingForInput === 'SHIP_SHORT_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('3010') && input.includes('7')) {
                     showLoading();
@@ -4200,6 +4342,10 @@
                 }
             } else if (waitingForInput === 'BILLED_ORDERS_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('100234') && input.includes('yesterday')) {
                     showLoading();
@@ -4230,6 +4376,10 @@
                 }
             } else if (waitingForInput === 'OPEN_ORDERS_WEIGHT_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('100234')) {
                     showLoading();
@@ -4260,6 +4410,10 @@
                 }
             } else if (waitingForInput === 'DELIVERY_NO_SHIPMENT_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('ca')) {
                     showLoading();
@@ -4289,6 +4443,10 @@
                 }
             } else if (waitingForInput === 'AMEND_ORDER_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('123456')) {
                     showLoading();
@@ -4313,6 +4471,10 @@
                 }
             } else if (waitingForInput === 'SHORTAGE_IMPACT_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('this month') && input.includes('3010')) {
                     showLoading();
@@ -4342,6 +4504,10 @@
                 }
             } else if (waitingForInput === 'EST_SHIPPING_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('16') && input.includes('3010')) {
                     showLoading();
@@ -4372,6 +4538,10 @@
                 }
             } else if (waitingForInput === 'SKU_MASTER_DATA_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('456789')) {
                     showLoading();
@@ -4405,6 +4575,10 @@
                 }
             } else if (waitingForInput === 'UNSHIPPED_PRODUCT_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('456789')) {
                     showLoading();
@@ -4472,6 +4646,10 @@
                 }
             } else if (waitingForInput === 'SMALL_ORDERS_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('200') && input.includes('this week')) {
                     showLoading();
@@ -4502,6 +4680,10 @@
                 }
             } else if (waitingForInput === 'BLOCKED_ORDERS_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('3010') && input.includes('2')) {
                     showLoading();
@@ -4531,6 +4713,10 @@
                 }
             } else if (waitingForInput === 'FILL_RATE_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('100234') && input.includes('4010') && input.includes('june 2026')) {
                     showLoading();
@@ -4588,6 +4774,10 @@
                 }
             } else if (waitingForInput === 'SHORTAGE_CHECK') {
                 waitingForInput = null;
+                {
+                    const gi = document.getElementById('global-input-area');
+                    if (gi) gi.style.display = 'block';
+                }
                 const input = text.toLowerCase();
                 if (input.includes('1234')) {
                     showLoading();
