@@ -1169,7 +1169,7 @@
                     <div class="nav-item prompt-item" data-category="analytics" onclick="startFillRateFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startUnbilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show me orders that have been shipped but not yet billed, for [sales org], [time period].</div>
                     <div class="nav-item prompt-item" data-category="logistics" onclick="startNonFullPalletFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> For plant xx, give me a list of orders where SKUs are not ordered in full pallet quantities.</div>
-                    <div class="nav-item prompt-item" data-category="logistics" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed but shipped short, for [sales org], [time period].</div>
+                    <div class="nav-item prompt-item" data-category="logistics" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed at delivery-note creation but shipped less than the confirmed quantity, for [sales org], [time period].</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (or any time frame) for a customer.</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].</div>
@@ -2288,29 +2288,94 @@
             }, 800);
         }
 
-        function startShipShortFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("List orders that were fully confirmed but shipped short, for [sales org], [time period].");
+        
+        function resolveShipShortFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can find orders that shipped less than the confirmed quantity. Please provide the Time Period and optionally the Sales Organization.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let org = input.match(/3010/i) ? '3010' : 'All Orgs';
+                
+                if (r < 0.6) {
+                    text = `I found 4 orders that shipped short (shipped qty is less than confirmed qty) for Sales Org ${org} in the selected period.`;
+                    badge = '<span class="status-badge delayed">SHIPPED SHORT</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Product</th><th>Confirmed Qty</th><th>Shipped Qty</th><th>Shortage</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">823456</a></td><td>SKU 123 - Premium Fries</td><td>1000</td><td>800</td><td style="color:var(--danger);">-200</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">823457</a></td><td>SKU 999 - Wedges</td><td>500</td><td>450</td><td style="color:var(--danger);">-50</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">823458</a></td><td>SKU 444 - Hashbrowns</td><td>2000</td><td>1900</td><td style="color:var(--danger);">-100</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">823459</a></td><td>SKU 222 - Onion Rings</td><td>100</td><td>0</td><td style="color:var(--danger);">-100</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Ship-Short Orders</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHIP_SHORT_CHECK')">
-                            <input type="text" placeholder="Time Period (e.g. Last 7 days)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHIP_SHORT_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('SHIP_SHORT_CHECK', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'SHIP_SHORT_CHECK');
-                waitingForInput = 'SHIP_SHORT_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'View root causes']);
+                } else if (r < 0.9) {
+                    text = `No fully-confirmed orders were shipped short for the criteria you gave.`;
+                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
+                } else {
+                    text = `Sorry, I couldn't find any orders matching that criteria - please double check the sales org, customer, or PO number.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Review filters', 'Try another search']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startShipShortFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("List orders that were fully confirmed at delivery-note creation but shipped less than the confirmed quantity, for [sales org], [time period].");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can look for orders that shipped short. Should I look at orders by their estimated loading date or by when the order was placed? And what date range?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Loading Date: Last 7 Days', 'Q9_SHIP_SHORT')">Loading Date: Last 7 Days</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Order Date: This Month', 'Q9_SHIP_SHORT')">Order Date: This Month</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <select class="inline-input" style="flex: 0.5; appearance: auto;" onkeypress="handleInlineEnter(event, 'Q9_SHIP_SHORT')">
+                                    <option value="Loading Date">Loading Date</option>
+                                    <option value="Order Date">Order Date</option>
+                                </select>
+                                <input type="text" placeholder="Date Range (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q9_SHIP_SHORT')">
+                                <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q9_SHIP_SHORT')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q9_SHIP_SHORT', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q9_SHIP_SHORT';
+            }, 800);
         }
 
         function startOpenOrdersWeightFlow() {
@@ -2704,29 +2769,90 @@
             }, 600);
         }
 
-        function startBlockedOrdersFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("List orders scheduled to load in the next 2 days that are currently on any block.");
+        
+        function resolveBlockedOrdersFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can check for blocked orders scheduled to load soon. Please confirm the Time Period and optionally the Sales Organization.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let org = input.match(/3010/i) ? '3010' : 'All Orgs';
+                let time = input.match(/7 days/i) ? 'next 7 days' : 'next 2 days';
+                
+                if (r < 0.6) {
+                    text = `I found 3 orders shipping in the ${time} that are on credit hold for Sales Org ${org}.`;
+                    badge = '<span class="status-badge delayed">BLOCKED ORDERS</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>PO #</th><th>Block Reason</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">923456</a></td><td>PO-11223</td><td style="color:var(--danger);">Credit Block: Not Approved</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">923457</a></td><td>PO-44556</td><td style="color:var(--danger);">Delivery Block: Missing Info</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">923458</a></td><td>PO-99887</td><td style="color:var(--danger);">Billing Block: Pricing Issue</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Blocked Orders</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'BLOCKED_ORDERS_CHECK')">
-                            <input type="text" placeholder="Time Period (e.g. Next 2 days)" class="inline-input" onkeypress="handleInlineEnter(event, 'BLOCKED_ORDERS_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('BLOCKED_ORDERS_CHECK', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'BLOCKED_ORDERS_CHECK');
-                waitingForInput = 'BLOCKED_ORDERS_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Review credit holds', 'Export to Excel']);
+                } else if (r < 0.9) {
+                    text = `No orders shipping in the ${time} are currently on credit hold for that sales org.`;
+                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
+                } else {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startBlockedOrdersFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("List orders scheduled to load in the next 2 days that are currently on any block (credit hold, and/or delivery block, and/or billing block).");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can find orders on block. What time frame are you looking for, and do you want to narrow it down by Sales Org?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Next 2 Days, Org 3010', 'Q10_BLOCKED')">Next 2 Days, Org 3010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Next 7 Days, All Orgs', 'Q10_BLOCKED')">Next 7 Days, All Orgs</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Time Frame (e.g. Next 2 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q10_BLOCKED')">
+                                <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q10_BLOCKED')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q10_BLOCKED', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q10_BLOCKED';
+            }, 800);
         }
 
         
@@ -3056,6 +3182,16 @@
                 const id = text.trim();
                 waitingForInput = null; // Cleared in resolve if not ambiguous
                 resolvePurchaseHistoryFlow(id);
+                return;
+            } else if (waitingForInput === 'Q9_SHIP_SHORT') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveShipShortFlow(id);
+                return;
+            } else if (waitingForInput === 'Q10_BLOCKED') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveBlockedOrdersFlow(id);
                 return;
             } else if (waitingForInput === 'Q8_UNBILLED') {
                 const id = text.trim();
