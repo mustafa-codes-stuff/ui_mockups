@@ -2009,13 +2009,24 @@
                 hideLoading();
                 if (stateContext === 'Q1_INITIAL') {
                     if (value === 'SAP Order Number') {
-                        appendAIMessage('Please enter the SAP Order Number.', null, null, false);
+                        appendAIMessage(`Please enter the SAP Order Number.
+                            <div class="inline-input-container" style="margin-top: 8px;">
+                                <input type="text" placeholder="Enter SAP Order Number..." class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_ORDER_ID')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q1_ORDER_ID', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
                         waitingForInput = 'Q1_ORDER_ID';
                     } else if (value === 'Customer PO Number') {
-                        appendAIOptions('Please select a recent PO Number or enter a new one below:', [
-                            {label: 'PO-999 (Recent)', value: 'PO-999'},
-                            {label: 'PO-1024 (Recent)', value: 'PO-1024'}
-                        ], 'Q1_PO');
+                        appendAIMessage(`Please select a recent PO Number or enter a new one below:
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('PO-999', 'Q1_PO')">PO-999 (Recent)</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('PO-1024', 'Q1_PO')">PO-1024 (Recent)</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Enter New PO Number..." class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_PO')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q1_PO', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
                         waitingForInput = 'Q1_PO';
                     } else if (value === 'Search by Customer Details') {
                         appendAIOptions('Please provide any two details about the Customer. (Select a predictive profile below for this demo):', [
@@ -2112,20 +2123,11 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            Please provide the Order ID you would like me to check.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
-                        </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Enter Order ID..." class="inline-input" onkeypress="handleInlineEnter(event, \'ORDER_ID\')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend(\'ORDER_ID\', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'ORDER_ID');
-                waitingForInput = 'ORDER_ID';
+                appendAIOptions('I can help you find that order. How would you like to search?', [
+                    {label: 'SAP Order Number', value: 'SAP Order Number'},
+                    {label: 'Customer PO Number', value: 'Customer PO Number'},
+                    {label: 'Search by Customer Details', value: 'Search by Customer Details'}
+                ], 'Q1_INITIAL');
             }, 800);
         }
 
