@@ -2475,29 +2475,91 @@
             }, 600);
         }
 
-        function startEstimatedShippingFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("Give me a list of orders that have an estimated shipping date of [date].");
+        
+        function resolveEstimatedShippingFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can check orders by estimated shipping date. What loading date (or date range) would you like me to check?
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let date = input.match(/April/i) ? 'April 16, 2026' : 'the requested period';
+                
+                if (r < 0.6) {
+                    text = `I found 8 orders with a planned shipping date of ${date} for Sales Org 3010.`;
+                    badge = '<span class="status-badge delayed">PLANNED SHIPMENTS</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Status</th><th>Shipping Plant</th><th>Customer</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">623456</a></td><td>Open Order</td><td>4010 - Toronto</td><td>100234</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">623457</a></td><td>Delivery Created</td><td>4010 - Toronto</td><td>100456</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">623458</a></td><td>Open Order</td><td>1000 - Montreal</td><td>220999</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">623459</a></td><td>Delivery Created</td><td>3010 - Vancouver</td><td>100234</td></tr>
+                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">4 more rows available in export</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Estimated Shipments: ${date}</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Time Frame (e.g. April 16, 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'EST_SHIPPING_CHECK')">
-                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'EST_SHIPPING_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('EST_SHIPPING_CHECK', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'EST_SHIPPING_CHECK');
-                waitingForInput = 'EST_SHIPPING_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'Check carrier status']);
+                } else if (r < 0.9) {
+                    text = `No orders are currently planned shipping date for the criteria given.`;
+                    badge = '<span class="status-badge healthy">NO SHIPMENTS</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date', 'Check different Sales Org']);
+                } else {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startEstimatedShippingFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Give me a list of orders that have an estimated shipping date(planned PGI date) of [date/date range]");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can pull orders based on their planned shipping date. What loading date (or date range) would you like me to check?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('April 16, 2026', 'Q14_EST_SHIP')">April 16, 2026</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Next Week', 'Q14_EST_SHIP')">Next Week</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Date/Range (e.g. April 16, 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q14_EST_SHIP')">
+                                <input type="text" placeholder="Sales Org (Optional)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q14_EST_SHIP')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q14_EST_SHIP', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q14_EST_SHIP';
+            }, 800);
         }
 
         function startSKUMasterDataFlow() {
@@ -3422,6 +3484,16 @@
                 const id = text.trim();
                 waitingForInput = null;
                 resolveBilledOrdersFlow(id);
+                return;
+            } else if (waitingForInput === 'Q14_EST_SHIP') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveEstimatedShippingFlow(id);
+                return;
+            } else if (waitingForInput === 'Q15_SKU') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveSkuDetailsFlow(id);
                 return;
             } else if (waitingForInput === 'Q13_UNSHIPPED') {
                 const id = text.trim();
