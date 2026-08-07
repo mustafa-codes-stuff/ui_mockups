@@ -1171,8 +1171,8 @@
                     <div class="nav-item prompt-item" data-category="logistics" onclick="startNonFullPalletFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> For plant xx, give me a list of orders where SKUs are not ordered in full pallet quantities.</div>
                     <div class="nav-item prompt-item" data-category="logistics" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed at delivery-note creation but shipped less than the confirmed quantity, for [sales org], [time period].</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
-                    <div class="nav-item prompt-item" data-category="orders" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (or any time frame) for a customer.</div>
-                    <div class="nav-item prompt-item" data-category="orders" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (dynamic date, can be any time frame).</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than 200 cases, for [sales org], [time frame].</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startPastDueCPUFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which orders had a planned loading (PGI) date in the past but have not yet shipped?</div>
                     <div class="nav-item prompt-item" data-category="logistics" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
                     <div class="nav-item prompt-item" data-category="logistics" onclick="startEstimatedShippingFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of orders that have an estimated shipping date of [date].</div>
@@ -2640,30 +2640,90 @@
             }, 600);
         }
 
-        function startBilledOrdersFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("List orders billed yesterday (or any time frame) for a customer.");
+        
+        function resolveBilledOrdersFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can look up billed orders. Please provide the Customer ID/Name and Time Frame.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let time = input.toLowerCase().includes('week') ? 'last week' : 'yesterday';
+                
+                if (r < 0.6) {
+                    text = `12 orders were billed ${time} for Sales Org 3010.`;
+                    badge = '<span class="status-badge delayed">BILLED ORDERS</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Invoice #</th><th>Customer</th><th>Amount</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">113456</a></td><td>INV-9001</td><td>100234</td><td>$5,400</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">113457</a></td><td>INV-9002</td><td>100456</td><td>$1,250</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">113458</a></td><td>INV-9003</td><td>100456</td><td>$3,800</td></tr>
+                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">9 more rows available in export</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Billing Documents</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Customer (e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'BILLED_ORDERS_CHECK')">
-                            <input type="text" placeholder="Time Frame (e.g. Yesterday)" class="inline-input" onkeypress="handleInlineEnter(event, 'BILLED_ORDERS_CHECK')">
-                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'BILLED_ORDERS_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('BILLED_ORDERS_CHECK', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'BILLED_ORDERS_CHECK');
-                waitingForInput = 'BILLED_ORDERS_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'View unbilled orders']);
+                } else if (r < 0.9) {
+                    text = `No orders were billed ${time} for that sales org/customer.`;
+                    badge = '<span class="status-badge healthy">NO BILLING</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different customer']);
+                } else {
+                    text = `Sorry, I couldn't find that customer or sales organization.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Customer']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startBilledOrdersFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("List orders billed yesterday (dynamic date, can be any time frame).");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can pull a list of billed orders. What time frame should I look at (e.g. Yesterday), and do you want to filter by a specific Customer?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Yesterday, All Customers', 'Q11_BILLED')">Yesterday, All Customers</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Last Week, Cust 100234', 'Q11_BILLED')">Last Week, Cust 100234</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Time Frame (e.g. Yesterday)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q11_BILLED')">
+                                <input type="text" placeholder="Customer (Optional, e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q11_BILLED')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q11_BILLED', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q11_BILLED';
+            }, 800);
         }
 
         
@@ -2743,30 +2803,89 @@
             }, 800);
         }
 
-        function startSmallOrdersFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].");
+        
+        function resolveSmallOrdersFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can find orders under a specific quantity. What order creation date range should I check, and what is the quantity threshold?
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                if (r < 0.6) {
+                    text = `I found 27 orders with less than 200 cases.`;
+                    badge = '<span class="status-badge delayed">SMALL ORDERS</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Total Qty (Cases)</th><th>Customer</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">223456</a></td><td style="color:var(--danger);">150</td><td>100234</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">223457</a></td><td style="color:var(--danger);">50</td><td>100456</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">223458</a></td><td style="color:var(--danger);">195</td><td>100456</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">223459</a></td><td style="color:var(--danger);">20</td><td>999000</td></tr>
+                        <tr><td colspan="3" style="text-align:center; color:var(--text-secondary);">23 more rows available in export</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Orders < 200 Cases</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Max Qty (e.g. 200)" class="inline-input" onkeypress="handleInlineEnter(event, 'SMALL_ORDERS_CHECK')">
-                            <input type="text" placeholder="Time Frame (e.g. This week)" class="inline-input" onkeypress="handleInlineEnter(event, 'SMALL_ORDERS_CHECK')">
-                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'SMALL_ORDERS_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('SMALL_ORDERS_CHECK', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'SMALL_ORDERS_CHECK');
-                waitingForInput = 'SMALL_ORDERS_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'Send to Sales Team']);
+                } else if (r < 0.9) {
+                    text = `No orders under 200 cases were found for that period and sales org.`;
+                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
+                } else {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startSmallOrdersFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("List all orders with a total quantity of less than 200 cases, for [sales org], [time frame].");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can look for orders with less than 200 cases. What order creation date range should I check? (e.g., this week, this month), and for which Sales Org?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('This Week, Org 3010', 'Q12_SMALL')">This Week, Org 3010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('This Month, All Orgs', 'Q12_SMALL')">This Month, All Orgs</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Time Frame (e.g. This Week)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q12_SMALL')">
+                                <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q12_SMALL')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q12_SMALL', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q12_SMALL';
+            }, 800);
         }
 
         
@@ -3187,6 +3306,16 @@
                 const id = text.trim();
                 waitingForInput = null;
                 resolveShipShortFlow(id);
+                return;
+            } else if (waitingForInput === 'Q11_BILLED') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveBilledOrdersFlow(id);
+                return;
+            } else if (waitingForInput === 'Q12_SMALL') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveSmallOrdersFlow(id);
                 return;
             } else if (waitingForInput === 'Q10_BLOCKED') {
                 const id = text.trim();
