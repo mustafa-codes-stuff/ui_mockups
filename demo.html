@@ -2378,28 +2378,91 @@
             }, 800);
         }
 
-        function startOpenOrdersWeightFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("List open orders with pallets, cases, and weight, for a customer.");
+        
+        function resolveOpenOrdersWeightFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can list open orders with logistics details. Please provide the Customer ID/Name.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let customer = input.match(/100234/i) ? '100234' : '999111';
+                
+                if (r < 0.6) {
+                    text = `Customer ${customer} has 5 open orders totaling 40 pallets / 3,200 cases / 64,000 kg.`;
+                    badge = '<span class="status-badge delayed">OPEN ORDERS</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Pallets</th><th>Cases</th><th>Gross Weight</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">773456</a></td><td>10</td><td>800</td><td>16,000 kg</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">773457</a></td><td>5</td><td>400</td><td>8,000 kg</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">773458</a></td><td>15</td><td>1,200</td><td>24,000 kg</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">773459</a></td><td>8</td><td>640</td><td>12,800 kg</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">773460</a></td><td>2</td><td>160</td><td>3,200 kg</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Order Weight & Dimensions</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Customer (e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'OPEN_ORDERS_WEIGHT_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('OPEN_ORDERS_WEIGHT_CHECK', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'OPEN_ORDERS_WEIGHT_CHECK');
-                waitingForInput = 'OPEN_ORDERS_WEIGHT_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'View order statuses']);
+                } else if (r < 0.9) {
+                    text = `Customer ${customer} has no open orders at this time.`;
+                    badge = '<span class="status-badge healthy">NO OPEN ORDERS</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check shipped orders', 'Check different customer']);
+                } else {
+                    text = `Sorry, I couldn't find that customer. Please confirm the customer ID or name.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another search']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startOpenOrdersWeightFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("List open orders with pallets, cases, and weight, for customer [ID/Name] in [sales org].");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can pull open orders with weight and pallet details. Please provide the Customer ID or Name. I will base this on all currently open orders unless you specify a date range.
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Cust 100234', 'Q16_WEIGHT')">Cust 100234</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Cust 999111', 'Q16_WEIGHT')">Cust 999111</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Customer ID or Name" class="inline-input" onkeypress="handleInlineEnter(event, 'Q16_WEIGHT')">
+                                <input type="text" placeholder="Sales Org (Optional)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q16_WEIGHT')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q16_WEIGHT', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q16_WEIGHT';
+            }, 800);
         }
 
         function startDeliveryNoShipmentFlow() {
@@ -2450,29 +2513,95 @@
             }, 600);
         }
 
-        function startShortageImpactFlow() {
-            resetChat();
-            if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
-            appendUserMessage("Which customers are most impacted by shortages for [sales org], [time period]?");
+        
+        function resolveShortageImpactFlow(input) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            I can rank customers by shortage impact. Please provide the Time Period and optionally the Sales Organization.
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                let org = input.match(/3010/i) ? '3010' : 'All Orgs';
+                
+                if (r < 0.6) {
+                    text = `Top customers impacted by shortages in Sales Org ${org}: 1) Customer 100234 (1,200 cases), 2) Customer 100456 (850 cases)...`;
+                    badge = '<span class="status-badge delayed">SHORTAGE IMPACT</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>Rank</th><th>Customer</th><th>Hierarchy</th><th>Total Shortage (Cases)</th></tr>
+                        <tr><td>#1</td><td><a href="#" style="color:var(--primary);">100234</a></td><td>National Accounts > Retail</td><td style="color:var(--danger); font-weight: 500;">1,200</td></tr>
+                        <tr><td>#2</td><td><a href="#" style="color:var(--primary);">100456</a></td><td>Foodservice > Regional</td><td style="color:var(--danger); font-weight: 500;">850</td></tr>
+                        <tr><td>#3</td><td><a href="#" style="color:var(--primary);">100888</a></td><td>National Accounts > Retail</td><td style="color:var(--danger); font-weight: 500;">400</td></tr>
+                        <tr><td>#4</td><td><a href="#" style="color:var(--primary);">100999</a></td><td>Independent</td><td style="color:var(--danger); font-weight: 500;">150</td></tr>
+                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">14 more rows available in export</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Customer Shortage Impact Ranking</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Time Frame (e.g. This Month)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_IMPACT_CHECK')">
-                            <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'SHORTAGE_IMPACT_CHECK')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('SHORTAGE_IMPACT_CHECK', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'SHORTAGE_IMPACT_CHECK');
-                waitingForInput = 'SHORTAGE_IMPACT_CHECK';
-            }, 600);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'View Customer 100234 orders']);
+                } else if (r < 0.9) {
+                    text = `No customers currently show shortage impact for the criteria you gave.`;
+                    badge = '<span class="status-badge healthy">NO SHORTAGES</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
+                } else {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
+        function startShortageImpactFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Which customers are most impacted by shortages (rank from highest shortage qty/value) for [sales org], [time period]?");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can rank the customers impacted by shortages. Should I look at orders by their estimated loading date or by when the order was placed? And what date range?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Loading Date: This Week, Org 3010', 'Q17_SHORTAGE_IMPACT')">Loading Date: This Week, Org 3010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Order Date: Last Month, All Orgs', 'Q17_SHORTAGE_IMPACT')">Order Date: Last Month, All Orgs</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <select class="inline-input" style="flex: 0.5; appearance: auto;" onkeypress="handleInlineEnter(event, 'Q17_SHORTAGE_IMPACT')">
+                                    <option value="Loading Date">Loading Date</option>
+                                    <option value="Order Date">Order Date</option>
+                                </select>
+                                <input type="text" placeholder="Date Range" class="inline-input" onkeypress="handleInlineEnter(event, 'Q17_SHORTAGE_IMPACT')">
+                                <input type="text" placeholder="Sales Org (Optional)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q17_SHORTAGE_IMPACT')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q17_SHORTAGE_IMPACT', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q17_SHORTAGE_IMPACT';
+            }, 800);
         }
 
         
@@ -3489,6 +3618,16 @@
                 const id = text.trim();
                 waitingForInput = null;
                 resolveEstimatedShippingFlow(id);
+                return;
+            } else if (waitingForInput === 'Q16_WEIGHT') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveOpenOrdersWeightFlow(id);
+                return;
+            } else if (waitingForInput === 'Q17_SHORTAGE_IMPACT') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolveShortageImpactFlow(id);
                 return;
             } else if (waitingForInput === 'Q15_SKU') {
                 const id = text.trim();
