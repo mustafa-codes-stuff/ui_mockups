@@ -41,6 +41,30 @@
             padding: 24px;
         }
 
+        
+        .chat-options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .chat-option-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 16px;
+            color: var(--primary);
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+        .chat-option-btn:hover {
+            border-color: var(--primary);
+            background-color: var(--bg-bubble-ai);
+        }
+
         /* Main App Container */
         
         .app-container {
@@ -1965,6 +1989,122 @@
         };
 
         // FLOW: Order Status
+        
+        function appendAIOptions(message, options, stateContext = null) {
+            let optionsHtml = '<div class="chat-options-container">';
+            options.forEach(opt => {
+                const safeValue = opt.value.replace(/'/g, "\'");
+                optionsHtml += `<button class="chat-option-btn" onclick="handleOptionClick('${safeValue}', '${stateContext || ''}')">${opt.label}</button>`;
+            });
+            optionsHtml += '</div>';
+            
+            appendAIMessage(message + optionsHtml, null, null, false);
+        }
+
+        function handleOptionClick(value, stateContext) {
+            appendUserMessage(value);
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                if (stateContext === 'Q1_INITIAL') {
+                    if (value === 'SAP Order Number') {
+                        appendAIMessage('Please enter the SAP Order Number.', null, null, false);
+                        waitingForInput = 'Q1_ORDER_ID';
+                    } else if (value === 'Customer PO Number') {
+                        appendAIOptions('Please select a recent PO Number or enter a new one below:', [
+                            {label: 'PO-999 (Recent)', value: 'PO-999'},
+                            {label: 'PO-1024 (Recent)', value: 'PO-1024'}
+                        ], 'Q1_PO');
+                        waitingForInput = 'Q1_PO';
+                    } else if (value === 'Search by Customer Details') {
+                        appendAIOptions('Please provide any two details about the Customer. (Select a predictive profile below for this demo):', [
+                            {label: 'Load Profile: ABC Company', value: 'Load Profile: ABC Company'},
+                            {label: 'Load Profile: Walmart', value: 'Load Profile: Walmart'}
+                        ], 'Q1_CUSTOMER');
+                        waitingForInput = 'Q1_CUSTOMER';
+                    }
+                } else if (stateContext === 'Q1_PO') {
+                    appendAIOptions(`I found multiple sales orders matching ${value}. Could you please confirm which Plant or Ship-to location is relevant?`, [
+                        {label: 'Plant XYZ', value: 'Plant XYZ'},
+                        {label: 'Plant ABC', value: 'Plant ABC'}
+                    ], 'Q1_PO_PLANT');
+                    waitingForInput = 'Q1_PO_PLANT';
+                } else if (stateContext === 'Q1_PO_PLANT') {
+                    resolveOrderStatus("PO-" + Math.floor(Math.random() * 10000));
+                } else if (stateContext === 'Q1_CUSTOMER') {
+                    const customerName = value.includes('ABC') ? 'ABC Company' : 'Walmart';
+                    appendAIOptions(`I found the customer ${customerName}. In the last month we received 10 orders from the customer and 2 are in open state. Please select an order to view its status:`, [
+                        {label: 'Order #12345 (Placed 2 days ago)', value: '12345'},
+                        {label: 'Order #98765 (Placed last week)', value: '98765'}
+                    ], 'Q1_CUSTOMER_ORDER');
+                    waitingForInput = 'Q1_CUSTOMER_ORDER';
+                } else if (stateContext === 'Q1_CUSTOMER_ORDER') {
+                    resolveOrderStatus(value);
+                } else if (stateContext === 'Q1_ESCALATE') {
+                    if (value === 'Yes, show escalation steps') {
+                        appendAIMessage(`Please connect with Production team of Smilies at the plant XYZ and their contact number is 123455678.<br><br>You can convey to production team with the following message:<br><em>"Our priority customer got impacted due to Smily out of stock, could you please tell us when can we deliver the order?"</em><br><br><span style="color:var(--text-secondary); font-size:11px;">Data Dimensions Referenced: Customer Master, Material Master/Product Master, Plant Master, Sales Order Facts, Purchase order details, Order Status catalogue, Plant production fact, Shipping and logistic facts</span>`, null, null, false);
+                    } else {
+                        appendAIMessage('Understood. Is there anything else I can help you with?', null, null, false);
+                    }
+                    waitingForInput = null;
+                }
+            }, 800);
+        }
+        
+        function resolveOrderStatus(orderId) {
+            const r = Math.random();
+            let responseHtml = "";
+            let needsEscalation = false;
+            
+            if (r < 0.15) {
+                // Cancelled
+                responseHtml = `Order ${orderId} has been cancelled - all line items were rejected.`;
+            } else if (r < 0.30) {
+                // Blocked
+                responseHtml = `Order ${orderId} is currently on credit hold and cannot proceed until released by the Credit team.`;
+                needsEscalation = true;
+            } else if (r < 0.45) {
+                // Open
+                responseHtml = `Order ${orderId} is open; no delivery exist yet. Estimated shipping date: April 16, 2026.`;
+            } else if (r < 0.60) {
+                // Delivery Created
+                responseHtml = `Order ${orderId} has delivery 0080012345. Estimated shipping date: April 16, 2026.`;
+            } else if (r < 0.70) {
+                // Shipment Created
+                responseHtml = `Order ${orderId} has delivery 0080012345, shipment 7891011. Estimated shipping date: April 16, 2026.`;
+            } else if (r < 0.85) {
+                // Loaded / Shipped
+                responseHtml = `Order ${orderId} was shipped on April 16, 2026. Invoicing is still pending.`;
+            } else if (r < 0.95) {
+                // Complete
+                responseHtml = `Order ${orderId} was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.`;
+            } else {
+                // Not found
+                responseHtml = `Sorry, I couldn't find order ${orderId}. Please check the order number/PO number and try again.`;
+            }
+            
+            const finalHtml = `
+                <div class="data-card" style="width: 100%;">
+                    <div style="font-weight: 500; margin-bottom: 8px;">Order Status: ${orderId}</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">${responseHtml}</div>
+                </div>
+            `;
+            
+            appendAIMessage(finalHtml, null, null, false);
+            
+            if (needsEscalation) {
+                setTimeout(() => {
+                    appendAIOptions('Do you want to know whom to escalate or resolve the issue?', [
+                        {label: 'Yes, show escalation steps', value: 'Yes, show escalation steps'},
+                        {label: 'No, I\'m done', value: 'No, I\'m done'}
+                    ], 'Q1_ESCALATE');
+                }, 1000);
+            } else {
+                waitingForInput = null;
+            }
+        }
+
         function startOrderFlow() {
             resetChat();
             if(initialState) initialState.style.display = 'none';
@@ -2409,6 +2549,22 @@
             
             appendUserMessage(text);
             
+            
+            if (waitingForInput === 'Q1_ORDER_ID' || waitingForInput === 'Q1_PO') {
+                const id = text.trim();
+                waitingForInput = null;
+                showLoading();
+                setTimeout(() => {
+                    hideLoading();
+                    if (waitingForInput === 'Q1_PO' || text.toUpperCase().startsWith('PO')) {
+                        handleOptionClick(text, 'Q1_PO'); // Trigger multiple match flow
+                    } else {
+                        resolveOrderStatus(id);
+                    }
+                }, 800);
+                return;
+            }
+
             if (waitingForInput === 'ORDER_ID') {
                 const id = text.trim();
                 waitingForInput = null;
