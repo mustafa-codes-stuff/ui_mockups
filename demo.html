@@ -2552,41 +2552,71 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const isNarrowed = input.toLowerCase().includes('4010');
-                const count = isNarrowed ? 4 : 500;
-                const text = isNarrowed 
-                    ? `I narrowed down the results. Here are the 4 orders with shortages shipping from Plant 4010:`
-                    : `Here is the full report of all 500 orders with shortages:`;
-                    
-                const tableHtml = isNarrowed ? `
-                    <tr><th>Order ID</th><th>Product ID</th><th>Ordered Qty</th><th>Confirmed Qty</th><th>Status</th></tr>
-                    <tr><td><a href="#" style="color:var(--primary);">123456</a></td><td>SKU 123</td><td>1000</td><td style="color:var(--danger);">800</td><td>Delivery Created</td></tr>
-                    <tr><td><a href="#" style="color:var(--primary);">123457</a></td><td>SKU 999</td><td>500</td><td style="color:var(--danger);">250</td><td>Delivery Created</td></tr>
-                    <tr><td><a href="#" style="color:var(--primary);">123458</a></td><td>SKU 444</td><td>2000</td><td style="color:var(--danger);">1900</td><td>Delivery Created</td></tr>
-                    <tr><td><a href="#" style="color:var(--primary);">123459</a></td><td>SKU 555</td><td>100</td><td style="color:var(--danger);">0</td><td>Delivery Created</td></tr>
-                ` : `
-                    <tr><th>Order ID</th><th>Product ID</th><th>Ordered Qty</th><th>Confirmed Qty</th><th>Status</th></tr>
-                    <tr><td><a href="#" style="color:var(--primary);">123456</a></td><td>SKU 123</td><td>1000</td><td style="color:var(--danger);">800</td><td>Delivery Created</td></tr>
-                    <tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
-                    <tr><td colspan="5" style="text-align:center; color:var(--text-secondary);">498 more rows available in export</td></tr>
-                `;
                 
-                const finalHtml = `
-                    <div class="ai-text-content">${text}</div>
-                    <div class="data-card" style="width: 100%;">
-                        <div class="data-card-header">
-                            <span class="data-card-title">Shortages Report ${isNarrowed ? '(Plant 4010)' : ''}</span>
-                            <span class="status-badge delayed">SHORTAGES FOUND</span>
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                if (r < 0.6) {
+                    // Scenario 1: Shortages found
+                    text = `I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.`;
+                    badge = '<span class="status-badge delayed">SHORTAGES FOUND</span>';
+                    
+                    const isNarrowed = input.toLowerCase().includes('4010');
+                    if(isNarrowed) text += " (Filtered to Plant 4010)";
+                    
+                    const tableHtml = isNarrowed ? `
+                        <tr><th>SAP Order #</th><th>Material</th><th>Ordered Qty</th><th>Confirmed Qty</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123456</a></td><td>SKU 123</td><td>1000</td><td style="color:var(--danger);">800</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123457</a></td><td>SKU 999</td><td>500</td><td style="color:var(--danger);">250</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123458</a></td><td>SKU 444</td><td>2000</td><td style="color:var(--danger);">1900</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123459</a></td><td>SKU 555</td><td>100</td><td style="color:var(--danger);">0</td></tr>
+                    ` : `
+                        <tr><th>SAP Order #</th><th>Material</th><th>Ordered Qty</th><th>Confirmed Qty</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123456</a></td><td>SKU 123</td><td>1000</td><td style="color:var(--danger);">800</td></tr>
+                        <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">13 more rows available in export</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Shortage Analysis</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
                         </div>
-                        <div class="data-card-body">
-                            <table class="data-table">
-                                ${tableHtml}
-                            </table>
-                        </div>
-                    </div>
-                `;
-                appendAIMessage(finalHtml, null, null, false);
-                appendFollowUpActions(['Export to Excel', 'Email Report']);
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Export to Excel', 'Email Report']);
+                } else if (r < 0.9) {
+                    // Scenario 2: No shortages found
+                    text = `Good news - I didn't find any orders with shortages that haven't shipped for the criteria you gave.`;
+                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different sales org']);
+                } else {
+                    // Scenario 3: Unauthorized Sales Org
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Sales Org']);
+                }
+                
                 waitingForInput = null;
             }, 800);
         }
