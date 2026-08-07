@@ -1171,6 +1171,7 @@
                     <div class="nav-item prompt-item" data-category="orders" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (or any time frame) for a customer.</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than [QTY] cases, for [sales org], [time frame].</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startPastDueCPUFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which orders had a planned loading (PGI) date in the past but have not yet shipped?</div>
                     <div class="nav-item prompt-item" data-category="logistics" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
                     <div class="nav-item prompt-item" data-category="logistics" onclick="startEstimatedShippingFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of orders that have an estimated shipping date of [date].</div>
                     <div class="nav-item prompt-item" data-category="inventory" onclick="startSKUMasterDataFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What are the cases-per-pallet, weights, and EAN/UPC for SKU [XXXX]?</div>
@@ -2398,6 +2399,97 @@
             }, 600);
         }
 
+        
+        function startPastDueCPUFlow() {
+            resetChat();
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd)?");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`I can check for past-due CPU orders. What time frame should I look at (e.g. Last 7 Days), and do you want to narrow it down by a specific Shipping Plant?
+                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
+                                <button class="chat-option-btn" onclick="handleOptionClick('Last 7 Days, Plant 4010', 'Q4_PAST_DUE')">Last 7 Days, Plant 4010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('This Month, All Plants', 'Q4_PAST_DUE')">This Month, All Plants</button>
+                            </div>
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q4_PAST_DUE')">
+                                <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q4_PAST_DUE')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q4_PAST_DUE', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                waitingForInput = 'Q4_PAST_DUE';
+            }, 800);
+        }
+
+        function resolvePastDueCPUFlow(input) {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                
+                const r = Math.random();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                let plant = input.match(/4010/i) ? '4010' : 'all plants';
+                
+                if (r < 0.6) {
+                    // Scenario 1: Orders found
+                    text = `I found 6 past-due CPU orders not yet PGI'd for plant ${plant} in the selected period.`;
+                    badge = '<span class="status-badge delayed">PAST DUE ORDERS</span>';
+                    
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Block Status</th><th>Planned PGI</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323456</a></td><td>Billing Block: Missing Info</td><td style="color:var(--danger);">2 Days Ago</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323457</a></td><td>Delivery Block: Export</td><td style="color:var(--danger);">5 Days Ago</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323458</a></td><td>Credit Hold: Limit Exceeded</td><td style="color:var(--danger);">Yesterday</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323459</a></td><td>-</td><td style="color:var(--danger);">Yesterday</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323460</a></td><td>-</td><td style="color:var(--danger);">3 Days Ago</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323461</a></td><td>Credit Hold: Not Approved</td><td style="color:var(--danger);">1 Week Ago</td></tr>
+                    `;
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Past Due CPU Orders</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    ${tableHtml}
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Resolve credit holds', 'Export to Excel']);
+                } else if (r < 0.9) {
+                    // Scenario 2: None found
+                    text = `No past-due CPU orders are currently open for that plant and time frame.`;
+                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check different date range', 'Check different plant']);
+                } else {
+                    // Scenario 3: Unauthorized Plant
+                    text = `Sorry, I couldn't find that plant, or you don't have access to it.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, false);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Plant']);
+                }
+                
+                waitingForInput = null;
+            }, 800);
+        }
+
         function startUnshippedProductFlow() {
             resetChat();
             if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
@@ -2665,6 +2757,11 @@
                 const id = text.trim();
                 waitingForInput = null;
                 resolveShortageDateRange(id);
+                return;
+            } else if (waitingForInput === 'Q4_PAST_DUE') {
+                const id = text.trim();
+                waitingForInput = null;
+                resolvePastDueCPUFlow(id);
                 return;
             } else if (waitingForInput === 'Q3_NARROW') {
                 const id = text.trim();
