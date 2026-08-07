@@ -2135,7 +2135,7 @@
                 </div>
             `;
             
-            appendAIMessage(finalHtml, null, null, false);
+            appendAIMessage(finalHtml, null, null, true);
             
             if (needsEscalation) {
                 setTimeout(() => {
@@ -2256,7 +2256,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View billing block reasons']);
                 } else if (r < 0.9) {
                     text = `All shipped orders for that period and sales org have been billed - no exceptions found.`;
@@ -2265,7 +2265,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
                 } else {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
@@ -2274,7 +2274,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Org']);
                 }
                 
@@ -2346,7 +2346,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View root causes']);
                 } else if (r < 0.9) {
                     text = `No fully-confirmed orders were shipped short for the criteria you gave.`;
@@ -2355,7 +2355,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
                 } else {
                     text = `Sorry, I couldn't find any orders matching that criteria - please double check the sales org, customer, or PO number.`;
@@ -2364,7 +2364,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Review filters', 'Try another search']);
                 }
                 
@@ -2441,7 +2441,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View order statuses']);
                 } else if (r < 0.9) {
                     text = `Customer ${customer} has no open orders at this time.`;
@@ -2450,7 +2450,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check shipped orders', 'Check different customer']);
                 } else {
                     text = `Sorry, I couldn't find that customer. Please confirm the customer ID or name.`;
@@ -2459,7 +2459,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another search']);
                 }
                 
@@ -2542,7 +2542,7 @@
                             <button class="chat-option-btn" onclick="handleOptionClick('Order 123457 (Plant 1000)', 'Q19_AMEND')">Order 123457 (Plant 1000)</button>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     waitingForInput = 'Q19_AMEND'; // Stay in the same state
                     return;
                 }
@@ -2563,7 +2563,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Make an amendment', 'View order details']);
                 } else if (r < 0.6) { // Scenario 2: Delivery created, not PGI'd
                     text = `Order ${order} already has a delivery in process. Low chances for changes to still be possible, please contact Customer Service representative.`;
@@ -2581,7 +2581,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Contact Customer Service', 'View delivery document']);
                 } else if (r < 0.85) { // Scenario 3: Loaded, not billed (Shipped)
                     text = `Order ${order} has already been shipped, changes are no longer possible.`;
@@ -2599,7 +2599,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Track shipment', 'View invoice']);
                 } else { // Scenario 5: Not found
                     text = `Sorry, I couldn't find that order. Please check the order number/PO number and try again.`;
@@ -2608,7 +2608,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check authorizations', 'Try another search']);
                 }
                 
@@ -2680,7 +2680,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View Customer 100234 orders']);
                 } else if (r < 0.9) {
                     text = `No customers currently show shortage impact for the criteria you gave.`;
@@ -2689,7 +2689,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
                 } else {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
@@ -2698,7 +2698,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Org']);
                 }
                 
@@ -2775,7 +2775,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Check carrier status']);
                 } else if (r < 0.9) {
                     text = `No orders are currently planned shipping date for the criteria given.`;
@@ -2784,7 +2784,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date', 'Check different Sales Org']);
                 } else {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
@@ -2793,7 +2793,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Org']);
                 }
                 
@@ -2914,7 +2914,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Resolve credit holds', 'Export to Excel']);
                 } else if (r < 0.9) {
                     // Scenario 2: None found
@@ -2924,7 +2924,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different plant']);
                 } else {
                     // Scenario 3: Unauthorized Plant
@@ -2934,7 +2934,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Plant']);
                 }
                 
@@ -2983,7 +2983,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View credit holds']);
                 } else if (r < 0.5) {
                     text = `I found 6 orders containing product ${product} that have not yet shipped, but have already a delivery document created.`;
@@ -3009,7 +3009,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View billing blocks']);
                 } else if (r < 0.75) {
                     text = `I found 6 orders containing product ${product} that have not yet shipped, but have already a delivery and shipment document created.`;
@@ -3034,7 +3034,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Track Shipments']);
                 } else if (r < 0.9) {
                     text = `All orders containing that product have already shipped, or none are currently open.`;
@@ -3043,7 +3043,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different product', 'Check shipped orders']);
                 } else {
                     text = `Sorry, I couldn't find that product. Please confirm the product ID.`;
@@ -3052,7 +3052,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Search product catalog', 'Try again']);
                 }
                 
@@ -3124,7 +3124,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View unbilled orders']);
                 } else if (r < 0.9) {
                     text = `No orders were billed ${time} for that sales org/customer.`;
@@ -3133,7 +3133,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different customer']);
                 } else {
                     text = `Sorry, I couldn't find that customer or sales organization.`;
@@ -3142,7 +3142,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Customer']);
                 }
                 
@@ -3236,7 +3236,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Send to Logistics']);
                 } else {
                     text = `Sorry, I couldn't find that plant, or you don't have access to it.`;
@@ -3245,7 +3245,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Plant']);
                 }
                 
@@ -3294,7 +3294,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Send to Sales Team']);
                 } else if (r < 0.9) {
                     text = `No orders under 200 cases were found for that period and sales org.`;
@@ -3303,7 +3303,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
                 } else {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
@@ -3312,7 +3312,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Org']);
                 }
                 
@@ -3384,7 +3384,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Review credit holds', 'Export to Excel']);
                 } else if (r < 0.9) {
                     text = `No orders shipping in the ${time} are currently on credit hold for that sales org.`;
@@ -3393,7 +3393,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
                 } else {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
@@ -3402,7 +3402,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Org']);
                 }
                 
@@ -3468,7 +3468,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['View shortage details', 'Export Data']);
                 } else if (r < 0.8) {
                     text = `I didn't find any orders for customer ${customer} at plant ${plant} in the period you selected, so a fill rate can't be calculated.`;
@@ -3477,7 +3477,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different customer']);
                 } else {
                     text = `Sorry, I couldn't find that customer/plant combination. Please confirm the customer ID and plant.`;
@@ -3486,7 +3486,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another search']);
                 }
                 
@@ -3543,7 +3543,7 @@
                             <button class="chat-option-btn" onclick="handleOptionClick('100456', 'Q7_PURCHASE')">100456 (Montreal)</button>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     waitingForInput = 'Q7_PURCHASE'; // Stay in the same state to handle the resolution
                     return;
                 }
@@ -3575,7 +3575,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View order volumes']);
                 } else if (r < 0.9) {
                     text = `I didn't find any purchases for customer 100234 in the selected period for the requested producer plant.`;
@@ -3584,7 +3584,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different customer']);
                 } else {
                     text = `Sorry, I couldn't find that customer. Please confirm the customer ID or name.`;
@@ -3593,7 +3593,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another search']);
                 }
                 
@@ -3689,7 +3689,7 @@
                             </div>
                         </div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Email Report']);
                 } else if (r < 0.9) {
                     // Scenario 2: No shortages found
@@ -3699,7 +3699,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check different date range', 'Check different sales org']);
                 } else {
                     // Scenario 3: Unauthorized Sales Org
@@ -3709,7 +3709,7 @@
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                     `;
-                    appendAIMessage(finalHtml, null, null, false);
+                    appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Check my authorizations', 'Try another Sales Org']);
                 }
                 
