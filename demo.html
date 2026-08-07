@@ -2013,6 +2013,12 @@
         }
 
         function handleOptionClick(value, stateContext) {
+            const isLegacyFlow = ['Q1_INITIAL', 'Q1_PO', 'Q1_PO_PLANT', 'Q1_CUSTOMER', 'Q1_CUSTOMER_ORDER', 'Q1_ESCALATE'].includes(stateContext);
+            if (!isLegacyFlow) {
+                handleSendText(value);
+                return;
+            }
+
             appendUserMessage(value);
             showLoading();
             
