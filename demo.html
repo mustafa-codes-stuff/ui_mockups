@@ -2009,7 +2009,7 @@
         }
 
         function handleOptionClick(value, stateContext) {
-            const isLegacyFlow = ['Q1_INITIAL', 'Q1_PO', 'Q1_PO_PLANT', 'Q1_CUSTOMER', 'Q1_CUSTOMER_ORDER', 'Q1_ESCALATE'].includes(stateContext);
+            const isLegacyFlow = ['Q1_INITIAL', 'Q1_PO', 'Q1_PO_PLANT', 'Q1_CUSTOMER', 'Q1_CUSTOMER_ORDER', 'Q1_ESCALATE', 'Q1_ADVANCED', 'Q1_DELIVERY', 'Q1_NOT_FOUND_NAME'].includes(stateContext);
             if (!isLegacyFlow) {
                 handleSendText(value);
                 return;
@@ -2037,12 +2037,17 @@
                             </div>
                         `, null, null, false);
                         waitingForInput = 'Q1_PO';
-                    } else if (value === 'Search by Customer Details') {
-                        appendAIOptions('Please provide any two details about the Customer. (Select a predictive profile below for this demo):', [
-                            {label: 'Load Profile: ABC Company', value: 'Load Profile: ABC Company'},
-                            {label: 'Load Profile: Walmart', value: 'Load Profile: Walmart'}
-                        ], 'Q1_CUSTOMER');
-                        waitingForInput = 'Q1_CUSTOMER';
+                    } else if (value === 'Advanced Search') {
+                        appendAIMessage(`Please enter any known details to perform an advanced search:
+                            <div class="inline-input-container" style="margin-top: 8px; flex-direction: column; gap: 8px; align-items: stretch; background: var(--bg-secondary); padding: 12px; border-radius: 8px;">
+                                <input type="text" placeholder="Customer Name (Sold-to)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_ADVANCED')">
+                                <input type="text" placeholder="McCain Product ID (SKU)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_ADVANCED')">
+                                <input type="text" placeholder="Delivery Number" class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_ADVANCED')">
+                                <input type="text" placeholder="Shipping Plant" class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_ADVANCED')">
+                                <button class="inline-submit-btn" style="align-self: flex-end;" onclick="handleInlineSend('Q1_ADVANCED', this)">Search</button>
+                            </div>
+                        `, null, null, false);
+                        waitingForInput = 'Q1_ADVANCED';
                     }
                 } else if (stateContext === 'Q1_PO') {
                     appendAIOptions(`I found multiple sales orders matching ${value}. Could you please confirm which Plant or Ship-to location is relevant?`, [
@@ -2052,6 +2057,29 @@
                     waitingForInput = 'Q1_PO_PLANT';
                 } else if (stateContext === 'Q1_PO_PLANT') {
                     resolveOrderStatus("PO-" + Math.floor(Math.random() * 10000));
+                } else if (stateContext === 'Q1_ADVANCED') {
+                    // Simulating a successful advanced lookup returning a few orders
+                    appendAIOptions(`I found a few open orders matching your criteria. Please select one to view its status:`, [
+                        {label: 'Order #12345 (Placed 2 days ago)', value: '12345'},
+                        {label: 'Order #98765 (Placed last week)', value: '98765'}
+                    ], 'Q1_CUSTOMER_ORDER');
+                    waitingForInput = 'Q1_CUSTOMER_ORDER';
+                } else if (stateContext === 'Q1_DELIVERY') {
+                    resolveOrderStatus(value);
+                } else if (stateContext === 'Q1_NOT_FOUND_NAME') {
+                    if (value === 'Yes, search by Name') {
+                        appendAIMessage(`Please enter the Customer Name (Sold-to).
+                            <div class="inline-input-container" style="margin-top: 8px;">
+                                <input type="text" placeholder="Enter Customer Name..." class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_ADVANCED')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q1_ADVANCED', this)">Search</button>
+                            </div>
+                        `, null, null, false);
+                        waitingForInput = 'Q1_ADVANCED';
+                    } else {
+                        appendAIMessage('Understood. Is there anything else I can help you with?', null, null, true);
+                        appendFollowUpActions(['Track Shipment', 'View Invoice', 'Contact Carrier']);
+                        waitingForInput = null;
+                    }
                 } else if (stateContext === 'Q1_CUSTOMER') {
                     const customerName = value.includes('ABC') ? 'ABC Company' : 'Walmart';
                     appendAIOptions(`I found the customer ${customerName}. In the last month we received 10 orders from the customer and 2 are in open state. Please select an order to view its status:`, [
@@ -2135,14 +2163,20 @@
                 tableRows = `<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr><tr><td class="label">Invoice Date</td><td class="value">April 17, 2026</td></tr>`;
             } else {
                 // Scenario 9: NOT FOUND / NO MATCH
-                text = `Sorry, I couldn't find that order. Please check the order number/PO number and try again.`;
+                text = `Sorry, I couldn't find a direct match for that order. Would you like to do a name-based lookup using Customer Name (Sold-to)?`;
                 
                 const notFoundHtml = `
                     <div class="ai-text-content">${text}</div>
                 `;
                 appendAIMessage(notFoundHtml, null, null, true);
-                appendFollowUpActions(['Try Another Search', 'Contact Support']);
-                waitingForInput = null;
+                
+                setTimeout(() => {
+                    appendAIOptions('', [
+                        {label: 'Yes, search by Name', value: 'Yes, search by Name'},
+                        {label: 'No, I\'ll try another ID', value: 'No, I\'ll try another ID'}
+                    ], 'Q1_NOT_FOUND_NAME');
+                }, 500);
+                
                 return;
             }
 
@@ -2192,7 +2226,7 @@
                 appendAIOptions('I can help you find that order. How would you like to search?', [
                     {label: 'SAP Order Number', value: 'SAP Order Number'},
                     {label: 'Customer PO Number', value: 'Customer PO Number'},
-                    {label: 'Search by Customer Details', value: 'Search by Customer Details'}
+                    {label: 'Advanced Search', value: 'Advanced Search'}
                 ], 'Q1_INITIAL');
             }, 800);
         }
@@ -3820,16 +3854,28 @@
                 waitingForInput = null;
                 resolveShortageFinal(id);
                 return;
-            } else if (waitingForInput === 'Q1_ORDER_ID' || waitingForInput === 'Q1_PO') {
+            } else if (waitingForInput === 'Q1_ORDER_ID' || waitingForInput === 'Q1_PO' || waitingForInput === 'Q1_ADVANCED') {
                 const id = text.trim();
+                const prevState = waitingForInput;
                 waitingForInput = null;
                 showLoading();
                 setTimeout(() => {
                     hideLoading();
-                    if (waitingForInput === 'Q1_PO' || text.toUpperCase().startsWith('PO')) {
+                    if (prevState === 'Q1_ADVANCED') {
+                         handleOptionClick(id, 'Q1_ADVANCED');
+                    } else if (prevState === 'Q1_PO' || text.toUpperCase().startsWith('PO')) {
                         handleOptionClick(text, 'Q1_PO'); // Trigger multiple match flow
                     } else {
-                        resolveOrderStatus(id);
+                        // Simulate multiple deliveries 30% of the time, else resolve
+                        if (Math.random() < 0.3) {
+                            appendAIOptions(`Multiple deliveries exist against order ${id}. Which delivery/line is relevant?`, [
+                                {label: 'Delivery 80012345 (Line 10)', value: '80012345'},
+                                {label: 'Delivery 80012346 (Line 20)', value: '80012346'}
+                            ], 'Q1_DELIVERY');
+                            waitingForInput = 'Q1_DELIVERY';
+                        } else {
+                            resolveOrderStatus(id);
+                        }
                     }
                 }, 800);
                 return;
