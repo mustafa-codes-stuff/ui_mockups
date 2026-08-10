@@ -2008,14 +2008,16 @@
             appendAIMessage(message + optionsHtml, null, null, false);
         }
 
-        function handleOptionClick(value, stateContext) {
+        function handleOptionClick(value, stateContext, skipUserMessage = false) {
             const isLegacyFlow = ['Q1_INITIAL', 'Q1_PO', 'Q1_PO_PLANT', 'Q1_CUSTOMER', 'Q1_CUSTOMER_ORDER', 'Q1_ESCALATE', 'Q1_ADVANCED', 'Q1_DELIVERY', 'Q1_NOT_FOUND_NAME'].includes(stateContext);
             if (!isLegacyFlow) {
                 handleSendText(value);
                 return;
             }
 
-            appendUserMessage(value);
+            if (!skipUserMessage) {
+                appendUserMessage(value);
+            }
             showLoading();
             
             setTimeout(() => {
@@ -3858,14 +3860,15 @@
                 const id = text.trim();
                 const prevState = waitingForInput;
                 waitingForInput = null;
-                showLoading();
-                setTimeout(() => {
-                    hideLoading();
-                    if (prevState === 'Q1_ADVANCED') {
-                         handleOptionClick(id, 'Q1_ADVANCED');
-                    } else if (prevState === 'Q1_PO' || text.toUpperCase().startsWith('PO')) {
-                        handleOptionClick(text, 'Q1_PO'); // Trigger multiple match flow
-                    } else {
+                
+                if (prevState === 'Q1_ADVANCED') {
+                     handleOptionClick(id, 'Q1_ADVANCED', true);
+                } else if (prevState === 'Q1_PO' || text.toUpperCase().startsWith('PO')) {
+                     handleOptionClick(text, 'Q1_PO', true); // Trigger multiple match flow
+                } else {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
                         // Simulate multiple deliveries 30% of the time, else resolve
                         if (Math.random() < 0.3) {
                             appendAIOptions(`Multiple deliveries exist against order ${id}. Which delivery/line is relevant?`, [
@@ -3876,8 +3879,8 @@
                         } else {
                             resolveOrderStatus(id);
                         }
-                    }
-                }, 800);
+                    }, 800);
+                }
                 return;
             }
 
