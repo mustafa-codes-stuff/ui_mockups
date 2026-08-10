@@ -4727,8 +4727,11 @@
             let values = [];
             let allEmpty = true;
             inputs.forEach(el => {
-                if (el.value.trim()) allEmpty = false;
-                values.push(el.value.trim());
+                const val = el.value.trim();
+                if (val) {
+                    allEmpty = false;
+                    values.push(val);
+                }
                 el.disabled = true;
             });
             
