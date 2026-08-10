@@ -2030,13 +2030,9 @@
                         `, null, null, false);
                         waitingForInput = 'Q1_ORDER_ID';
                     } else if (value === 'Customer PO Number') {
-                        appendAIMessage(`Please select a recent PO Number or enter a new one below:
-                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('PO-999', 'Q1_PO')">PO-999 (Recent)</button>
-                                <button class="chat-option-btn" onclick="handleOptionClick('PO-1024', 'Q1_PO')">PO-1024 (Recent)</button>
-                            </div>
-                            <div class="inline-input-container">
-                                <input type="text" placeholder="Enter New PO Number..." class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_PO')">
+                        appendAIMessage(`Please enter the Customer PO Number.
+                            <div class="inline-input-container" style="margin-top: 8px;">
+                                <input type="text" placeholder="Enter PO Number..." class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_PO')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q1_PO', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -2078,54 +2074,91 @@
         }
         
         function resolveOrderStatus(orderId) {
-            const keys = Object.keys(orderScenarios);
-            const randomKey = keys[Math.floor(Math.random() * keys.length)];
-            const data = orderScenarios[randomKey];
-            
-            let tableSplit = data.tables.split(',');
-            let sourceTablesHtml = '';
-            if (tableSplit.length > 1) {
-                sourceTablesHtml = `<strong>Source Tables:</strong>`;
-                tableSplit.forEach((table, index) => {
-                    sourceTablesHtml += `<div style="margin-top: 4px; margin-left: 8px;">${table.trim()} - <em>Last Updated: ${getTimestamp(index * 4 + 2)}</em></div>`;
-                });
+            // Generate the dynamic text response based on 8 scenarios
+            const r = Math.random();
+            let text = "";
+            let badge = "";
+            let badgeClass = "";
+            let title = "";
+            let timelineHtml = "";
+            let tableRows = "";
+            let needsEscalation = false;
+            let tables = "";
+
+            if (r < 0.125) {
+                // Scenario 1: Cancelled / Rejected
+                text = `Order ${orderId} has been cancelled - all line items were rejected, (reason code: Z01 - Out of stock).`;
+                title = 'Cancelled / Rejected'; badge = 'CANCELLED'; badgeClass = 'danger';
+                tables = "SAP.VBAK, SAP.VBAP";
+                tableRows = `<tr><td class="label">Order Status</td><td class="value" style="color: var(--danger);">Rejected</td></tr><tr><td class="label">Rejection Reason</td><td class="value">Z01 (Out of stock)</td></tr>`;
+            } else if (r < 0.25) {
+                // Scenario 2: Blocks before delivery creation
+                text = `Order ${orderId} is currently on credit hold and cannot proceed until released by the Credit team.`;
+                title = 'Blocked Before Delivery'; badge = 'BLOCKED'; badgeClass = 'danger';
+                tables = "SAP.VBAK, SAP.VBUK";
+                tableRows = `<tr><td class="label">Order Status</td><td class="value" style="color: var(--danger);">Credit Hold</td></tr><tr><td class="label">Delivery Block</td><td class="value">-</td></tr>`;
+                needsEscalation = true;
+            } else if (r < 0.375) {
+                // Scenario 4: Open - Not Yet Allocated
+                text = `Order ${orderId} is open; no delivery exist yet. Estimated shipping date: April 16, 2026.`;
+                title = 'Open - Not Yet Allocated'; badge = 'OPEN'; badgeClass = 'delayed';
+                tables = "SAP.VBAK, SAP.VBEP";
+                timelineHtml = buildTimeline(1, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
+                tableRows = `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
+            } else if (r < 0.5) {
+                // Scenario 5: Delivery Created - no PGI'd
+                text = `Order ${orderId} has delivery 0080012345. Estimated shipping date: April 16, 2026.`;
+                title = 'Delivery Created - No PGI'; badge = 'IN PROGRESS'; badgeClass = 'delayed';
+                tables = "SAP.LIKP, SAP.LIPS";
+                timelineHtml = buildTimeline(2, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
+                tableRows = `<tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
+            } else if (r < 0.625) {
+                // Scenario 6: Shipment Created - no PGI'd
+                text = `Order ${orderId} has delivery 0080012345, shipment 7891011. Estimated shipping date: April 16, 2026.`;
+                title = 'Shipment Created - No PGI'; badge = 'IN PROGRESS'; badgeClass = 'delayed';
+                tables = "SAP.VTTK, SAP.LIKP";
+                timelineHtml = buildTimeline(3, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
+                tableRows = `<tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr><tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
+            } else if (r < 0.75) {
+                // Scenario 7: Loaded / Shipped - Not Yet Billed
+                text = `Order ${orderId} was shipped on April 16, 2026. Invoicing is still pending.`;
+                title = 'Loaded / Shipped - Not Billed'; badge = 'SHIPPED'; badgeClass = 'healthy';
+                tables = "SAP.VTTK, SAP.VBUK";
+                timelineHtml = buildTimeline(4, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
+                tableRows = `<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value">Pending</td></tr>`;
+            } else if (r < 0.875) {
+                // Scenario 8: Loaded and Billed - Complete
+                text = `Order ${orderId} was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.`;
+                title = 'Delivered & Billed - Complete'; badge = 'COMPLETE'; badgeClass = 'healthy';
+                tables = "SAP.VBRK";
+                timelineHtml = buildTimeline(5, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
+                tableRows = `<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr><tr><td class="label">Invoice Date</td><td class="value">April 17, 2026</td></tr>`;
             } else {
-                sourceTablesHtml = `<strong>Source Tables:</strong> ${data.tables} - <em>Last Updated: ${getTimestamp()}</em>`;
+                // Scenario 9: NOT FOUND / NO MATCH
+                text = `Sorry, I couldn't find that order. Please check the order number/PO number and try again.`;
+                
+                const notFoundHtml = `
+                    <div class="ai-text-content">${text}</div>
+                `;
+                appendAIMessage(notFoundHtml, null, null, true);
+                appendFollowUpActions(['Try Another Search', 'Contact Support']);
+                waitingForInput = null;
+                return;
             }
 
-            // Generate the dynamic text response
-            const r = Math.random();
-            let responseHtml = "";
-            let needsEscalation = false;
-            
-            if (r < 0.15) {
-                responseHtml = `Order ${orderId} has been cancelled - all line items were rejected.`;
-            } else if (r < 0.30) {
-                responseHtml = `Order ${orderId} is currently on credit hold and cannot proceed until released by the Credit team.`;
-                needsEscalation = true;
-            } else if (r < 0.45) {
-                responseHtml = `Order ${orderId} is open; no delivery exist yet. Estimated shipping date: April 16, 2026.`;
-            } else if (r < 0.60) {
-                responseHtml = `Order ${orderId} has delivery 0080012345. Estimated shipping date: April 16, 2026.`;
-            } else if (r < 0.70) {
-                responseHtml = `Order ${orderId} has delivery 0080012345, shipment 7891011. Estimated shipping date: April 16, 2026.`;
-            } else if (r < 0.85) {
-                responseHtml = `Order ${orderId} was shipped on April 16, 2026. Invoicing is still pending.`;
-            } else {
-                responseHtml = `Order ${orderId} was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.`;
-            }
-            
+            let sourceTablesHtml = `<strong>Source Tables:</strong> ${tables} - <em>Last Updated: ${getTimestamp()}</em>`;
+
             const finalHtml = `
-                <div class="ai-text-content">${responseHtml}</div>
-                ${data.timeline}
+                <div class="ai-text-content">${text}</div>
+                ${timelineHtml}
                 <div class="data-card" style="width: 100%;">
                     <div class="data-card-header">
-                        <span class="data-card-title">Order ${orderId} · ${data.title}</span>
-                        <span class="status-badge ${data.badgeClass}">${data.badge}</span>
+                        <span class="data-card-title">Order ${orderId} · ${title}</span>
+                        <span class="status-badge ${badgeClass}">${badge}</span>
                     </div>
                     <div class="data-card-body">
                         <table class="data-table">
-                            ${data.table}
+                            ${tableRows}
                         </table>
                     </div>
                 </div>
@@ -2133,9 +2166,9 @@
                     <span>${sourceTablesHtml}</span>
                 </div>
             `;
-            
+
             appendAIMessage(finalHtml, null, null, true);
-            
+
             if (needsEscalation) {
                 setTimeout(() => {
                     appendAIOptions('Do you want to know whom to escalate or resolve the issue?', [
