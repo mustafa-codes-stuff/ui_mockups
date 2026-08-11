@@ -1279,6 +1279,24 @@
         // Wait for specific input states
         let waitingForInput = null;
 
+        function getDeterministicFloat(input, flowType = '') {
+            if (!input) return 0.1;
+            const lower = String(input).toLowerCase();
+            
+            if (flowType === 'ORDER_STATUS') {
+                if (lower.includes('0000') || lower.includes('error') || lower.includes('invalid') || lower.includes('9999') || lower.includes('empty') || lower.includes('none')) {
+                    return 0.99; 
+                }
+                return 0.85; 
+            }
+            
+            if (lower.includes('0000') || lower.includes('error') || lower.includes('invalid')) return 0.99;
+            if (lower.includes('9999') || lower.includes('empty') || lower.includes('none')) return 0.8;
+            
+            return 0.1;
+        }
+
+
         const rightSidebar = document.getElementById('right-sidebar');
         const rightSidebarContent = document.getElementById('right-sidebar-content');
         const sidebar = document.getElementById('sidebar');
@@ -2129,7 +2147,7 @@
         
         function resolveOrderStatus(orderId) {
             // Generate the dynamic text response based on 8 scenarios
-            const r = window.forceSuccess ? (window.forceSuccess = false, 0.8) : Math.random();
+            const r = window.forceSuccess ? (window.forceSuccess = false, 0.85) : getDeterministicFloat(typeof orderId !== "undefined" ? orderId : "", "ORDER_STATUS");
             let text = "";
             let badge = "";
             let badgeClass = "";
@@ -2315,7 +2333,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2406,7 +2424,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2503,7 +2521,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2621,7 +2639,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2762,7 +2780,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2860,7 +2878,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3002,7 +3020,7 @@
             setTimeout(() => {
                 hideLoading();
                 
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3077,7 +3095,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3234,7 +3252,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3350,7 +3368,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3412,7 +3430,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3505,7 +3523,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3607,7 +3625,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3695,7 +3713,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3823,7 +3841,7 @@
             setTimeout(() => {
                 hideLoading();
                 
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
