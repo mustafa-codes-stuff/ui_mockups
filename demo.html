@@ -1791,7 +1791,14 @@
                                     </table>
                                 </div>
                             </div>
-                        `;
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                    `;
                         break;
                     case 'Contact Carrier':
                         responseHtml = '<div class="ai-text-content">The carrier for this shipment is <strong>DHL Express</strong>. Their support number is 1-800-CALL-DHL. Would you like me to open a support ticket on your behalf?</div>';
@@ -1814,7 +1821,14 @@
                                     </table>
                                 </div>
                             </div>
-                        `;
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                    `;
                         break;
                     case 'Update notifications':
                         responseHtml = `<div class="ai-text-content">Sure! I have updated your notification preferences. You will now receive SMS alerts for this order's tracking events.</div>`;
@@ -2340,6 +2354,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Invoice Header Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View billing block reasons']);
@@ -2426,6 +2447,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View root causes']);
@@ -2517,6 +2545,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Inventory Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View order statuses']);
@@ -2635,6 +2670,13 @@
                                 <div><strong>Status:</strong> Open Order (No delivery created)</div>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Make an amendment', 'View order details']);
@@ -2653,6 +2695,13 @@
                                 <div><strong>Status:</strong> Delivery Created (Not yet PGI'd)</div>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Contact Customer Service', 'View delivery document']);
@@ -2671,6 +2720,13 @@
                                 <div><strong>Status:</strong> Shipped (Actual GI Date is set)</div>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Track shipment', 'View invoice']);
@@ -2748,6 +2804,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Inventory Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View Customer 100234 orders']);
@@ -2839,6 +2902,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Check carrier status']);
@@ -2974,6 +3044,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Resolve credit holds', 'Export to Excel']);
@@ -3039,6 +3116,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View credit holds']);
@@ -3065,6 +3149,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View billing blocks']);
@@ -3090,6 +3181,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Track Shipments']);
@@ -3176,6 +3274,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View unbilled orders']);
@@ -3284,6 +3389,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Send to Logistics']);
@@ -3338,6 +3450,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Send to Sales Team']);
@@ -3432,6 +3551,13 @@
                                 ${tableHtml}
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Review credit holds', 'Export to Excel']);
@@ -3512,6 +3638,13 @@
                                 <div><strong>Delivered:</strong> 11,100 CS</div>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['View shortage details', 'Export Data']);
@@ -3615,6 +3748,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'View order volumes']);
@@ -3725,6 +3865,13 @@
                                 </table>
                             </div>
                         </div>
+                    
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Inventory Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Email Report']);
@@ -4163,7 +4310,14 @@
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 6 more orders</div>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Full List', 'Send Reminders']);
                     }, 800);
                 } else if (input.includes('3010') && input.includes('30')) {
@@ -4193,7 +4347,14 @@
                                     </table>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Investigate Shortages', 'Notify Sales Reps']);
                     }, 800);
                 } else if (input.includes('3010') && input.includes('30')) {
@@ -4223,7 +4384,14 @@
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 9 more invoices</div>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Invoice Header Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Invoices', 'View Customer Account']);
                     }, 800);
                 } else if (input.includes('100234') && input.includes('last week')) {
@@ -4253,7 +4421,14 @@
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 2 more orders</div>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Inventory Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Full List', 'Check Pallet Config']);
                     }, 800);
                 } else if (input.includes('100235')) {
@@ -4282,7 +4457,14 @@
                                     </table>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Full List', 'Check Logistics']);
                     }, 800);
                 } else if (input.includes('us')) {
@@ -4335,7 +4517,14 @@
                                     </table>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Inventory Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Rankings', 'Investigate Acme Corp']);
                     }, 800);
                 } else if (input.includes('last month') && input.includes('3010')) {
@@ -4365,7 +4554,14 @@
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 5 more orders</div>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Full List', 'Check Plant Capacity']);
                     }, 800);
                 } else if (input.includes('17') && input.includes('3010')) {
@@ -4398,7 +4594,14 @@
                                     </table>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Inventory Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['View Inventory', 'Check Pending Orders']);
                     }, 800);
                 } else if (input.includes('456790')) {
@@ -4427,7 +4630,14 @@
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 4 more orders</div>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Full List', 'Release Blocks']);
                     }, 800);
                 } else if (input.includes('456790')) {
@@ -4446,7 +4656,14 @@
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 4 more orders</div>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Full List', 'Check Delivery Status']);
                     }, 800);
                 } else if (input.includes('456791')) {
@@ -4465,7 +4682,14 @@
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 4 more orders</div>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Full List', 'Track Shipments']);
                     }, 800);
                 } else if (input.includes('456792')) {
@@ -4495,7 +4719,14 @@
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 24 more orders</div>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export Full List', 'Group by Customer']);
                     }, 800);
                 } else if (input.includes('200') && input.includes('last week')) {
@@ -4524,7 +4755,14 @@
                                     </table>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Request Credit Release', 'Email Finance']);
                     }, 800);
                 } else if (input.includes('3010') && input.includes('5')) {
@@ -4557,7 +4795,14 @@
                                     </table>
                                 </div>
                             </div>
-                        `);
+                        
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                    `);
                         appendFollowUpActions(['Export to Excel', 'View unfulfilled orders', 'Check July 2026']);
                     }, 800);
                 } else if (input.includes('100234') && input.includes('4010') && input.includes('may 2026')) {
