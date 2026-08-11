@@ -1628,7 +1628,7 @@
             const needsFeedback = showFeedback && !htmlContent.includes('inline-input-container') && !htmlContent.includes('Please provide') && !htmlContent.includes('What is') && !htmlContent.includes('Enter ');
             const feedbackHtml = needsFeedback ? `
                     <div class="feedback-container">
-                        <button class="feedback-btn" onclick="handleFeedback(this, 'up')" title="Good response">
+                        <button class="feedback-btn" onclick="handleFeedback(this, 'up')" title="Good response (Leave Comments)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
                         </button>
                         <button class="feedback-btn" onclick="handleFeedback(this, 'down')" title="Bad response">
@@ -1696,8 +1696,15 @@
 
         function appendFollowUpActions(actions = ['Why is it delayed?', 'Get full tracking history', 'Contact Carrier', 'Alternative routes?', 'View order items', 'Update notifications']) {
             if (!actions) return;
-            if (!actions.includes('Ask something else')) {
-                actions.push('Ask something else');
+            
+            // Filter out Track Shipment
+            actions = actions.filter(a => a !== 'Track Shipment');
+            
+            // Rename View Invoice
+            actions = actions.map(a => a === 'View Invoice (PDF)' ? 'View Invoice (PDF)' : a);
+            
+            if (!actions.includes('Type a new question')) {
+                actions.push('Type a new question');
             }
             if (actions.length === 0) return;
             let buttonsHtml = actions.map(action => `<button class="follow-up-btn" onclick="handleFollowUpClick('${action}')">${action}</button>`).join('');
@@ -1720,7 +1727,15 @@
 
         window.handleFollowUpClick = function(action) {
             hideUserDetails();
-            if (action === 'Ask something else') {
+            if (action === 'Contact Carrier') {
+                window.location.href = "mailto:?subject=Carrier Inquiry";
+                return;
+            }
+            if (action === 'Send to Sales Team') {
+                window.location.href = "mailto:?subject=Sales Order Information";
+                return;
+            }
+            if (action === 'Type a new question' || action === 'Type a new question') {
                 const globalInput = document.getElementById('global-input-area');
                 if (globalInput) {
                     globalInput.style.display = 'block';
@@ -1840,7 +1855,7 @@
             let numericStage = isError ? 1 : stage;
 
             if (!isError) {
-                for (let i = 1; i <= 5; i++) {
+                for (let i = 1; i <= 3; i++) {
                     if (i < numericStage) classes[i] = 'completed';
                     if (i === numericStage) classes[i] = 'active';
                 }
@@ -1853,8 +1868,6 @@
                     if (i === 1) return '🛒';
                     if (i === 2) return '⚙️';
                     if (i === 3) return '📦';
-                    if (i === 4) return '🚚';
-                    if (i === 5) return '🎉';
                 }
                 return '';
             };
@@ -1868,7 +1881,7 @@
 
             const getLabel = (i) => {
                 if (isError && i === 1) return stage;
-                const labels = ['', 'Order Placed', 'Processing', 'Shipped', 'In Transit', 'Delivered'];
+                const labels = ['', 'Order Placed', 'Processing', 'Shipped'];
                 return labels[i];
             };
 
@@ -1923,75 +1936,75 @@
             // Cancelled
             '10001': {
                 title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED', {1: 'Customer Serv.'}),
-                text: 'Order 10001 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: var(--danger);">April 11, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: var(--danger);">Customer requested cancellation (Z01)</td></tr>`, tables: 'SAP.VBAK, SAP.VBAP'
+                text: 'Order 10001 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: var(--danger);">April 11, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: var(--danger);">Customer requested cancellation (Z01)</td></tr>`, tables: 'Order Header Data, Order Items Data'
             },
             '10002': {
                 title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED', {1: 'System API'}),
-                text: 'Order 10002 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: var(--danger);">April 14, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: var(--danger);">Out of Stock - Cannot Fulfill (Z04)</td></tr>`, tables: 'SAP.VBAK, SAP.VBAP'
+                text: 'Order 10002 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: var(--danger);">April 14, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: var(--danger);">Out of Stock - Cannot Fulfill (Z04)</td></tr>`, tables: 'Order Header Data, Order Items Data'
             },
             
             // Blocked
             '20001': {
                 title: 'Blocked (Credit Hold)', badge: 'BLOCKED', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Finance Team'}),
-                text: 'Order 20001 is currently on credit hold and cannot proceed until released by the Credit team.', table: `<tr><td class="label">Order Placed</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Credit Check Date</td><td class="value" style="color: var(--danger);">April 15, 2026</td></tr><tr><td class="label">Credit Status</td><td class="value" style="color: var(--danger);">Not Approved (Hold)</td></tr>`, tables: 'SAP.VBAK, SAP.VBUK'
+                text: 'Order 20001 is currently on credit hold and cannot proceed until released by the Credit team.', table: `<tr><td class="label">Order Placed</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Credit Check Date</td><td class="value" style="color: var(--danger);">April 15, 2026</td></tr><tr><td class="label">Credit Status</td><td class="value" style="color: var(--danger);">Not Approved (Hold)</td></tr>`, tables: 'Order Header Data, Header Status Fields'
             },
             '20002': {
                 title: 'Blocked (Delivery Block)', badge: 'BLOCKED', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Export Control'}),
-                text: 'Order 20002 has a delivery block.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Delivery Block Applied</td><td class="value" style="color: var(--danger);">April 16, 2026</td></tr><tr><td class="label">Delivery Block</td><td class="value" style="color: var(--danger);">Z2 - Export Papers Missing</td></tr>`, tables: 'SAP.VBAK'
+                text: 'Order 20002 has a delivery block.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Delivery Block Applied</td><td class="value" style="color: var(--danger);">April 16, 2026</td></tr><tr><td class="label">Delivery Block</td><td class="value" style="color: var(--danger);">Z2 - Export Papers Missing</td></tr>`, tables: 'Order Header Data'
             },
 
             // Open
             '30001': {
                 title: 'Open - Not Yet Allocated', badge: 'OPEN', badgeClass: 'neutral', timeline: buildTimeline(1, {1: 'System API'}),
-                text: 'Order 30001 is open; no delivery exists yet.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Order Processing</td><td class="value">In Progress</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">Tomorrow</td></tr>`, tables: 'SAP.VBAK'
+                text: 'Order 30001 is open; no delivery exists yet.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Order Processing</td><td class="value">In Progress</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">Tomorrow</td></tr>`, tables: 'Order Header Data'
             },
             '30002': {
                 title: 'Open - Not Yet Allocated', badge: 'OPEN', badgeClass: 'neutral', timeline: buildTimeline(1, {1: 'Sales Rep'}),
-                text: 'Order 30002 is open; no delivery exists yet.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Order Processing</td><td class="value">In Progress</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">Next Week</td></tr>`, tables: 'SAP.VBAK'
+                text: 'Order 30002 is open; no delivery exists yet.', table: `<tr><td class="label">Order Placed</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Order Processing</td><td class="value">In Progress</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">Next Week</td></tr>`, tables: 'Order Header Data'
             },
 
             // Delivery Created
             '40001': {
                 title: 'Delivery Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2, {1: 'Sales Rep', 2: 'Warehouse'}),
-                text: 'Order 40001 has delivery 008001111.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.VBAK, SAP.LIKP'
+                text: 'Order 40001 has delivery 008001111.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'Order Header Data, Delivery Header (PGI Date)'
             },
             '40002': {
                 title: 'Delivery Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2, {1: 'System API', 2: 'Warehouse'}),
-                text: 'Order 40002 has delivery 008001112.', table: `<tr><td class="label">Order Placed</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.VBAK, SAP.LIKP'
+                text: 'Order 40002 has delivery 008001112.', table: `<tr><td class="label">Order Placed</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'Order Header Data, Delivery Header (PGI Date)'
             },
 
             // Shipment Created
             '50001': {
                 title: 'Shipment Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2, {1: 'Sales Rep', 2: 'Logistics'}),
-                text: 'Order 50001 has delivery 008001222, shipment 789111.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipment Number</td><td class="value">789111 (Created April 15)</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VTTK'
+                text: 'Order 50001 has delivery 008001222, shipment 789111.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipment Number</td><td class="value">789111 (Created April 15)</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'Delivery Header (PGI Date), Shipment Details (Carrier Info)'
             },
             '50002': {
                 title: 'Shipment Created (No PGI)', badge: 'PROCESSING', badgeClass: 'neutral', timeline: buildTimeline(2, {1: 'System API', 2: 'Logistics'}),
-                text: 'Order 50002 has delivery 008001223, shipment 789112.', table: `<tr><td class="label">Order Placed</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Shipment Number</td><td class="value">789112 (Created April 16)</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VTTK'
+                text: 'Order 50002 has delivery 008001223, shipment 789112.', table: `<tr><td class="label">Order Placed</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Shipment Number</td><td class="value">789112 (Created April 16)</td></tr><tr><td class="label">Actual GI Date</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'Delivery Header (PGI Date), Shipment Details (Carrier Info)'
             },
 
             // Shipped
             '60001': {
                 title: 'Loaded / Shipped - In Transit', badge: 'SHIPPED', badgeClass: 'healthy', timeline: buildTimeline(4, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'DHL Express'}),
-                text: 'Order 60001 is currently in transit with DHL Express.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 11, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VBRK'
+                text: 'Order 60001 is currently in transit with DHL Express.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 11, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 15, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'Delivery Header (PGI Date), Invoice Header Data'
             },
             '60002': {
                 title: 'Loaded / Shipped - In Transit', badge: 'SHIPPED', badgeClass: 'healthy', timeline: buildTimeline(4, {1: 'Sales Rep', 2: 'Warehouse', 3: 'Logistics', 4: 'FedEx'}),
-                text: 'Order 60002 is currently in transit with FedEx.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'SAP.LIKP, SAP.VBRK'
+                text: 'Order 60002 is currently in transit with FedEx.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 13, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value" style="color: var(--text-secondary);">Pending</td></tr>`, tables: 'Delivery Header (PGI Date), Invoice Header Data'
             },
 
             // Completed
             '70001': {
                 title: 'Delivered & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(5, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'DHL', 5: 'Finance'}),
-                text: 'Order 70001 was delivered and invoice 009000111 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 01, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 02, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 04, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 06, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000111 (Issued April 07)</td></tr>`, tables: 'SAP.VBRK'
+                text: 'Order 70001 was delivered and invoice 009000111 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 01, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 02, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 04, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 06, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000111 (Issued April 07)</td></tr>`, tables: 'Invoice Header Data'
             },
             '70002': {
                 title: 'Delivered & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(5, {1: 'Sales Rep', 2: 'Warehouse', 3: 'Logistics', 4: 'FedEx', 5: 'Finance'}),
-                text: 'Order 70002 was delivered and invoice 009000112 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 05, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 06, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 08, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000112 (Issued April 11)</td></tr>`, tables: 'SAP.VBRK'
+                text: 'Order 70002 was delivered and invoice 009000112 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 05, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 06, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 08, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000112 (Issued April 11)</td></tr>`, tables: 'Invoice Header Data'
             },
             '70003': {
                 title: 'Delivered & Billed - Complete', badge: 'COMPLETE', badgeClass: 'healthy', timeline: buildTimeline(5, {1: 'System API', 2: 'Warehouse', 3: 'Logistics', 4: 'UPS', 5: 'Finance'}),
-                text: 'Order 70003 was delivered and invoice 009000113 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 11, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000113 (Issued April 15)</td></tr>`, tables: 'SAP.VBRK'
+                text: 'Order 70003 was delivered and invoice 009000113 was issued.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Delivery Created</td><td class="value">April 11, 2026</td></tr><tr><td class="label">Shipment Created</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">009000113 (Issued April 15)</td></tr>`, tables: 'Invoice Header Data'
             }
         };
 
@@ -2079,7 +2092,7 @@
                         waitingForInput = 'Q1_ADVANCED';
                     } else {
                         appendAIMessage('Understood. Is there anything else I can help you with?', null, null, true);
-                        appendFollowUpActions(['Track Shipment', 'View Invoice', 'Contact Carrier']);
+                        appendFollowUpActions(['View Invoice (PDF)', 'Contact Carrier']);
                         waitingForInput = null;
                     }
                 } else if (stateContext === 'Q1_CUSTOMER') {
@@ -2097,7 +2110,7 @@
                     } else {
                         appendAIMessage('Understood. Is there anything else I can help you with?', null, null, true);
                     }
-                    appendFollowUpActions(['Track Shipment', 'View Invoice', 'Contact Carrier']);
+                    appendFollowUpActions(['View Invoice (PDF)', 'Contact Carrier']);
                     waitingForInput = null;
                 }
             }, 800);
@@ -2119,48 +2132,48 @@
                 // Scenario 1: Cancelled / Rejected
                 text = `Order ${orderId} has been cancelled - all line items were rejected, (reason code: Z01 - Out of stock).`;
                 title = 'Cancelled / Rejected'; badge = 'CANCELLED'; badgeClass = 'danger';
-                tables = "SAP.VBAK, SAP.VBAP";
+                tables = "Order Header Data, Order Items Data";
                 tableRows = `<tr><td class="label">Order Status</td><td class="value" style="color: var(--danger);">Rejected</td></tr><tr><td class="label">Rejection Reason</td><td class="value">Z01 (Out of stock)</td></tr>`;
             } else if (r < 0.25) {
                 // Scenario 2: Blocks before delivery creation
                 text = `Order ${orderId} is currently on credit hold and cannot proceed until released by the Credit team.`;
                 title = 'Blocked Before Delivery'; badge = 'BLOCKED'; badgeClass = 'danger';
-                tables = "SAP.VBAK, SAP.VBUK";
+                tables = "Order Header Data, Header Status Fields";
                 tableRows = `<tr><td class="label">Order Status</td><td class="value" style="color: var(--danger);">Credit Hold</td></tr><tr><td class="label">Delivery Block</td><td class="value">-</td></tr>`;
                 needsEscalation = true;
             } else if (r < 0.375) {
                 // Scenario 4: Open - Not Yet Allocated
                 text = `Order ${orderId} is open; no delivery exist yet. Estimated shipping date: April 16, 2026.`;
                 title = 'Open - Not Yet Allocated'; badge = 'OPEN'; badgeClass = 'delayed';
-                tables = "SAP.VBAK, SAP.VBEP";
+                tables = "Order Header Data, Schedule Line Data";
                 timelineHtml = buildTimeline(1, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
                 tableRows = `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
             } else if (r < 0.5) {
                 // Scenario 5: Delivery Created - no PGI'd
                 text = `Order ${orderId} has delivery 0080012345. Estimated shipping date: April 16, 2026.`;
                 title = 'Delivery Created - No PGI'; badge = 'IN PROGRESS'; badgeClass = 'delayed';
-                tables = "SAP.LIKP, SAP.LIPS";
+                tables = "Delivery Header (PGI Date), Delivery Items Data";
                 timelineHtml = buildTimeline(2, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
                 tableRows = `<tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
             } else if (r < 0.625) {
                 // Scenario 6: Shipment Created - no PGI'd
                 text = `Order ${orderId} has delivery 0080012345, shipment 7891011. Estimated shipping date: April 16, 2026.`;
                 title = 'Shipment Created - No PGI'; badge = 'IN PROGRESS'; badgeClass = 'delayed';
-                tables = "SAP.VTTK, SAP.LIKP";
+                tables = "Shipment Details (Carrier Info), Delivery Header (PGI Date)";
                 timelineHtml = buildTimeline(3, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
                 tableRows = `<tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr><tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
             } else if (r < 0.75) {
                 // Scenario 7: Loaded / Shipped - Not Yet Billed
                 text = `Order ${orderId} was shipped on April 16, 2026. Invoicing is still pending.`;
                 title = 'Loaded / Shipped - Not Billed'; badge = 'SHIPPED'; badgeClass = 'healthy';
-                tables = "SAP.VTTK, SAP.VBUK";
+                tables = "Shipment Details (Carrier Info), Header Status Fields";
                 timelineHtml = buildTimeline(4, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
                 tableRows = `<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value">Pending</td></tr>`;
             } else if (r < 0.875) {
                 // Scenario 8: Loaded and Billed - Complete
                 text = `Order ${orderId} was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.`;
                 title = 'Delivered & Billed - Complete'; badge = 'COMPLETE'; badgeClass = 'healthy';
-                tables = "SAP.VBRK";
+                tables = "Invoice Header Data";
                 timelineHtml = buildTimeline(5, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
                 tableRows = `<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr><tr><td class="label">Invoice Date</td><td class="value">April 17, 2026</td></tr>`;
             } else {
@@ -2182,7 +2195,7 @@
                 return;
             }
 
-            let sourceTablesHtml = `<strong>Source Tables:</strong> ${tables} - <em>Last Updated: ${getTimestamp()}</em>`;
+            let sourceTablesHtml = `<strong>Data Sources Updated:</strong> ${tables} - <em>Last Updated: ${getTimestamp()}</em>`;
 
             const finalHtml = `
                 <div class="ai-text-content">${text}</div>
@@ -2213,7 +2226,7 @@
                     ], 'Q1_ESCALATE');
                 }, 1000);
             } else {
-                appendFollowUpActions(['Track Shipment', 'View Invoice', 'Contact Carrier']);
+                appendFollowUpActions(['View Invoice (PDF)', 'Contact Carrier']);
                 waitingForInput = null;
             }
         }
@@ -3739,11 +3752,13 @@
                                 <button class="chat-option-btn" onclick="handleOptionClick('Order Date: This Month', 'Q3_DATE_RANGE')">Order Date: This Month</button>
                             </div>
                             <div class="inline-input-container">
-                                <select class="inline-input" style="flex: 0.5; appearance: auto;" onkeypress="handleInlineEnter(event, 'Q3_DATE_RANGE')">
+                                <select class="inline-input" style="flex: 0.5; appearance: auto;">
                                     <option value="Loading Date">Loading Date</option>
                                     <option value="Order Date">Order Date</option>
                                 </select>
-                                <input type="text" placeholder="Date Range (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q3_DATE_RANGE')">
+                                <input type="date" class="inline-input" title="Start Date">
+                                <span style="display: flex; align-items: center; color: var(--text-secondary);">to</span>
+                                <input type="date" class="inline-input" title="End Date">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q3_DATE_RANGE', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -3897,12 +3912,12 @@
                         let tableSplit = data.tables.split(',');
                         let sourceTablesHtml = '';
                         if (tableSplit.length > 1) {
-                            sourceTablesHtml = `<strong>Source Tables:</strong>`;
+                            sourceTablesHtml = `<strong>Data Sources Updated:</strong>`;
                             tableSplit.forEach((table, index) => {
                                 sourceTablesHtml += `<div style="margin-top: 4px; margin-left: 8px;">${table.trim()} - <em>Last Updated: ${getTimestamp(index * 4 + 2)}</em></div>`;
                             });
                         } else {
-                            sourceTablesHtml = `<strong>Source Tables:</strong> ${data.tables} - <em>Last Updated: ${getTimestamp()}</em>`;
+                            sourceTablesHtml = `<strong>Data Sources Updated:</strong> ${data.tables} - <em>Last Updated: ${getTimestamp()}</em>`;
                         }
 
                         showUserDetails(id);
@@ -3992,9 +4007,9 @@
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span><strong>Source Tables:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.LIKP - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
                         `);
@@ -4045,8 +4060,8 @@
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span><strong>Source Tables:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
                                 </span>
                             </div>
                         `);
@@ -4091,9 +4106,9 @@
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span><strong>Source Tables:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBRK - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Invoice Header Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
                         `);
@@ -4142,9 +4157,9 @@
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span><strong>Source Tables:</strong> 
+                                <span><strong>Data Sources Updated:</strong> 
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.MARD - <em>Last Updated: ${getTimestamp(1)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBEP - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Schedule Line Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
                         `);
@@ -4169,9 +4184,9 @@
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span><strong>Source Tables:</strong> 
+                                <span><strong>Data Sources Updated:</strong> 
                                     <div style="margin-top: 4px; margin-left: 8px;">SAP.MARD - <em>Last Updated: ${getTimestamp(1)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBEP - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Schedule Line Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
                         `);
@@ -4669,10 +4684,10 @@
                                 </div>
                             </div>
                             <div class="footer-metadata">
-                                <span><strong>Source Tables:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAK - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBAP - <em>Last Updated: ${getTimestamp(3)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.VBEP - <em>Last Updated: ${getTimestamp(4)}</em></div>
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Order Items Data - <em>Last Updated: ${getTimestamp(3)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Schedule Line Data - <em>Last Updated: ${getTimestamp(4)}</em></div>
                                 </span>
                             </div>
                         `);
@@ -4763,15 +4778,11 @@
         }
     
         function handleFeedback(btn, type) {
-            if (type === 'up') {
-                const originalHtml = btn.innerHTML;
-                btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-                setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
-            } else if (type === 'down') {
-                document.getElementById('feedback-modal-overlay').classList.add('active');
-                document.getElementById('feedback-textarea').value = '';
-                document.getElementById('feedback-textarea').focus();
-            }
+            // Both up and down can provide additional comments
+            document.getElementById('feedback-modal-overlay').classList.add('active');
+            document.getElementById('feedback-textarea').value = '';
+            document.getElementById('feedback-textarea').placeholder = type === 'up' ? "Any additional comments on why this was helpful?" : "What went wrong with this response? Please be specific.";
+            document.getElementById('feedback-textarea').focus();
         }
         
         function closeFeedbackModal() {
