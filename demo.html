@@ -1206,32 +1206,31 @@
             
             <div class="sidebar-tabs">
                 <div class="sidebar-tab active" onclick="filterPrompts('orders', this)">Orders</div>
-                <div class="sidebar-tab" onclick="filterPrompts('logistics', this)">Logistics</div>
-                <div class="sidebar-tab" onclick="filterPrompts('inventory', this)">Inventory</div>
-                <div class="sidebar-tab" onclick="filterPrompts('analytics', this)">Analytics</div>
+                <div class="sidebar-tab" onclick="filterPrompts('shipping', this)">Shipping</div>
+                <div class="sidebar-tab" onclick="filterPrompts('exceptions', this)">Exceptions</div>
+                <div class="sidebar-tab" onclick="filterPrompts('insights', this)">Insights</div>
             </div>
 
             <div class="sidebar-section">
                 <div class="sidebar-nav" style="padding:0; margin:0; display:flex; flex-direction:column; gap:8px;" id="sidebar-nav">
                     <div class="nav-item prompt-item" data-category="orders" onclick="startOrderFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the status of a specific order?</div>
-                    <div class="nav-item prompt-item" data-category="orders" onclick="pullAllOrdersInStatus()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders for a product and their status</div>
-                    <div class="nav-item prompt-item" data-category="inventory" onclick="startInventoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the on-hand stock for SKU [123] at plant [4001]?</div>
-                    <div class="nav-item prompt-item" data-category="analytics" onclick="startShortageFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped.</div>
-                    <div class="nav-item prompt-item" data-category="analytics" onclick="startPurchaseHistoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List products purchased by customer [XXXX] and the producing plant for each, for [time frame].</div>
-                    <div class="nav-item prompt-item" data-category="analytics" onclick="startFillRateFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?</div>
+                    <div class="nav-item prompt-item" data-category="insights" onclick="startInventoryFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What is the current on-hand stock for a specific SKU at a plant/warehouse, and how many open orders exist against it?</div>
+                    <div class="nav-item prompt-item" data-category="exceptions" onclick="startShortageFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped, for [sales org] between [date range].</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startUnbilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show me orders that have been shipped but not yet billed, for [sales org], [time period].</div>
-                    <div class="nav-item prompt-item" data-category="logistics" onclick="startNonFullPalletFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> For plant xx, give me a list of orders where SKUs are not ordered in full pallet quantities.</div>
-                    <div class="nav-item prompt-item" data-category="logistics" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed at delivery-note creation but shipped less than the confirmed quantity, for [sales org], [time period].</div>
-                    <div class="nav-item prompt-item" data-category="orders" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
+                    <div class="nav-item prompt-item" data-category="shipping" onclick="startShipShortFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders that were fully confirmed at delivery-note creation but shipped less than the confirmed quantity, for [sales org], [time period].</div>
+                                        <div class="nav-item prompt-item" data-category="exceptions" onclick="startUnconfirmedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List unconfirmed orders</div>
+                    <div class="nav-item prompt-item" data-category="exceptions" onclick="startDeliveryBlockedFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me the list of orders with delivery blocked</div>
+                    <div class="nav-item prompt-item" data-category="exceptions" onclick="startBillingBlockedFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me the list of orders with billing blocked</div>
+                    <div class="nav-item prompt-item" data-category="exceptions" onclick="startBlockedOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders scheduled to load in the next 2 days that are currently on any block.</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startBilledOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List orders billed yesterday (dynamic date, can be any time frame).</div>
-                    <div class="nav-item prompt-item" data-category="orders" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than 200 cases, for [sales org], [time frame].</div>
-                    <div class="nav-item prompt-item" data-category="orders" onclick="startPastDueCPUFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which orders had a planned loading (PGI) date in the past but have not yet shipped?</div>
-                    <div class="nav-item prompt-item" data-category="logistics" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
-                    <div class="nav-item prompt-item" data-category="logistics" onclick="startEstimatedShippingFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of orders that have an estimated shipping date of [date].</div>
-                    <div class="nav-item prompt-item" data-category="inventory" onclick="startSKUMasterDataFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What are the cases-per-pallet, weights, and EAN/UPC for SKU [XXXX]?</div>
-                    <div class="nav-item prompt-item" data-category="logistics" onclick="startOpenOrdersWeightFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List open orders with pallets, cases, and weight, for a customer.</div>
-                    <div class="nav-item prompt-item" data-category="analytics" onclick="startShortageImpactFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which customers are most impacted by shortages for [sales org], [time period]?</div>
-                    <div class="nav-item prompt-item" data-category="logistics" onclick="startDeliveryNoShipmentFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with a delivery created but no shipment for a destination country.</div>
+                    <div class="nav-item prompt-item" data-category="insights" onclick="startSmallOrdersFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List all orders with a total quantity of less than 200 cases, for [sales org], [time frame].</div>
+                    <div class="nav-item prompt-item" data-category="shipping" onclick="startPastDueCPUFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd), for [sales org], [time frame]?</div>
+                    <div class="nav-item prompt-item" data-category="shipping" onclick="startUnshippedProductFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of all orders with product xxx that have not shipped yet.</div>
+                    <div class="nav-item prompt-item" data-category="shipping" onclick="startEstimatedShippingFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Give me a list of orders that have an estimated shipping date of [date].</div>
+                    <div class="nav-item prompt-item" data-category="insights" onclick="startSKUMasterDataFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> What are the cases-per-pallet, weights, and EAN/UPC for SKU [XXXX]?</div>
+                    <div class="nav-item prompt-item" data-category="orders" onclick="startOpenOrdersWeightFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> List open orders with pallets, cases, and weight, for a customer.</div>
+                    <div class="nav-item prompt-item" data-category="insights" onclick="startShortageImpactFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Which customers are most impacted by shortages for [sales org], [time period]?</div>
+                    <div class="nav-item prompt-item" data-category="shipping" onclick="startDeliveryNoShipmentFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Show orders with a delivery created but no shipment for a destination country.</div>
                     <div class="nav-item prompt-item" data-category="orders" onclick="startAmendOrderFlow()" style="white-space: normal; height: auto; padding: 12px; line-height: 1.4;"><span class="nav-icon" style="color:var(--primary);">💬</span> Can order/PO [X] still be amended?</div>
                 </div>
             </div>
@@ -1296,11 +1295,11 @@
                                     <span>Look up SKU stock levels</span>
                                 </div>
                             </div>
-                            <div class="suggestion-card" onclick="startFillRateFlow()">
+                            <div class="suggestion-card" onclick="startShortageFlow()">
                                 <div class="suggestion-icon">📊</div>
                                 <div class="suggestion-text">
-                                    <strong>Analyze Fill Rate</strong>
-                                    <span>View customer fill rates</span>
+                                    <strong>Analyze Shortages</strong>
+                                    <span>View orders with shortages</span>
                                 </div>
                             </div>
                             <div class="suggestion-card" onclick="startShortageImpactFlow()">
@@ -1530,6 +1529,468 @@
                 setTimeout(() => {
                     tooltipBtn.classList.add('animate-attention');
                 }, 100);
+            } else if (flowType === 'Q2') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); grid-column: 1 / -1; margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q2 Product Scenarios</strong>
+                            
+                            <code>123</code> <div>Provide just SKU to trigger branching for Plant ID</div>
+                            <code>123, 4010</code> <div>Scenario 1: Stock found, plant authorized</div>
+                            <code>456, 4010</code> <div>Scenario 2: Stock found but zero</div>
+                            <code>789, 5555</code> <div>Scenario 3: Access Restricted</div>
+                            <code>999, 9999</code> <div>Scenario 4: Not found / No match</div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block'; // Show button
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none'; // Keep closed until clicked
+                
+                // Trigger attention animation
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => {
+                    tooltipBtn.classList.add('animate-attention');
+                }, 100);
+            } else if (flowType === 'Q3') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q3 Shortage Scenarios</strong>
+                            
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Shortages found</div>
+                                <code style="white-space:normal;">Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped, for Sales Org 1234 between Last 7 Days</code>
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: No shortages found</div>
+                                <code style="white-space:normal;">Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped, for Sales Org 1234 between Last Month</code>
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
+                                <code style="white-space:normal;">Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped, for Sales Org 9999 between Last 7 Days</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block'; // Show button
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none'; // Keep closed until clicked
+                
+                // Trigger attention animation
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => {
+                    tooltipBtn.classList.add('animate-attention');
+                }, 100);
+            } else if (flowType === 'Q4') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q4 Past Due CPU Scenarios</strong>
+                            
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd), for Sales Org 1234, Last 7 Days?</code>
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd), for Sales Org 1234, Last Month?</code>
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
+                                <code style="white-space:normal;">Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd), for Sales Org 9999, Last 7 Days?</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block'; // Show button
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none'; // Keep closed until clicked
+                
+                // Trigger attention animation
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => {
+                    tooltipBtn.classList.add('animate-attention');
+                }, 100);
+            } else if (flowType === 'Q5') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q5 Unconfirmed Orders Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 30 Days</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Leave Inputs Blank</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
+                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 30 Days</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q6') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q6 Delivery Blocked Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 7 Days</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Leave Inputs Blank</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
+                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 7 Days</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q7') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q7 Billing Blocked Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 7 Days</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Leave Inputs Blank</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
+                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 7 Days</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q8') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q8 Shipped but Not Invoiced Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 7 Days</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Leave Inputs Blank</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
+                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 7 Days</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q9') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q9 Ship-Short Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 7 Days</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Leave Inputs Blank</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
+                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 7 Days</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q10') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q10 Blocked Orders (Scheduled to load) Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Sales Org: 3010 (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Sales Org: 1111</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
+                                <code style="white-space:normal;">Sales Org: 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q11') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q11 Billed Orders Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Customer: 100234 (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Customer/Timeframe: 1111</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Error</div>
+                                <code style="white-space:normal;">Customer/Timeframe: 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q12') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q12 Small Orders Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Sales Org: 3010 (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Sales Org: 1111</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Access Restricted / Error</div>
+                                <code style="white-space:normal;">Sales Org: 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q13') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q13 Unshipped Product Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Product ID: 456789 (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Product ID: 0000</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Error</div>
+                                <code style="white-space:normal;">Product ID: 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q14') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q14 Estimated Shipping Date Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Orders found</div>
+                                <code style="white-space:normal;">Date: Tomorrow (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Date: Next Year or 1111</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Error</div>
+                                <code style="white-space:normal;">Date: Invalid or 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q15') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q15 SKU Master Data Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Found</div>
+                                <code style="white-space:normal;">SKU: 456789</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: Missing Data</div>
+                                <code style="white-space:normal;">SKU: 456790</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Not Found</div>
+                                <code style="white-space:normal;">SKU: Any other</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q16') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q16 Open Orders Weight Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Found</div>
+                                <code style="white-space:normal;">Customer: 100234 (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Customer: 1111</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Error</div>
+                                <code style="white-space:normal;">Customer: 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q17') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q17 Shortage Impact Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Found</div>
+                                <code style="white-space:normal;">Sales Org: 3010 (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Sales Org: 1111</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Error</div>
+                                <code style="white-space:normal;">Sales Org: 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q18') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q18 Delivery No Shipment Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Found</div>
+                                <code style="white-space:normal;">Country: US (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: None found</div>
+                                <code style="white-space:normal;">Country: zz</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Error</div>
+                                <code style="white-space:normal;">Country: 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
+            } else if (flowType === 'Q19') {
+                html = `
+                    <div style="font-size: 13px;">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px;">
+                            <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q19 Amend Order Scenarios</strong>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 1: Can Amend</div>
+                                <code style="white-space:normal;">Order ID: 123001 (or Leave Blank)</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
+                                <div style="font-weight:500;">Scenario 2: Cannot Amend</div>
+                                <code style="white-space:normal;">Order ID: 123008</code>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-weight:500;">Scenario 3: Not Found</div>
+                                <code style="white-space:normal;">Order ID: 9999</code>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tooltipContainer.style.display = 'block';
+                tooltipContent.innerHTML = html;
+                tooltipPopover.style.display = 'none';
+                tooltipBtn.classList.remove('animate-attention');
+                setTimeout(() => { tooltipBtn.classList.add('animate-attention'); }, 100);
             } else {
                 tooltipContainer.style.display = 'none'; // Hide if no question selected
             }
@@ -1605,9 +2066,10 @@
                         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>SKU 123, Plant 4010</td><td>Stock found (1,250 cases)</td></tr>
-                            <tr><td>SKU 124, Plant 4010</td><td>Zero stock (0 cases)</td></tr>
-                            <tr><td>Any other</td><td>Not found</td></tr>
+                            <tr><td>123, 4010</td><td>Stock found (1,250 cases)</td></tr>
+                            <tr><td>456, 4010</td><td>Zero stock (0 cases)</td></tr>
+                            <tr><td>789, 5555</td><td>Access Restricted</td></tr>
+                            <tr><td>999, 9999</td><td>Not found</td></tr>
                         </table>
                     </div>
                     `;
@@ -2278,117 +2740,22 @@
             }
 
             // Fallback for unknown/random inputs
-            const r = window.forceSuccess ? (window.forceSuccess = false, 0.85) : getDeterministicFloat(typeof orderId !== "undefined" ? orderId : "", "ORDER_STATUS");
-            let text = "";
-            let badge = "";
-            let badgeClass = "";
-            let title = "";
-            let timelineHtml = "";
-            let tableRows = "";
-            let needsEscalation = false;
-            let tables = "";
-
-            if (r < 0.125) {
-                // Scenario 1: Cancelled / Rejected
-                text = `Order ${orderId} has been cancelled - all line items were rejected, (reason code: Z01 - Out of stock).`;
-                title = 'Cancelled / Rejected'; badge = 'CANCELLED'; badgeClass = 'danger';
-                tables = "Order Header Data, Order Items Data";
-                tableRows = `<tr><td class="label">Order Status</td><td class="value" style="color: var(--danger);">Rejected</td></tr><tr><td class="label">Rejection Reason</td><td class="value">Z01 (Out of stock)</td></tr>`;
-            } else if (r < 0.25) {
-                // Scenario 2: Blocks before delivery creation
-                text = `Order ${orderId} is currently on credit hold and cannot proceed until released by the Credit team.`;
-                title = 'Blocked Before Delivery'; badge = 'BLOCKED'; badgeClass = 'danger';
-                tables = "Order Header Data, Header Status Fields";
-                tableRows = `<tr><td class="label">Order Status</td><td class="value" style="color: var(--danger);">Credit Hold</td></tr><tr><td class="label">Delivery Block</td><td class="value">-</td></tr>`;
-                needsEscalation = true;
-            } else if (r < 0.375) {
-                // Scenario 4: Open - Not Yet Allocated
-                text = `Order ${orderId} is open; no delivery exist yet. Estimated shipping date: April 16, 2026.`;
-                title = 'Open - Not Yet Allocated'; badge = 'OPEN'; badgeClass = 'delayed';
-                tables = "Order Header Data, Schedule Line Data";
-                timelineHtml = buildTimeline(1, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
-                tableRows = `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
-            } else if (r < 0.5) {
-                // Scenario 5: Delivery Created - no PGI'd
-                text = `Order ${orderId} has delivery 0080012345. Estimated shipping date: April 16, 2026.`;
-                title = 'Delivery Created - No PGI'; badge = 'IN PROGRESS'; badgeClass = 'delayed';
-                tables = "Delivery Header (PGI Date), Delivery Items Data";
-                timelineHtml = buildTimeline(2, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
-                tableRows = `<tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
-            } else if (r < 0.625) {
-                // Scenario 6: Shipment Created - no PGI'd
-                text = `Order ${orderId} has delivery 0080012345, shipment 7891011. Estimated shipping date: April 16, 2026.`;
-                title = 'Shipment Created - No PGI'; badge = 'IN PROGRESS'; badgeClass = 'delayed';
-                tables = "Shipment Details (Carrier Info), Delivery Header (PGI Date)";
-                timelineHtml = buildTimeline(3, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
-                tableRows = `<tr><td class="label">Delivery Number</td><td class="value">0080012345</td></tr><tr><td class="label">Shipment Number</td><td class="value">7891011</td></tr><tr><td class="label">Estimated Shipping Date</td><td class="value">April 16, 2026</td></tr>`;
-            } else if (r < 0.75) {
-                // Scenario 7: Loaded / Shipped - Not Yet Billed
-                text = `Order ${orderId} was shipped on April 16, 2026. Invoicing is still pending.`;
-                title = 'Loaded / Shipped - Not Billed'; badge = 'SHIPPED'; badgeClass = 'healthy';
-                tables = "Shipment Details (Carrier Info), Header Status Fields";
-                timelineHtml = buildTimeline(4, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
-                tableRows = `<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value">Pending</td></tr>`;
-            } else if (r < 0.875) {
-                // Scenario 8: Loaded and Billed - Complete
-                text = `Order ${orderId} was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.`;
-                title = 'Delivered & Billed - Complete'; badge = 'COMPLETE'; badgeClass = 'healthy';
-                tables = "Invoice Header Data";
-                timelineHtml = buildTimeline(5, {1: 'System', 2: 'Warehouse', 3: 'Logistics', 4: 'Carrier', 5: 'Finance'});
-                tableRows = `<tr><td class="label">Shipped Date (Actual GI)</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Number</td><td class="value">0090004567</td></tr><tr><td class="label">Invoice Date</td><td class="value">April 17, 2026</td></tr>`;
-            } else {
-                // Scenario 9: NOT FOUND / NO MATCH
-                text = `Sorry, I couldn't find a direct match for that order. Would you like to do a name-based lookup using Customer Name (Sold-to)?`;
-                
-                const notFoundHtml = `
-                    <div class="ai-text-content">${text}</div>
-                `;
-                appendAIMessage(notFoundHtml, null, null, true);
-                
-                setTimeout(() => {
-                    appendAIOptions('', [
-                        {label: 'Yes, search by Name', value: 'Yes, search by Name'},
-                        {label: 'No, I\'ll try another ID', value: 'No, I\'ll try another ID'}
-                    ], 'Q1_NOT_FOUND_NAME');
-                }, 500);
-                
-                return;
-            }
-
-            let sourceTablesHtml = `<strong>Data Sources Updated:</strong> ${tables} - <em>Last Updated: ${getTimestamp()}</em>`;
-
-            const finalHtml = `
+            // Scenario 9: NOT FOUND / NO MATCH
+            let text = `Sorry, I couldn't find a direct match for that order. Would you like to do a name-based lookup using Customer Name (Sold-to)?`;
+            
+            const notFoundHtml = `
                 <div class="ai-text-content">${text}</div>
-                ${timelineHtml}
-                <div class="data-card" style="width: 100%;">
-                    <div class="data-card-header">
-                        <span class="data-card-title">Order ${orderId} · ${title}</span>
-                        <span class="status-badge ${badgeClass}">${badge}</span>
-                    </div>
-                    <div class="data-card-body">
-                        <table class="data-table">
-                            ${tableRows}
-                        </table>
-                    </div>
-                </div>
-                <div class="footer-metadata">
-                    <span>${sourceTablesHtml}</span>
-                </div>
             `;
-
-            appendAIMessage(finalHtml, null, null, true);
-
-            if (needsEscalation) {
-                setTimeout(() => {
-                    appendAIOptions('Do you want to know whom to escalate or resolve the issue?', [
-                        {label: 'Yes, show escalation steps', value: 'Yes, show escalation steps'},
-                        {label: 'No, I\'m done', value: 'No, I\'m done'}
-                    ], 'Q1_ESCALATE');
-                }, 1000);
-            } else {
-                appendFollowUpActions(['View Invoice (PDF)', 'Contact Carrier']);
-                waitingForInput = null;
-            }
+            appendAIMessage(notFoundHtml, null, null, true);
+            
+            setTimeout(() => {
+                appendAIOptions('', [
+                    {label: 'Yes, search by Name', value: 'Yes, search by Name'},
+                    {label: 'No, I\'ll try another ID', value: 'No, I\'ll try another ID'}
+                ], 'Q1_NOT_FOUND_NAME');
+            }, 500);
+            
+            return;
         }
 
         function startOrderFlow() {
@@ -2424,8 +2791,8 @@
                         </div>
                         <div class="inline-input-container">
                             <input type="text" placeholder="Product (e.g. potatoes)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
-                                    <input type="text" placeholder="Status (e.g. shipped)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS', this)">Submit</button>
+                            <input type="text" placeholder="Status (e.g. shipped)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS', this)">Submit</button>
                         </div>
                     </div>
                 `, modalId, 'PRODUCT_STATUS');
@@ -2436,25 +2803,24 @@
         // FLOW: Inventory
         function startInventoryFlow() {
             resetChat();
+            updateDemoTooltip('Q2');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Check Inventory Status");
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                 appendAIMessage(`
                     <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
                         <div>
-                            What SKU and plant/warehouse would you like to check inventory for?
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
+                            What is the current on-hand stock for a specific SKU at a plant/warehouse, and how many open orders exist against it? Please provide the details below.
                         </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="SKU (e.g. 123)" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
-                                    <input type="text" placeholder="Plant (e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK', this)">Submit</button>
+                        <div class="inline-input-container" style="display: flex; gap: 8px; flex-direction: row; background: transparent; border: none; padding: 0;">
+                            <input type="text" placeholder="SKU (e.g. 123)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                            <input type="text" placeholder="Plant ID (e.g. 4010)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                            <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK', this)">Submit</button>
                         </div>
                     </div>
-                `, modalId, 'INVENTORY_CHECK');
+                `);
                 waitingForInput = 'INVENTORY_CHECK';
             }, 800);
         }
@@ -2465,71 +2831,52 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let org = input.match(/3010/i) ? '3010' : 'All Orgs';
+                if (!input) input = "";
                 
-                if (r < 0.6) {
-                    text = `I found 9 orders shipped but not yet billed for Sales Org ${org} in the selected period.`;
+                if (input.includes('9999')) {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('3010')) {
+                    text = `I found 5 orders that have shipped but haven't been invoiced yet for Sales Org 3010 in the selected period.`;
                     badge = '<span class="status-badge delayed">UNBILLED ORDERS</span>';
-                    
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                         <div class="data-card" style="width: 100%;">
                             <div class="data-card-header">
-                                <span class="data-card-title">Shipped but Not Billed</span>
+                                <span class="data-card-title">Shipped but Not Invoiced</span>
                                 ${badge}
                             </div>
                             <div class="data-card-body">
                                 <table class="data-table">
-                                    <tr><th>SAP Order #</th><th>Shipped Date (PGI)</th><th>Customer</th></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">723456</a></td><td>Yesterday</td><td>100234</td></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">723457</a></td><td>2 Days Ago</td><td>100456</td></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">723458</a></td><td>2 Days Ago</td><td>100456</td></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">723459</a></td><td>3 Days Ago</td><td>220111</td></tr>
-                                    <tr><td colspan="3" style="text-align:center; color:var(--text-secondary);">5 more rows available in export</td></tr>
+                                    <tr><th>SAP Order #</th><th>PO #</th><th>Actual GI Date</th><th>Customer</th><th>Product</th><th>Qty</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">778899</a></td><td>A1</td><td>2026-08-01</td><td>Cust 1</td><td>Prod 1</td><td>100</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">778900</a></td><td>A2</td><td>2026-08-01</td><td>Cust 2</td><td>Prod 2</td><td>200</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">778901</a></td><td>A3</td><td>2026-08-02</td><td>Cust 3</td><td>Prod 3</td><td>300</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">778902</a></td><td>A4</td><td>2026-08-02</td><td>Cust 4</td><td>Prod 4</td><td>400</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">778903</a></td><td>A5</td><td>2026-08-03</td><td>Cust 5</td><td>Prod 5</td><td>500</td></tr>
                                 </table>
                             </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Invoice Header Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'View billing block reasons']);
-                } else if (r < 0.9) {
-                    text = `All shipped orders for that period and sales org have been billed - no exceptions found.`;
-                    badge = '<span class="status-badge healthy">ALL BILLED</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
+                        </div>`;
                 } else {
-                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                    text = `All shipped orders for that period have been invoiced.`;
+                    badge = '<span class="status-badge healthy">ALL INVOICED</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
+
+
         function startUnbilledOrdersFlow() {
             resetChat();
+            updateDemoTooltip('Q8');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Show me orders that have been shipped but not yet billed, for [sales org], [time period].");
             showLoading();
@@ -2556,74 +2903,51 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let org = input.match(/3010/i) ? '3010' : 'All Orgs';
+                if (!input) input = "";
                 
-                if (r < 0.6) {
-                    text = `I found 4 orders that shipped short (shipped qty is less than confirmed qty) for Sales Org ${org} in the selected period.`;
-                    badge = '<span class="status-badge delayed">SHIPPED SHORT</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Product</th><th>Confirmed Qty</th><th>Shipped Qty</th><th>Shortage</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">823456</a></td><td>SKU 123 - Premium Fries</td><td>1000</td><td>800</td><td style="color:var(--danger);">-200</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">823457</a></td><td>SKU 999 - Wedges</td><td>500</td><td>450</td><td style="color:var(--danger);">-50</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">823458</a></td><td>SKU 444 - Hashbrowns</td><td>2000</td><td>1900</td><td style="color:var(--danger);">-100</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">823459</a></td><td>SKU 222 - Onion Rings</td><td>100</td><td>0</td><td style="color:var(--danger);">-100</td></tr>
-                    `;
-                    
+                if (input.includes('9999')) {
+                    text = `Sorry, I couldn't find any orders matching that criteria - please double check the sales org, customer, or PO number.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('3010')) {
+                    text = `I found 4 orders that shipped short (shipped qty is less than confirmed qty) for Sales Org 3010 in the selected period.`;
+                    badge = '<span class="status-badge delayed">SHIP SHORT</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                         <div class="data-card" style="width: 100%;">
                             <div class="data-card-header">
-                                <span class="data-card-title">Ship-Short Orders</span>
+                                <span class="data-card-title">Shipped Short</span>
                                 ${badge}
                             </div>
                             <div class="data-card-body">
                                 <table class="data-table">
-                                    ${tableHtml}
+                                    <tr><th>SAP Order #</th><th>Product</th><th>Name</th><th>Shorted Qty</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">332211</a></td><td>1001</td><td>Fries 1</td><td>5 cases</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">332212</a></td><td>1002</td><td>Fries 2</td><td>10 cases</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">332213</a></td><td>1003</td><td>Wedges 1</td><td>2 cases</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">332214</a></td><td>1004</td><td>Tots 1</td><td>8 cases</td></tr>
                                 </table>
                             </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'View root causes']);
-                } else if (r < 0.9) {
-                    text = `No fully-confirmed orders were shipped short for the criteria you gave.`;
-                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
+                        </div>`;
                 } else {
-                    text = `Sorry, I couldn't find any orders matching that criteria - please double check the sales org, customer, or PO number.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Review filters', 'Try another search']);
+                    text = `No fully-confirmed orders were shipped short for the criteria you gave.`;
+                    badge = '<span class="status-badge healthy">CLEAR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
+
+
         function startShipShortFlow() {
             resetChat();
+            updateDemoTooltip('Q9');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("List orders that were fully confirmed at delivery-note creation but shipped less than the confirmed quantity, for [sales org], [time period].");
             showLoading();
@@ -2653,75 +2977,48 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let customer = input.match(/100234/i) ? '100234' : '999111';
+                if (!input) input = "";
                 
-                if (r < 0.6) {
-                    text = `Customer ${customer} has 5 open orders totaling 40 pallets / 3,200 cases / 64,000 kg.`;
-                    badge = '<span class="status-badge delayed">OPEN ORDERS</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Pallets</th><th>Cases</th><th>Gross Weight</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">773456</a></td><td>10</td><td>800</td><td>16,000 kg</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">773457</a></td><td>5</td><td>400</td><td>8,000 kg</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">773458</a></td><td>15</td><td>1,200</td><td>24,000 kg</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">773459</a></td><td>8</td><td>640</td><td>12,800 kg</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">773460</a></td><td>2</td><td>160</td><td>3,200 kg</td></tr>
-                    `;
-                    
+                if (input.includes('9999')) {
+                    text = `Customer ID not recognized.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('1111')) {
+                    text = `No open orders found for that customer.`;
+                    badge = '<span class="status-badge healthy">NONE FOUND</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else {
+                    text = `I found 3 open orders for Customer 100234.`;
+                    badge = '<span class="status-badge healthy">OPEN ORDERS</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                         <div class="data-card" style="width: 100%;">
                             <div class="data-card-header">
-                                <span class="data-card-title">Order Weight & Dimensions</span>
+                                <span class="data-card-title">Open Orders (Weight/Pallets)</span>
                                 ${badge}
                             </div>
                             <div class="data-card-body">
                                 <table class="data-table">
-                                    ${tableHtml}
+                                    <tr><th>SAP Order #</th><th>Pallets</th><th>Cases</th><th>Weight</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">556677</a></td><td>10</td><td>800</td><td>18,000 kg</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">556678</a></td><td>5</td><td>400</td><td>9,000 kg</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">556679</a></td><td>20</td><td>1600</td><td>36,000 kg</td></tr>
                                 </table>
                             </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Inventory Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'View order statuses']);
-                } else if (r < 0.9) {
-                    text = `Customer ${customer} has no open orders at this time.`;
-                    badge = '<span class="status-badge healthy">NO OPEN ORDERS</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check shipped orders', 'Check different customer']);
-                } else {
-                    text = `Sorry, I couldn't find that customer. Please confirm the customer ID or name.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another search']);
+                        </div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
         function startOpenOrdersWeightFlow() {
             resetChat();
+            updateDemoTooltip('Q16');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("List open orders with pallets, cases, and weight, for customer [ID/Name] in [sales org].");
             showLoading();
@@ -2744,6 +3041,7 @@
 
         function startDeliveryNoShipmentFlow() {
             resetChat();
+            updateDemoTooltip('Q18');
             if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
             appendUserMessage("Show orders with a delivery created but no shipment.");
             showLoading();
@@ -2771,123 +3069,33 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let order = input.match(/\d+/) ? input.match(/\d+/)[0] : '123456';
-                let isPo = input.toLowerCase().includes('po');
+                if (!input) input = "";
                 
-                // If it's a PO, sometimes it matches multiple orders (Scenario 1b)
-                if (isPo && r < 0.2) {
-                    text = `The PO number ${input} matches more than one sales order. Please confirm which order/plant or ship-to you are inquiring about.`;
-                    badge = '<span class="status-badge neutral">MULTIPLE MATCHES</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="chat-options-container" style="margin-top: 8px;">
-                            <button class="chat-option-btn" onclick="handleOptionClick('Order 123456 (Plant 4010)', 'Q19_AMEND')">Order 123456 (Plant 4010)</button>
-                            <button class="chat-option-btn" onclick="handleOptionClick('Order 123457 (Plant 1000)', 'Q19_AMEND')">Order 123457 (Plant 1000)</button>
-                        </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    waitingForInput = 'Q19_AMEND'; // Stay in the same state
-                    return;
-                }
-                
-                if (r < 0.35) { // Scenario 1: Fully open
-                    text = `Yes, order ${order} is still fully open - and can be amended.`;
-                    badge = '<span class="status-badge healthy">AMENDMENT OK</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%; max-width: 400px;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Order Status: ${order}</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body">
-                                <div><strong>Status:</strong> Open Order (No delivery created)</div>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Make an amendment', 'View order details']);
-                } else if (r < 0.6) { // Scenario 2: Delivery created, not PGI'd
-                    text = `Order ${order} already has a delivery in process. Low chances for changes to still be possible, please contact Customer Service representative.`;
-                    badge = '<span class="status-badge neutral">WARNING</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%; max-width: 400px;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Order Status: ${order}</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body">
-                                <div><strong>Status:</strong> Delivery Created (Not yet PGI'd)</div>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Contact Customer Service', 'View delivery document']);
-                } else if (r < 0.85) { // Scenario 3: Loaded, not billed (Shipped)
-                    text = `Order ${order} has already been shipped, changes are no longer possible.`;
-                    badge = '<span class="status-badge delayed">LOCKED</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%; max-width: 400px;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Order Status: ${order}</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body">
-                                <div><strong>Status:</strong> Shipped (Actual GI Date is set)</div>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Track shipment', 'View invoice']);
-                } else { // Scenario 5: Not found
-                    text = `Sorry, I couldn't find that order. Please check the order number/PO number and try again.`;
+                if (input.includes('9999')) {
+                    text = `Order not found.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check authorizations', 'Try another search']);
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('123008')) {
+                    text = `No, order 123008 has already shipped and cannot be amended.`;
+                    badge = '<span class="status-badge healthy">CANNOT AMEND</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else {
+                    text = `Yes, order 123001 is open and can be amended.`;
+                    badge = '<span class="status-badge healthy">CAN AMEND</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
         function startAmendOrderFlow() {
             resetChat();
+            updateDemoTooltip('Q19');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Can order/PO [X] still be amended? (quantity change, add/remove product, cancellation, or requested-delivery-date change)?");
             showLoading();
@@ -2912,75 +3120,48 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let org = input.match(/3010/i) ? '3010' : 'All Orgs';
+                if (!input) input = "";
                 
-                if (r < 0.6) {
-                    text = `Top customers impacted by shortages in Sales Org ${org}: 1) Customer 100234 (1,200 cases), 2) Customer 100456 (850 cases)...`;
-                    badge = '<span class="status-badge delayed">SHORTAGE IMPACT</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>Rank</th><th>Customer</th><th>Hierarchy</th><th>Total Shortage (Cases)</th></tr>
-                        <tr><td>#1</td><td><a href="#" style="color:var(--primary);">100234</a></td><td>National Accounts > Retail</td><td style="color:var(--danger); font-weight: 500;">1,200</td></tr>
-                        <tr><td>#2</td><td><a href="#" style="color:var(--primary);">100456</a></td><td>Foodservice > Regional</td><td style="color:var(--danger); font-weight: 500;">850</td></tr>
-                        <tr><td>#3</td><td><a href="#" style="color:var(--primary);">100888</a></td><td>National Accounts > Retail</td><td style="color:var(--danger); font-weight: 500;">400</td></tr>
-                        <tr><td>#4</td><td><a href="#" style="color:var(--primary);">100999</a></td><td>Independent</td><td style="color:var(--danger); font-weight: 500;">150</td></tr>
-                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">14 more rows available in export</td></tr>
-                    `;
-                    
+                if (input.includes('9999')) {
+                    text = `Sales Org not recognized.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('1111')) {
+                    text = `No shortages found for that criteria.`;
+                    badge = '<span class="status-badge healthy">NONE FOUND</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else {
+                    text = `Here are the customers most impacted by shortages for Sales Org 3010.`;
+                    badge = '<span class="status-badge healthy">SHORTAGE IMPACT</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                         <div class="data-card" style="width: 100%;">
                             <div class="data-card-header">
-                                <span class="data-card-title">Customer Shortage Impact Ranking</span>
+                                <span class="data-card-title">Impacted Customers</span>
                                 ${badge}
                             </div>
                             <div class="data-card-body">
                                 <table class="data-table">
-                                    ${tableHtml}
+                                    <tr><th>Customer</th><th>Total Shortage Qty</th><th>Impact %</th></tr>
+                                    <tr><td>Cust A</td><td>500 cases</td><td>15%</td></tr>
+                                    <tr><td>Cust B</td><td>300 cases</td><td>10%</td></tr>
+                                    <tr><td>Cust C</td><td>100 cases</td><td>5%</td></tr>
                                 </table>
                             </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Inventory Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'View Customer 100234 orders']);
-                } else if (r < 0.9) {
-                    text = `No customers currently show shortage impact for the criteria you gave.`;
-                    badge = '<span class="status-badge healthy">NO SHORTAGES</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
-                } else {
-                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                        </div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
         function startShortageImpactFlow() {
             resetChat();
+            updateDemoTooltip('Q17');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Which customers are most impacted by shortages (rank from highest shortage qty/value) for [sales org], [time period]?");
             showLoading();
@@ -3010,75 +3191,47 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let date = input.match(/April/i) ? 'April 16, 2026' : 'the requested period';
+                if (!input) input = "";
                 
-                if (r < 0.6) {
-                    text = `I found 8 orders with a planned shipping date of ${date} for Sales Org 3010.`;
-                    badge = '<span class="status-badge delayed">PLANNED SHIPMENTS</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Status</th><th>Shipping Plant</th><th>Customer</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">623456</a></td><td>Open Order</td><td>4010 - Toronto</td><td>100234</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">623457</a></td><td>Delivery Created</td><td>4010 - Toronto</td><td>100456</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">623458</a></td><td>Open Order</td><td>1000 - Montreal</td><td>220999</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">623459</a></td><td>Delivery Created</td><td>3010 - Vancouver</td><td>100234</td></tr>
-                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">4 more rows available in export</td></tr>
-                    `;
-                    
+                if (input.includes('invalid') || input.includes('9999')) {
+                    text = `Sorry, that date format is not recognized.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('next year') || input.includes('1111')) {
+                    text = `No orders estimated to ship on that date.`;
+                    badge = '<span class="status-badge healthy">NONE FOUND</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else {
+                    text = `I found 2 orders estimated to ship on the requested date.`;
+                    badge = '<span class="status-badge healthy">EST SHIP</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                         <div class="data-card" style="width: 100%;">
                             <div class="data-card-header">
-                                <span class="data-card-title">Estimated Shipments: ${date}</span>
+                                <span class="data-card-title">Estimated Shipping</span>
                                 ${badge}
                             </div>
                             <div class="data-card-body">
                                 <table class="data-table">
-                                    ${tableHtml}
+                                    <tr><th>SAP Order #</th><th>Customer</th><th>Status</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">445566</a></td><td>Cust X</td><td>Open</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">445567</a></td><td>Cust Y</td><td>Delivery Created</td></tr>
                                 </table>
                             </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'Check carrier status']);
-                } else if (r < 0.9) {
-                    text = `No orders are currently planned shipping date for the criteria given.`;
-                    badge = '<span class="status-badge healthy">NO SHIPMENTS</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date', 'Check different Sales Org']);
-                } else {
-                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                        </div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
         function startEstimatedShippingFlow() {
             resetChat();
+            updateDemoTooltip('Q14');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Give me a list of orders that have an estimated shipping date(planned PGI date) of [date/date range]");
             showLoading();
@@ -3101,6 +3254,7 @@
 
         function startSKUMasterDataFlow() {
             resetChat();
+            updateDemoTooltip('Q15');
             if(initialState) { initialState.style.display = 'none'; document.getElementById('global-input-area').style.display = 'none'; }
             appendUserMessage("What are the cases-per-pallet, gross weight, net weight, and EAN/UPC for SKU [XXXX]?");
             showLoading();
@@ -3126,20 +3280,21 @@
         
         function startPastDueCPUFlow() {
             resetChat();
+            updateDemoTooltip('Q4');
             if(initialState) initialState.style.display = 'none';
-            appendUserMessage("Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd)?");
+            appendUserMessage("Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd), for [sales org], [time frame]?");
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                appendAIMessage(`I can check for past-due CPU orders. What time frame should I look at (e.g. Last 7 Days), and do you want to narrow it down by a specific Shipping Plant?
+                appendAIMessage(`I can check for past-due CPU orders. What time frame should I look at (e.g. Last 7 Days), and for which Sales Organization?
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('Last 7 Days, Plant 4010', 'Q4_PAST_DUE')">Last 7 Days, Plant 4010</button>
-                                <button class="chat-option-btn" onclick="handleOptionClick('This Month, All Plants', 'Q4_PAST_DUE')">This Month, All Plants</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Last 7 Days, Sales Org 1234', 'Q4_PAST_DUE')">Last 7 Days, Sales Org 1234</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Last Month, Sales Org 1234', 'Q4_PAST_DUE')">Last Month, Sales Org 1234</button>
                             </div>
                             <div class="inline-input-container">
                                 <input type="date" class="inline-input" style="flex: 0 0 130px; cursor: pointer; color: var(--text-secondary);" title="Select a Specific Date" onchange="this.nextElementSibling.value = this.value">
                                 <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q4_PAST_DUE')">
-                                <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q4_PAST_DUE')">
+                                <input type="text" placeholder="Sales Org (e.g. 1234)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q4_PAST_DUE')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q4_PAST_DUE', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -3147,30 +3302,48 @@
             }, 800);
         }
 
-        function resolvePastDueCPUFlow(input) {
+        function resolvePastDueFinal(salesOrg, timeFrame) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
                 
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
-                let plant = input.match(/4010/i) ? '4010' : 'all plants';
                 
-                if (r < 0.6) {
+                if (salesOrg.includes('9999')) {
+                    // Scenario 3: Unauthorized / Not Found
+                    text = `Sorry, I couldn't find that plant or sales organization, or you don't have access to it.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, true);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Sales Org']);
+                } else if (timeFrame.toLowerCase().includes('last month')) {
+                    // Scenario 2: None found
+                    text = `No past-due CPU orders are currently open for that plant and time frame.`;
+                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
+                    
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                    `;
+                    appendAIMessage(finalHtml, null, null, true);
+                    appendFollowUpActions(['Check different date range', 'Check different sales org']);
+                } else {
                     // Scenario 1: Orders found
-                    text = `I found 6 past-due CPU orders not yet PGI'd for plant ${plant} in the selected period.`;
+                    text = `I found 6 past-due CPU orders not yet PGI'd for plant 4010 in the selected period.`;
                     badge = '<span class="status-badge delayed">PAST DUE ORDERS</span>';
                     
                     const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Block Status</th><th>Planned PGI</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323456</a></td><td>Billing Block: Missing Info</td><td style="color:var(--danger);">2 Days Ago</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323457</a></td><td>Delivery Block: Export</td><td style="color:var(--danger);">5 Days Ago</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323458</a></td><td>Credit Hold: Limit Exceeded</td><td style="color:var(--danger);">Yesterday</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323459</a></td><td>-</td><td style="color:var(--danger);">Yesterday</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323460</a></td><td>-</td><td style="color:var(--danger);">3 Days Ago</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323461</a></td><td>Credit Hold: Not Approved</td><td style="color:var(--danger);">1 Week Ago</td></tr>
+                        <tr><th>SAP Order #</th><th>Billing Block</th><th>Delivery Block</th><th>Credit Status</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323456</a></td><td>Missing Info</td><td>-</td><td>-</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323457</a></td><td>-</td><td>Export</td><td>-</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323458</a></td><td>-</td><td>-</td><td>Limit Exceeded</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323459</a></td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323460</a></td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">323461</a></td><td>-</td><td>-</td><td>Not Approved</td></tr>
                     `;
                     
                     finalHtml = `
@@ -3181,41 +3354,21 @@
                                 ${badge}
                             </div>
                             <div class="data-card-body">
-                                <table class="data-table">
+                                <table class="data-table" style="width: 100%; text-align: left;">
                                     ${tableHtml}
                                 </table>
                             </div>
                         </div>
                     
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
+                        <div class="footer-metadata">
+                            <span><strong>Data Sources Updated:</strong> 
+                                <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
+                                <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
+                            </span>
+                        </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Resolve credit holds', 'Export to Excel']);
-                } else if (r < 0.9) {
-                    // Scenario 2: None found
-                    text = `No past-due CPU orders are currently open for that plant and time frame.`;
-                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different plant']);
-                } else {
-                    // Scenario 3: Unauthorized Plant
-                    text = `Sorry, I couldn't find that plant, or you don't have access to it.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Plant']);
                 }
                 
                 waitingForInput = null;
@@ -3227,138 +3380,48 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let product = input.match(/456789/i) ? '456789' : 'SKU-FRIES';
+                if (!input) input = "";
                 
-                if (r < 0.25) {
-                    text = `I found 6 open orders containing product ${product} that have not yet shipped.`;
-                    badge = '<span class="status-badge delayed">NO DELIVERY</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Product</th><th>Qty</th><th>Est. Shipping Date</th><th>Block Status</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323456</a></td><td>${product}</td><td>100</td><td>Tomorrow</td><td style="color:var(--danger);">Credit Hold</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323457</a></td><td>${product}</td><td>50</td><td>Next Week</td><td style="color:var(--danger);">Delivery Block</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">323458</a></td><td>${product}</td><td>200</td><td>Tomorrow</td><td style="color:var(--text-secondary);">None</td></tr>
-                    `;
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Open Orders (No Delivery Created)</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body">
-                                <table class="data-table">
-                                    ${tableHtml}
-                                </table>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'View credit holds']);
-                } else if (r < 0.5) {
-                    text = `I found 6 orders containing product ${product} that have not yet shipped, but have already a delivery document created.`;
-                    badge = '<span class="status-badge neutral">DELIVERY CREATED</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Product</th><th>Qty</th><th>Est. Shipping Date</th><th>Block Status</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">423456</a></td><td>${product}</td><td>150</td><td>Tomorrow</td><td style="color:var(--danger);">Billing Block 01</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">423457</a></td><td>${product}</td><td>300</td><td>Next Week</td><td style="color:var(--text-secondary);">None</td></tr>
-                    `;
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Orders with Delivery Document</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body">
-                                <table class="data-table">
-                                    ${tableHtml}
-                                </table>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'View billing blocks']);
-                } else if (r < 0.75) {
-                    text = `I found 6 orders containing product ${product} that have not yet shipped, but have already a delivery and shipment document created.`;
-                    badge = '<span class="status-badge healthy">SHIPMENT CREATED</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Product</th><th>Qty</th><th>Est. Shipping Date</th><th>Block Status</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">523456</a></td><td>${product}</td><td>400</td><td>Today</td><td style="color:var(--text-secondary);">None</td></tr>
-                    `;
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Orders Pending PGI</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body">
-                                <table class="data-table">
-                                    ${tableHtml}
-                                </table>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Track Shipments']);
-                } else if (r < 0.9) {
-                    text = `All orders containing that product have already shipped, or none are currently open.`;
-                    badge = '<span class="status-badge healthy">ALL SHIPPED</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different product', 'Check shipped orders']);
-                } else {
-                    text = `Sorry, I couldn't find that product. Please confirm the product ID.`;
+                if (input.includes('9999')) {
+                    text = `Sorry, product ID not recognized.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
-                    
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('0000')) {
+                    text = `No open orders found for that product.`;
+                    badge = '<span class="status-badge healthy">NONE FOUND</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else {
+                    text = `I found 3 open orders for product 456789.`;
+                    badge = '<span class="status-badge healthy">OPEN ORDERS</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Search product catalog', 'Try again']);
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Unshipped Product</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    <tr><th>SAP Order #</th><th>Qty</th><th>Est Ship Date</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">334455</a></td><td>100</td><td>Tomorrow</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">334456</a></td><td>200</td><td>Next Week</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">334457</a></td><td>300</td><td>Next Month</td></tr>
+                                </table>
+                            </div>
+                        </div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
         function startUnshippedProductFlow() {
             resetChat();
+            updateDemoTooltip('Q13');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Give me a list of all orders with product [product] that have not shipped yet.");
             showLoading();
@@ -3384,74 +3447,48 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let time = input.toLowerCase().includes('week') ? 'last week' : 'yesterday';
+                if (!input) input = "";
                 
-                if (r < 0.6) {
-                    text = `12 orders were billed ${time} for Sales Org 3010.`;
-                    badge = '<span class="status-badge delayed">BILLED ORDERS</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Invoice #</th><th>Customer</th><th>Amount</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">113456</a></td><td>INV-9001</td><td>100234</td><td>$5,400</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">113457</a></td><td>INV-9002</td><td>100456</td><td>$1,250</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">113458</a></td><td>INV-9003</td><td>100456</td><td>$3,800</td></tr>
-                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">9 more rows available in export</td></tr>
-                    `;
-                    
+                if (input.includes('9999')) {
+                    text = `Sorry, I couldn't run that search - customer not recognized.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('1111')) {
+                    text = `Good news - I didn't find any billed orders for that timeframe.`;
+                    badge = '<span class="status-badge healthy">NONE FOUND</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else {
+                    text = `I found 3 orders billed in the selected timeframe.`;
+                    badge = '<span class="status-badge healthy">BILLED ORDERS</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                         <div class="data-card" style="width: 100%;">
                             <div class="data-card-header">
-                                <span class="data-card-title">Billing Documents</span>
+                                <span class="data-card-title">Billed Orders</span>
                                 ${badge}
                             </div>
                             <div class="data-card-body">
                                 <table class="data-table">
-                                    ${tableHtml}
+                                    <tr><th>SAP Order #</th><th>Customer</th><th>Billed Qty</th><th>Billing Date</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">112233</a></td><td>Cust 1</td><td>100</td><td>Yesterday</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">112234</a></td><td>Cust 2</td><td>50</td><td>Yesterday</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">112235</a></td><td>Cust 3</td><td>200</td><td>Yesterday</td></tr>
                                 </table>
                             </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'View unbilled orders']);
-                } else if (r < 0.9) {
-                    text = `No orders were billed ${time} for that sales org/customer.`;
-                    badge = '<span class="status-badge healthy">NO BILLING</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different customer']);
-                } else {
-                    text = `Sorry, I couldn't find that customer or sales organization.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Customer']);
+                        </div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
         function startBilledOrdersFlow() {
             resetChat();
+            updateDemoTooltip('Q11');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("List orders billed yesterday (dynamic date, can be any time frame).");
             showLoading();
@@ -3562,73 +3599,47 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                if (r < 0.6) {
-                    text = `I found 27 orders with less than 200 cases.`;
-                    badge = '<span class="status-badge delayed">SMALL ORDERS</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>SAP Order #</th><th>Total Qty (Cases)</th><th>Customer</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">223456</a></td><td style="color:var(--danger);">150</td><td>100234</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">223457</a></td><td style="color:var(--danger);">50</td><td>100456</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">223458</a></td><td style="color:var(--danger);">195</td><td>100456</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">223459</a></td><td style="color:var(--danger);">20</td><td>999000</td></tr>
-                        <tr><td colspan="3" style="text-align:center; color:var(--text-secondary);">23 more rows available in export</td></tr>
-                    `;
-                    
+                if (!input) input = "";
+                
+                if (input.includes('9999')) {
+                    text = `Sorry, Sales Org not recognized or you don't have access.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('1111')) {
+                    text = `No small orders found for that criteria.`;
+                    badge = '<span class="status-badge healthy">NONE FOUND</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else {
+                    text = `I found 2 orders under 200 cases.`;
+                    badge = '<span class="status-badge healthy">SMALL ORDERS</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                         <div class="data-card" style="width: 100%;">
                             <div class="data-card-header">
-                                <span class="data-card-title">Orders < 200 Cases</span>
+                                <span class="data-card-title">Orders &lt; 200 Cases</span>
                                 ${badge}
                             </div>
                             <div class="data-card-body">
                                 <table class="data-table">
-                                    ${tableHtml}
+                                    <tr><th>SAP Order #</th><th>Total Cases</th><th>Customer</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">223344</a></td><td>50</td><td>Cust A</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">223345</a></td><td>150</td><td>Cust B</td></tr>
                                 </table>
                             </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'Send to Sales Team']);
-                } else if (r < 0.9) {
-                    text = `No orders under 200 cases were found for that period and sales org.`;
-                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
-                } else {
-                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                        </div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
         function startSmallOrdersFlow() {
             resetChat();
+            updateDemoTooltip('Q12');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("List all orders with a total quantity of less than 200 cases, for [sales org], [time frame].");
             showLoading();
@@ -3655,35 +3666,19 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                let org = input.match(/3010/i) ? '3010' : 'All Orgs';
-                let time = input.match(/7 days/i) ? 'next 7 days' : 'next 2 days';
+                if (!input) input = "";
                 
-                if (r < 0.6) {
-                    text = `I found 3 orders shipping in the ${time} that are on credit hold for Sales Org ${org}.`;
-                    badge = '<span class="status-badge delayed">BLOCKED ORDERS</span>';
-                    
-                    const tableHtml = `
-                        <table class="data-table" style="text-align: left; padding: 16px; width: 100%;">
-                            <thead>
-                                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
-                                    <th style="padding: 12px 16px; font-weight: 500;">SAP Order #</th>
-                                    <th style="padding: 12px 16px; font-weight: 500;">PO #</th>
-                                    <th style="padding: 12px 16px; font-weight: 500;">Block Reason</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td style="padding: 12px 16px;"><a href="#" style="color:var(--primary);"><strong>923456</strong></a></td><td style="padding: 12px 16px;">PO-11223</td><td style="padding: 12px 16px; color:var(--danger);">Credit Block: Not Approved</td></tr>
-                                <tr><td style="padding: 12px 16px;"><a href="#" style="color:var(--primary);"><strong>923457</strong></a></td><td style="padding: 12px 16px;">PO-44556</td><td style="padding: 12px 16px; color:var(--danger);">Delivery Block: Missing Info</td></tr>
-                                <tr><td style="padding: 12px 16px;"><a href="#" style="color:var(--primary);"><strong>923458</strong></a></td><td style="padding: 12px 16px;">PO-99887</td><td style="padding: 12px 16px; color:var(--danger);">Billing Block: Pricing Issue</td></tr>
-                            </tbody>
-                        </table>
-                    `;
-                    
+                if (input.includes('9999')) {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (input.includes('3010') || !input) {
+                    text = `I found 3 orders shipping in the next 2 days that are on credit hold for Sales Org 3010.`;
+                    badge = '<span class="status-badge delayed">ON BLOCK</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
                         <div class="data-card" style="width: 100%;">
@@ -3691,46 +3686,30 @@
                                 <span class="data-card-title">Blocked Orders</span>
                                 ${badge}
                             </div>
-                            <div class="data-card-body" style="padding: 0;">
-                                ${tableHtml}
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    <tr><th>SAP Order #</th><th>PO #</th><th>Block/Hold Status</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">554433</a></td><td>PO11</td><td>Credit Status: Not Approved</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">554434</a></td><td>PO12</td><td>Delivery Block: 01</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">554435</a></td><td>PO13</td><td>Billing Block: 04</td></tr>
+                                </table>
                             </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Review credit holds', 'Export to Excel']);
-                } else if (r < 0.9) {
-                    text = `No orders shipping in the ${time} are currently on credit hold for that sales org.`;
-                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different Sales Org']);
+                        </div>`;
                 } else {
-                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Org']);
+                    text = `No orders shipping in the next 2 days are currently on credit hold for that sales org.`;
+                    badge = '<span class="status-badge healthy">CLEAR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
                 }
-                
+                appendAIMessage(finalHtml, null, null, true);
                 waitingForInput = null;
             }, 800);
         }
 
+
+
         function startBlockedOrdersFlow() {
             resetChat();
+            updateDemoTooltip('Q10');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("List orders scheduled to load in the next 2 days that are currently on any block (credit hold, and/or delivery block, and/or billing block).");
             showLoading();
@@ -3954,49 +3933,40 @@
 
         
         function resolveShortageDateRange(input) {
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                // We ask the optional narrow down question
-                appendAIMessage(`I found over 500 orders matching those dates across all plants. Would you like to narrow it down by a specific Shipping Plant or Customer?
-                    <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                        <button class="chat-option-btn" onclick="handleOptionClick('Narrow by Plant 4010', 'Q3_NARROW')">Narrow by Plant 4010</button>
-                        <button class="chat-option-btn" onclick="handleOptionClick('Show all 500 orders', 'Q3_NARROW')">Show all 500 orders</button>
-                    </div>
-                `, null, null, false);
-                waitingForInput = 'Q3_NARROW';
-            }, 800);
+            resolveShortageFinal('1234', input);
         }
         
-        function resolveShortageFinal(input) {
+        function resolveShortageFinal(salesOrg, dateRange) {
             showLoading();
             setTimeout(() => {
                 hideLoading();
                 
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
                 
-                if (r < 0.6) {
+                if (salesOrg !== '1234') {
+                    // Scenario 3: Invalid Sales Org
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    appendAIMessage(`<div class="ai-text-content">${text}</div>`, null, null, true);
+                    appendFollowUpActions(['Check my authorizations', 'Try another Sales Org']);
+                } else if (dateRange && dateRange.toLowerCase().includes('month')) {
+                    // Scenario 2: No shortages found
+                    text = `Good news - I didn't find any orders with shortages that haven't shipped for the criteria you gave.`;
+                    appendAIMessage(`<div class="ai-text-content" style="margin-bottom: 0;">${text}</div>`, null, null, true);
+                    appendFollowUpActions(['Check different date range', 'Check different sales org']);
+                } else {
                     // Scenario 1: Shortages found
-                    text = `I found 14 orders with shortages that have not yet shipped for Sales Org 1234 in the selected period.`;
+                    text = `I found 14 orders with shortages that have not yet shipped for Sales Org ${salesOrg} in the selected period.`;
                     badge = '<span class="status-badge delayed">SHORTAGES FOUND</span>';
                     
-                    const isNarrowed = input.toLowerCase().includes('4010');
-                    if(isNarrowed) text += " (Filtered to Plant 4010)";
-                    
-                    const tableHtml = isNarrowed ? `
-                        <tr><th>SAP Order #</th><th>Material</th><th>Ordered Qty</th><th>Confirmed Qty</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">123456</a></td><td>SKU 123</td><td>1000</td><td style="color:var(--danger);">800</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">123457</a></td><td>SKU 999</td><td>500</td><td style="color:var(--danger);">250</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">123458</a></td><td>SKU 444</td><td>2000</td><td style="color:var(--danger);">1900</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">123459</a></td><td>SKU 555</td><td>100</td><td style="color:var(--danger);">0</td></tr>
-                    ` : `
-                        <tr><th>SAP Order #</th><th>Material</th><th>Ordered Qty</th><th>Confirmed Qty</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">123456</a></td><td>SKU 123</td><td>1000</td><td style="color:var(--danger);">800</td></tr>
-                        <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
-                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">13 more rows available in export</td></tr>
+                    const tableHtml = `
+                        <tr><th>SAP Order #</th><th>Customer</th><th>Material</th><th>Ordered Qty</th><th>Confirmed Qty</th><th>Shortage Qty</th></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123456</a></td><td>Cust A</td><td>SKU 123</td><td>1000</td><td style="color:var(--danger);">800</td><td style="color:var(--danger);">200</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123457</a></td><td>Cust B</td><td>SKU 999</td><td>500</td><td style="color:var(--danger);">250</td><td style="color:var(--danger);">250</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123458</a></td><td>Cust C</td><td>SKU 444</td><td>2000</td><td style="color:var(--danger);">1900</td><td style="color:var(--danger);">100</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">123459</a></td><td>Cust D</td><td>SKU 555</td><td>100</td><td style="color:var(--danger);">0</td><td style="color:var(--danger);">100</td></tr>
+                        <tr><td colspan="6" style="text-align:center; color:var(--text-secondary);">10 more rows available in export</td></tr>
                     `;
                     
                     finalHtml = `
@@ -4022,26 +3992,6 @@
                     `;
                     appendAIMessage(finalHtml, null, null, true);
                     appendFollowUpActions(['Export to Excel', 'Email Report']);
-                } else if (r < 0.9) {
-                    // Scenario 2: No shortages found
-                    text = `Good news - I didn't find any orders with shortages that haven't shipped for the criteria you gave.`;
-                    badge = '<span class="status-badge healthy">ALL CLEAR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different sales org']);
-                } else {
-                    // Scenario 3: Unauthorized Sales Org
-                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Sales Org']);
                 }
                 
                 waitingForInput = null;
@@ -4050,6 +4000,7 @@
 
         function startShortageFlow() {
             resetChat();
+            updateDemoTooltip('Q3');
             if(initialState) initialState.style.display = 'none';
             appendUserMessage("Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped.");
             showLoading();
@@ -4083,6 +4034,26 @@
             document.querySelectorAll('.helper-modal').forEach(m => m.classList.remove('visible'));
             
             appendUserMessage(text);
+            
+            const q3Regex = /confirmed quantity less than.*?sales org (\d+).*?between (.*)/i;
+            const matchQ3 = text.match(q3Regex);
+            if (matchQ3) {
+                const salesOrg = matchQ3[1];
+                const dateRange = matchQ3[2];
+                waitingForInput = null;
+                resolveShortageFinal(salesOrg, dateRange);
+                return;
+            }
+
+            const q4Regex = /Which orders had a planned loading \(PGI\) date in the past but have not yet shipped.*?for Sales Org (.*?),\s*(.*?)\?/i;
+            const matchQ4 = text.match(q4Regex);
+            if (matchQ4) {
+                const salesOrg = matchQ4[1];
+                const timeFrame = matchQ4[2];
+                waitingForInput = null;
+                resolvePastDueFinal(salesOrg, timeFrame);
+                return;
+            }
             
             
             if (waitingForInput === 'Q2_SKU_PLANT') {
@@ -4173,7 +4144,12 @@
             } else if (waitingForInput === 'Q4_PAST_DUE') {
                 const id = text.trim();
                 waitingForInput = null;
-                resolvePastDueCPUFlow(id);
+                let parts = id.split(',');
+                if (parts.length === 2) {
+                    resolvePastDueFinal(parts[1].trim(), parts[0].trim());
+                } else {
+                    resolvePastDueFinal(id, 'Last 7 Days');
+                }
                 return;
             } else if (waitingForInput === 'Q3_NARROW') {
                 const id = text.trim();
@@ -4234,10 +4210,16 @@
                             ], 'Q1_CUSTOMER_ORDER');
                             waitingForInput = 'Q1_CUSTOMER_ORDER';
                         } else if (searchLower.includes('target')) {
-                            appendAIMessage(`I found over 50 open orders for Target. To help narrow it down, please provide a Date Range or a specific SKU.
-                                <div class="inline-input-container" style="margin-top: 8px;">
-                                    <input type="text" placeholder="e.g. Last 7 days" class="inline-input" onkeypress="handleInlineEnter(event, 'Q1_DATE_NARROW')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('Q1_DATE_NARROW', this)">Submit</button>
+                            appendAIMessage(`I found over 50 open orders for Target. To help narrow it down, please provide a Date or a specific SKU.
+                                <div class="inline-input-container" style="margin-top: 8px; display: flex; gap: 8px; background: transparent; border: none; padding: 0; align-items: stretch;">
+                                    <input type="text" placeholder="SKU (e.g. SKU-123)" class="inline-input" style="flex: 1; padding: 8px 12px;" onkeypress="if(event.key === 'Enter') handleInlineDateRangeSend('Q1_DATE_NARROW', this.parentElement.querySelector('button'))">
+                                    <div style="display: flex; align-items: center; color: var(--text-secondary); font-size: 12px; font-weight: 500; padding: 0 4px;">OR</div>
+                                    <div style="display: flex; flex: 1; gap: 4px; align-items: center;">
+                                        <input type="date" class="inline-input" style="flex: 1; padding: 8px 12px; cursor: text;" onkeypress="if(event.key === 'Enter') handleInlineDateRangeSend('Q1_DATE_NARROW', this.parentElement.closest('.inline-input-container').querySelector('button'))">
+                                        <span style="color: var(--text-secondary); font-size: 12px;">to</span>
+                                        <input type="date" class="inline-input" style="flex: 1; padding: 8px 12px; cursor: text;" onkeypress="if(event.key === 'Enter') handleInlineDateRangeSend('Q1_DATE_NARROW', this.parentElement.closest('.inline-input-container').querySelector('button'))">
+                                    </div>
+                                    <button class="inline-submit-btn" onclick="handleInlineDateRangeSend('Q1_DATE_NARROW', this)">Search</button>
                                 </div>
                             `, null, null, false);
                             waitingForInput = 'Q1_DATE_NARROW';
@@ -4273,6 +4255,170 @@
                 return;
             }
 
+            const resolveInventoryAnswer = (sku, plant) => {
+                if (sku === '123' && plant === '4010') {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Inventory Analysis</span>
+                                    <span class="status-badge healthy">STOCK FOUND</span>
+                                </div>
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value">1,250 cases</td></tr>
+                                        <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.MARD - <em>Last Updated: ${getTimestamp(1)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Schedule Line Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Check alternate plants', 'View open orders', 'Contact Planner']);
+                    }, 800);
+                } else if ((sku === '456' || sku === '124') && plant === '4010') {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content">Plant 4010 currently has 0 cases of SKU ${sku} on hand; there are 8 open orders totaling 3,400 cases against it.</div>
+                            <div class="data-card" style="width: 100%;">
+                                <div class="data-card-header">
+                                    <span class="data-card-title">Inventory Analysis</span>
+                                    <span class="status-badge healthy">STOCK FOUND BUT ZERO</span>
+                                </div>
+                                <div class="data-card-body">
+                                    <table class="data-table">
+                                        <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value" style="color: var(--danger);">0 cases</td></tr>
+                                        <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="footer-metadata">
+                                <span><strong>Data Sources Updated:</strong> 
+                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.MARD - <em>Last Updated: ${getTimestamp(1)}</em></div>
+                                    <div style="margin-top: 4px; margin-left: 8px;">Schedule Line Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
+                                </span>
+                            </div>
+                        `);
+                        appendFollowUpActions(['Check alternate plants', 'View open orders', 'Contact Planner']);
+                    }, 800);
+                } else if (sku === '789' && plant === '5555') {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content" style="margin-bottom:0;">You do not have authorization to view stock data for plant ${plant}. If you need access, please contact your administrator.</div>
+                        `);
+                    }, 800);
+                } else {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`
+                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+                                <div>
+                                    Sorry, I couldn't find stock data for that plant and SKU combination. Please confirm the plant and product ID.
+                                </div>
+                                <div class="inline-input-container" style="display: flex; gap: 8px; flex-direction: row; background: transparent; border: none; padding: 0;">
+                                    <input type="text" placeholder="SKU (e.g. 123)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <input type="text" placeholder="Plant ID (e.g. 4010)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK', this)">Submit</button>
+                                </div>
+                            </div>
+                        `);
+                        waitingForInput = 'INVENTORY_CHECK';
+                    }, 800);
+                }
+            };
+
+
+
+            const resolveQ2Answer = (sku, plant) => {
+                waitingForInput = null;
+                showLoading();
+                setTimeout(() => {
+                    hideLoading();
+                    sku = sku.replace(/sku-/i, '');
+                    
+                    const validPlants = ['4010', '5555', '9999'];
+                    if (!validPlants.includes(plant)) {
+                        window.currentQ2Sku = sku;
+                        appendAIMessage(`Plant ID <strong>${plant}</strong> did not match any known locations. Please provide a valid Plant/Warehouse ID to check stock for SKU-${sku}.
+                            <div class="inline-input-container" style="margin-top: 8px; display: flex; gap: 8px; background: transparent; border: none; padding: 0;">
+                                <input type="text" placeholder="e.g. 4010" class="inline-input" onkeypress="handleInlineEnter(event, 'Q2_PLANT')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q2_PLANT', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                        waitingForInput = 'Q2_PLANT';
+                        return;
+                    }
+
+                    if (sku === '123' && plant === '4010') {
+                        appendAIMessage(`Plant 4010 currently has <strong>1,250 cases</strong> of SKU 123 on hand; there are <strong>8 open orders</strong> totaling 3,400 cases against it.`);
+                        appendFollowUpActions(['View Inventory for SKU 123']);
+                    } else if (sku === '456' && plant === '4010') {
+                        appendAIMessage(`Plant 4010 currently has <strong>0 cases</strong> of SKU 456 on hand; there are <strong>8 open orders</strong> totaling 3,400 cases against it.`);
+                        appendFollowUpActions(['View Order Details']);
+                    } else if (sku === '789' && plant === '5555') {
+                        appendAIMessage(`You do not have authorization to view stock data for plant ${plant}. If you need access, please contact your administrator.`);
+                    } else {
+                        appendAIMessage(`Sorry, I couldn't find stock data for that plant and SKU combination. Please confirm the plant and product ID.`);
+                    }
+                }, 800);
+            };
+
+            if (waitingForInput === 'Q2_PRODUCT') {
+                const textLower = text.toLowerCase();
+                let skuMatch = textLower.match(/sku-?(\d+)/);
+                let plantMatch = textLower.match(/plant\s*(\d+)/);
+                
+                let sku = skuMatch ? skuMatch[1] : null;
+                let plant = plantMatch ? plantMatch[1] : null;
+
+                if (!sku || !plant) {
+                    let numbers = textLower.match(/\d+/g) || [];
+                    if (!sku && numbers.length > 0) sku = numbers[0];
+                    if (!plant && numbers.length > 1) plant = numbers[1];
+                }
+
+                if (!sku) sku = '123'; // Fallback for demo if generic input
+
+                if (!plant) {
+                    window.currentQ2Sku = sku;
+                    waitingForInput = null;
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`To check stock for SKU-${sku}, please provide the <strong>Plant/Warehouse ID</strong>.
+                            <div class="inline-input-container" style="margin-top: 8px; display: flex; gap: 8px; background: transparent; border: none; padding: 0;">
+                                <input type="text" placeholder="e.g. 4010" class="inline-input" onkeypress="handleInlineEnter(event, 'Q2_PLANT')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('Q2_PLANT', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                        waitingForInput = 'Q2_PLANT';
+                    }, 800);
+                } else {
+                    resolveQ2Answer(sku, plant);
+                }
+                return;
+            }
+            
+            if (waitingForInput === 'Q2_PLANT') {
+                const textLower = text.toLowerCase();
+                let plantMatch = textLower.match(/plant\s*(\d+)/) || textLower.match(/\b(4010|9999)\b/);
+                let plant = plantMatch ? (plantMatch[1] || plantMatch[0]) : text.trim();
+                
+                resolveQ2Answer(window.currentQ2Sku, plant);
+                return;
+            }
 
             if (waitingForInput === 'ORDER_ID') {
                 const id = text.trim();
@@ -4427,82 +4573,55 @@
                 }
             } else if (waitingForInput === 'INVENTORY_CHECK') {
                 waitingForInput = null;
-                const input = text.toLowerCase();
-                if (input.includes('123') && input.includes('4010')) {
-                    showLoading();
-                    setTimeout(() => {
-                        hideLoading();
-                        appendAIMessage(`
-                            <div class="ai-text-content">Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
-                            <div class="data-card" style="width: 100%;">
-                                <div class="data-card-header">
-                                    <span class="data-card-title">Inventory Analysis</span>
-                                    <span class="status-badge healthy">STOCK FOUND</span>
-                                </div>
-                                <div class="data-card-body">
-                                    <table class="data-table">
-                                        <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value">1,250 cases</td></tr>
-                                        <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.MARD - <em>Last Updated: ${getTimestamp(1)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Schedule Line Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                        `);
-                        appendFollowUpActions(['Check alternate plants', 'View open orders', 'Contact Planner']);
-                    }, 800);
-                } else if (input.includes('124') && input.includes('4010')) {
-                    showLoading();
-                    setTimeout(() => {
-                        hideLoading();
-                        appendAIMessage(`
-                            <div class="ai-text-content">Plant 4010 currently has 0 cases of SKU 124 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
-                            <div class="data-card" style="width: 100%;">
-                                <div class="data-card-header">
-                                    <span class="data-card-title">Inventory Analysis</span>
-                                    <span class="status-badge healthy">STOCK FOUND BUT ZERO</span>
-                                </div>
-                                <div class="data-card-body">
-                                    <table class="data-table">
-                                        <tr><td class="label">On-Hand Unrestricted Stock</td><td class="value" style="color: var(--danger);">0 cases</td></tr>
-                                        <tr><td class="label">Open Sales Order Qty</td><td class="value">3,400 cases</td></tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">SAP.MARD - <em>Last Updated: ${getTimestamp(1)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Schedule Line Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                        `);
-                        appendFollowUpActions(['Check alternate plants', 'View open orders', 'Contact Planner']);
-                    }, 800);
-                } else {
-                    showLoading();
-                    setTimeout(() => {
-                        hideLoading();
-                        const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                        appendAIMessage(`
-                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                                <div>
-                                    Sorry, I couldn't find stock data for that plant and SKU combination. Please confirm the plant and product ID.
-                                    <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
-                                </div>
-                                <div class="inline-input-container">
-                                    <input type="text" placeholder="SKU (e.g. 123)" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
-                                    <input type="text" placeholder="Plant (e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK', this)">Submit</button>
-                                </div>
-                            </div>
-                        `, modalId, 'INVENTORY_CHECK');
-                        waitingForInput = 'INVENTORY_CHECK';
-                    }, 800);
+                const textLower = text.toLowerCase();
+                let skuMatch = textLower.match(/sku-?(\d+)/);
+                let plantMatch = textLower.match(/plant\s*(\d+)/);
+                let sku = skuMatch ? skuMatch[1] : null;
+                let plant = plantMatch ? plantMatch[1] : null;
+
+                if (!sku || !plant) {
+                    let numbers = textLower.match(/\d+/g) || [];
+                    if (!sku && numbers.length > 0) sku = numbers[0];
+                    if (!plant && numbers.length > 1) plant = numbers[1];
                 }
+
+                if (!sku) sku = '123';
+                if (!plant) plant = '4010';
+
+                const validPlants = ['4010', '5555', '9999'];
+                if (!validPlants.includes(plant)) {
+                    window.currentInventorySku = sku;
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        appendAIMessage(`Plant ID <strong>${plant}</strong> did not match any known locations. Please provide a valid Plant/Warehouse ID to check stock for SKU-${sku}.
+                            <div class="inline-input-container" style="margin-top: 8px; display: flex; gap: 8px; background: transparent; border: none; padding: 0;">
+                                <input type="text" placeholder="e.g. 4010" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_PLANT')">
+                                <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_PLANT', this)">Submit</button>
+                            </div>
+                        `, null, null, false);
+                        waitingForInput = 'INVENTORY_PLANT';
+                    }, 800);
+                    return;
+                }
+
+                if (sku === '123' && plant === '4010') {
+                    resolveInventoryAnswer(sku, plant);
+                } else if ((sku === '456' || sku === '124') && plant === '4010') {
+                    resolveInventoryAnswer(sku, plant);
+                } else if (sku === '789' && plant === '5555') {
+                    resolveInventoryAnswer(sku, plant);
+                } else {
+                    resolveInventoryAnswer(sku, plant);
+                }
+            } else if (waitingForInput === 'INVENTORY_PLANT') {
+                const textLower = text.toLowerCase();
+                let plantMatch = textLower.match(/plant\s*(\d+)/) || textLower.match(/\d+/);
+                let plant = plantMatch ? plantMatch[0] : text.trim();
+                
+                waitingForInput = null;
+                resolveInventoryAnswer(window.currentInventorySku, plant);
+                return;
             } else if (waitingForInput === 'UNBILLED_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
@@ -5125,6 +5244,36 @@
         }
 
 
+        window.handleInlineDateRangeSend = function(state, btnEl) {
+            const container = btnEl.closest('.inline-input-container');
+            const textInput = container.querySelector('input[type="text"]');
+            const dateInputs = container.querySelectorAll('input[type="date"]');
+            
+            let val = '';
+            if (textInput && textInput.value.trim()) {
+                val = textInput.value.trim();
+            } else if (dateInputs && dateInputs.length > 0) {
+                if (dateInputs.length === 2 && (dateInputs[0].value || dateInputs[1].value)) {
+                    const start = dateInputs[0].value || 'Any';
+                    const end = dateInputs[1].value || 'Any';
+                    val = `${start} to ${end}`;
+                } else if (dateInputs.length === 1 && dateInputs[0].value) {
+                    val = dateInputs[0].value;
+                }
+            }
+            
+            if (!val) return; // do nothing if both empty
+            
+            // hide outer container
+            container.style.display = 'none';
+            
+            appendUserMessage(val);
+            waitingForInput = state;
+            
+            // Re-use the existing routing logic by passing the formatted string to the global handler
+            window.handleGlobalMessage({ target: { value: val } }, val);
+        };
+        
         window.handleInlineSend = function(state, btnEl) {
             const container = btnEl.closest('.inline-input-container');
             const inputs = container.querySelectorAll('.inline-input');
@@ -5185,6 +5334,184 @@
             closeFeedbackModal();
             
             // Optional: show a quick toast or change the thumbs down icon
+        }
+
+
+        // Q5: Unconfirmed Orders
+        function startUnconfirmedOrdersFlow() {
+            resetChat();
+            updateDemoTooltip('Q5');
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("List unconfirmed orders");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`Please provide the Period of Time (Sales Document Date or Loading Date) and the Sales Organization.
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Time Frame (e.g. Last 30 Days)" class="inline-input" id="q5_time" onkeypress="handleInlineEnter(event, 'Q5_UNCONFIRMED')">
+                                <input type="text" placeholder="Sales Org (e.g. 3010)" class="inline-input" id="q5_org" onkeypress="handleInlineEnter(event, 'Q5_UNCONFIRMED')">
+                                <button class="inline-submit-btn" onclick="resolveUnconfirmedOrdersFlow(document.getElementById('q5_org').value, document.getElementById('q5_time').value)">Submit</button>
+                            </div>
+                        `, null, null, false);
+            }, 800);
+        }
+
+        function resolveUnconfirmedOrdersFlow(salesOrg, timeFrame) {
+            if(!salesOrg) salesOrg = "";
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                if (salesOrg.includes('9999')) {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (salesOrg.includes('3010')) {
+                    text = `I found 2 unconfirmed orders for Sales Org 3010 in the selected period.`;
+                    badge = '<span class="status-badge delayed">UNCONFIRMED</span>';
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Unconfirmed Orders</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    <tr><th>SAP Order #</th><th>PO #</th><th>Order Date</th><th>Customer</th><th>Product</th><th>Unconfirmed Qty</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">998877</a></td><td>A123</td><td>2026-08-01</td><td>100123</td><td>Prod X</td><td>100</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">998878</a></td><td>B456</td><td>2026-08-02</td><td>100124</td><td>Prod Y</td><td>50</td></tr>
+                                </table>
+                            </div>
+                        </div>`;
+                } else {
+                    text = `Good news - there are no completely unconfirmed orders for that period.`;
+                    badge = '<span class="status-badge healthy">CLEAR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                }
+                appendAIMessage(finalHtml, null, null, true);
+            }, 800);
+        }
+
+        // Q6: Delivery Blocked
+        function startDeliveryBlockedFlow() {
+            resetChat();
+            updateDemoTooltip('Q6');
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Give me the list of orders with delivery blocked");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`Please provide the Period of Time (Loading Date or Order Creation Date) and the Sales Organization.
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" id="q6_time">
+                                <input type="text" placeholder="Sales Org (e.g. 3010)" class="inline-input" id="q6_org">
+                                <button class="inline-submit-btn" onclick="resolveDeliveryBlockedFlow(document.getElementById('q6_org').value, document.getElementById('q6_time').value)">Submit</button>
+                            </div>
+                        `, null, null, false);
+            }, 800);
+        }
+
+        function resolveDeliveryBlockedFlow(salesOrg, timeFrame) {
+            if(!salesOrg) salesOrg = "";
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                if (salesOrg.includes('9999')) {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (salesOrg.includes('3010')) {
+                    text = `I found 3 orders with a delivery block for Sales Org 3010 in the selected period.`;
+                    badge = '<span class="status-badge delayed">DELIVERY BLOCKED</span>';
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Delivery Blocked</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    <tr><th>SAP Order #</th><th>PO #</th><th>Block ID & Desc</th><th>Customer</th><th>Product</th><th>Qty</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">112233</a></td><td>PO-1</td><td>01 (Credit Limit)</td><td>CUST-A</td><td>PRD-1</td><td>200</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">112234</a></td><td>PO-2</td><td>02 (Political)</td><td>CUST-B</td><td>PRD-2</td><td>150</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">112235</a></td><td>PO-3</td><td>01 (Credit Limit)</td><td>CUST-C</td><td>PRD-3</td><td>300</td></tr>
+                                </table>
+                            </div>
+                        </div>`;
+                } else {
+                    text = `Good news - there are no orders with delivery blocks for that period.`;
+                    badge = '<span class="status-badge healthy">CLEAR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                }
+                appendAIMessage(finalHtml, null, null, true);
+            }, 800);
+        }
+
+        // Q7: Billing Blocked
+        function startBillingBlockedFlow() {
+            resetChat();
+            updateDemoTooltip('Q7');
+            if(initialState) initialState.style.display = 'none';
+            appendUserMessage("Give me the list of orders with billing blocked");
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                appendAIMessage(`Please provide the Period of Time (Loading Date or Order Creation Date) and the Sales Organization.
+                            <div class="inline-input-container">
+                                <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" id="q7_time">
+                                <input type="text" placeholder="Sales Org (e.g. 3010)" class="inline-input" id="q7_org">
+                                <button class="inline-submit-btn" onclick="resolveBillingBlockedFlow(document.getElementById('q7_org').value, document.getElementById('q7_time').value)">Submit</button>
+                            </div>
+                        `, null, null, false);
+            }, 800);
+        }
+
+        function resolveBillingBlockedFlow(salesOrg, timeFrame) {
+            if(!salesOrg) salesOrg = "";
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                let text = '';
+                let finalHtml = '';
+                let badge = '';
+                
+                if (salesOrg.includes('9999')) {
+                    text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
+                    badge = '<span class="status-badge delayed">ERROR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                } else if (salesOrg.includes('3010')) {
+                    text = `I found 1 order with a billing block for Sales Org 3010 in the selected period.`;
+                    badge = '<span class="status-badge delayed">BILLING BLOCKED</span>';
+                    finalHtml = `
+                        <div class="ai-text-content">${text}</div>
+                        <div class="data-card" style="width: 100%;">
+                            <div class="data-card-header">
+                                <span class="data-card-title">Billing Blocked</span>
+                                ${badge}
+                            </div>
+                            <div class="data-card-body">
+                                <table class="data-table">
+                                    <tr><th>SAP Order #</th><th>PO #</th><th>Block ID & Desc</th><th>Customer</th><th>Product</th><th>Qty</th></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">445566</a></td><td>PO-99</td><td>04 (Check Pricing)</td><td>CUST-X</td><td>PRD-Z</td><td>500</td></tr>
+                                </table>
+                            </div>
+                        </div>`;
+                } else {
+                    text = `Good news - there are no orders with billing blocks for that period.`;
+                    badge = '<span class="status-badge healthy">CLEAR</span>';
+                    finalHtml = `<div class="ai-text-content">${text}</div>`;
+                }
+                appendAIMessage(finalHtml, null, null, true);
+            }, 800);
         }
 
     </script>
