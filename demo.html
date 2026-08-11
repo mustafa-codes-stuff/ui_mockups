@@ -1907,10 +1907,10 @@
             };
 
             // Progress bar width based on active/completed stages
-            // 5 stages = 4 segments. Each segment is 25% of the total width.
+            // 3 stages = 2 segments. Each segment is 50% of the total width.
             let progressWidth = 0;
             if (!isError) {
-                progressWidth = (numericStage - 1) * 25;
+                progressWidth = (numericStage - 1) * 50;
             }
 
             return `
@@ -1935,18 +1935,6 @@
                     <div class="step-label ${classes[3]}">${getLabel(3)}</div>
                     <div class="step-subtitle">${getSubtitle(3)}</div>
                     ${assignees[3] ? `<div class="step-assignee">👤 ${assignees[3]}</div>` : ''}
-                </div>
-                <div class="timeline-step">
-                    <div class="step-dot ${classes[4]}">${getIcon(4)}</div>
-                    <div class="step-label ${classes[4]}">${getLabel(4)}</div>
-                    <div class="step-subtitle">${getSubtitle(4)}</div>
-                    ${assignees[4] ? `<div class="step-assignee">👤 ${assignees[4]}</div>` : ''}
-                </div>
-                <div class="timeline-step">
-                    <div class="step-dot ${classes[5]}">${getIcon(5)}</div>
-                    <div class="step-label ${classes[5]}">${getLabel(5)}</div>
-                    <div class="step-subtitle">${getSubtitle(5)}</div>
-                    ${assignees[5] ? `<div class="step-assignee">👤 ${assignees[5]}</div>` : ''}
                 </div>
             </div>
             `;
