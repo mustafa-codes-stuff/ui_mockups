@@ -1861,7 +1861,7 @@
                         responseHtml = '<div class="ai-text-content">The invoice is currently <strong>Pending Payment</strong>. It is due in 15 days (Net 30 terms). No past due amounts are present.</div>';
                         break;
                     default:
-                        responseHtml = '<div class="ai-text-content">I have processed your request for: ' + action + '. Let me know if you need anything else!</div>';
+                        responseHtml = '<div class="ai-text-content">Simulating action: <strong>' + action + '</strong>...<br><br><span style="color:var(--text-secondary); font-size:12px;">In a production environment, this would transition to the appropriate detailed view or execute the requested transaction.</span></div>';
                         break;
                 }
                 appendAIMessage(responseHtml);
@@ -2043,6 +2043,7 @@
         }
 
         function handleOptionClick(value, stateContext, skipUserMessage = false) {
+            window.forceSuccess = true;
             const isLegacyFlow = ['Q1_INITIAL', 'Q1_PO', 'Q1_PO_PLANT', 'Q1_CUSTOMER', 'Q1_CUSTOMER_ORDER', 'Q1_ESCALATE', 'Q1_ADVANCED', 'Q1_DELIVERY', 'Q1_NOT_FOUND_NAME'].includes(stateContext);
             if (!isLegacyFlow) {
                 handleSendText(value);
@@ -2139,7 +2140,7 @@
         
         function resolveOrderStatus(orderId) {
             // Generate the dynamic text response based on 8 scenarios
-            const r = Math.random();
+            const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
             let text = "";
             let badge = "";
             let badgeClass = "";
@@ -2325,7 +2326,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2415,7 +2416,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2512,7 +2513,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2630,7 +2631,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2771,7 +2772,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -2869,7 +2870,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3010,7 +3011,7 @@
             setTimeout(() => {
                 hideLoading();
                 
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3085,7 +3086,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3242,7 +3243,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3357,7 +3358,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3419,7 +3420,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3511,7 +3512,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3612,7 +3613,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3699,7 +3700,7 @@
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
@@ -3826,7 +3827,7 @@
             setTimeout(() => {
                 hideLoading();
                 
-                const r = Math.random();
+                const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
                 let text = '';
                 let finalHtml = '';
                 let badge = '';
