@@ -1873,7 +1873,7 @@
         function buildTimeline(stage, assignees = {}) {
             let classes = ['', '', '', '', '', ''];
             let isError = (stage === 'CANCELLED' || stage === 'BLOCKED');
-            let numericStage = isError ? 1 : stage;
+            let numericStage = isError ? 1 : Math.min(stage, 3);
 
             if (!isError) {
                 for (let i = 1; i <= 3; i++) {
