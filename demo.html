@@ -658,9 +658,9 @@
 
         .timeline-progress {
             position: absolute;
-            top: 14px;
-            left: 36px;
-            height: 4px;
+            top: 0;
+            left: 0;
+            height: 100%;
             background-color: var(--primary);
             z-index: 2;
             border-radius: 2px;
@@ -1915,8 +1915,9 @@
 
             return `
             <div class="timeline-container">
-                <div class="timeline-line"></div>
-                <div class="timeline-progress" style="width: ${progressWidth}%;"></div>
+                <div class="timeline-line">
+                    <div class="timeline-progress" style="width: ${progressWidth}%;"></div>
+                </div>
                 
                 <div class="timeline-step">
                     <div class="step-dot ${isError ? 'error' : classes[1]}">${getIcon(1)}</div>
