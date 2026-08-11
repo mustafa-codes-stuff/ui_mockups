@@ -840,6 +840,13 @@
             font-size: 13px;
         }
 
+        .data-table th {
+            text-align: left;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
         .data-table td {
             padding: 8px 0;
             border-bottom: 1px solid var(--border-color);
@@ -3973,22 +3980,43 @@
                     }, 800);
                 }
             } else if (waitingForInput === 'PRODUCT_STATUS') {
-                const input = text.trim().toLowerCase();
+                const input = text.trim();
                 waitingForInput = null;
                 
-                if (input.includes('potato') && input.includes('shipped')) {
+                const validStatuses = ['shipped', 'blocked', 'processing', 'in transit', 'delivered', 'pending', 'billed', 'complete'];
+                let statusFound = validStatuses.find(s => input.toLowerCase().includes(s));
+                
+                if (statusFound) {
+                    const parts = input.split(',');
+                    let product = parts[0] ? parts[0].trim() : 'Product';
+                    product = product.charAt(0).toUpperCase() + product.slice(1);
+                    const statusFormatted = statusFound.charAt(0).toUpperCase() + statusFound.slice(1);
+                    
+                    let statusColor = 'var(--text-secondary)';
+                    let badgeClass = 'neutral';
+                    if (statusFound === 'shipped' || statusFound === 'delivered' || statusFound === 'complete' || statusFound === 'billed') {
+                        statusColor = 'var(--success)';
+                        badgeClass = 'healthy';
+                    } else if (statusFound === 'blocked') {
+                        statusColor = 'var(--danger)';
+                        badgeClass = 'delayed';
+                    } else if (statusFound === 'processing' || statusFound === 'in transit' || statusFound === 'pending') {
+                        statusColor = 'var(--warning)';
+                        badgeClass = 'warning';
+                    }
+                    
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">Here are the recently shipped orders for <strong>Potatoes</strong>:</div>
+                            <div class="ai-text-content">Here are the ${statusFound} orders for <strong>${product}</strong>:</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-header">
-                                    <span class="data-card-title">Order Status List: Potatoes (Shipped)</span>
-                                    <span class="status-badge healthy">2 RECORDS</span>
+                                    <span class="data-card-title">Order Status List: ${product} (${statusFormatted})</span>
+                                    <span class="status-badge ${badgeClass}">3 RECORDS</span>
                                 </div>
                                 <div class="data-card-body" style="padding: 0;">
-                                    <table class="data-table" style="text-align: left; padding: 16px;">
+                                    <table class="data-table" style="text-align: left; padding: 16px; width: 100%;">
                                         <thead>
                                             <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
                                                 <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
@@ -4002,112 +4030,19 @@
                                                 <td style="padding: 12px 16px;"><strong>10022</strong></td>
                                                 <td style="padding: 12px 16px;">Sysco (GB)</td>
                                                 <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: var(--success);">Shipped</td>
+                                                <td style="padding: 12px 16px; color: ${statusColor};">${statusFormatted}</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 12px 16px;"><strong>10034</strong></td>
                                                 <td style="padding: 12px 16px;">Sainsburys</td>
                                                 <td style="padding: 12px 16px;">4020</td>
-                                                <td style="padding: 12px 16px; color: var(--success);">Shipped</td>
+                                                <td style="padding: 12px 16px; color: ${statusColor};">${statusFormatted}</td>
                                             </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                        `);
-                        appendFollowUpActions(['View all items', 'Export to Excel', 'Contact Warehouse', 'Check production schedule']);
-                    }, 800);
-                } else if (input.includes('fries') && input.includes('blocked')) {
-                    showLoading();
-                    setTimeout(() => {
-                        hideLoading();
-                        appendAIMessage(`
-                            <div class="ai-text-content">Here are the currently blocked orders for <strong>Fries</strong>:</div>
-                            <div class="data-card" style="width: 100%;">
-                                <div class="data-card-header">
-                                    <span class="data-card-title">Order Status List: Fries (Blocked)</span>
-                                    <span class="status-badge delayed">3 RECORDS</span>
-                                </div>
-                                <div class="data-card-body" style="padding: 0;">
-                                    <table class="data-table" style="text-align: left; padding: 16px;">
-                                        <thead>
-                                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
-                                                <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
-                                                <th style="padding: 12px 16px; font-weight: 500;">Customer</th>
-                                                <th style="padding: 12px 16px; font-weight: 500;">Plant</th>
-                                                <th style="padding: 12px 16px; font-weight: 500;">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
                                             <tr>
-                                                <td style="padding: 12px 16px;"><strong>20088</strong></td>
+                                                <td style="padding: 12px 16px;"><strong>10055</strong></td>
                                                 <td style="padding: 12px 16px;">Tesco</td>
                                                 <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: var(--danger);">Z1 Block (Credit Hold)</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 12px 16px;"><strong>20089</strong></td>
-                                                <td style="padding: 12px 16px;">Asda</td>
-                                                <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: var(--danger);">Z2 Block (Delivery)</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 12px 16px;"><strong>20090</strong></td>
-                                                <td style="padding: 12px 16px;">Morrisons</td>
-                                                <td style="padding: 12px 16px;">4030</td>
-                                                <td style="padding: 12px 16px; color: var(--danger);">Z1 Block (Credit Hold)</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                        `);
-                        appendFollowUpActions(['Check credit hold details', 'Review delivery blocks', 'Contact Sales', 'Escalate to Management']);
-                    }, 800);
-                } else if (input.includes('wedges') && input.includes('complete')) {
-                    showLoading();
-                    setTimeout(() => {
-                        hideLoading();
-                        appendAIMessage(`
-                            <div class="ai-text-content">Here are the completed orders for <strong>Wedges</strong>:</div>
-                            <div class="data-card" style="width: 100%;">
-                                <div class="data-card-header">
-                                    <span class="data-card-title">Order Status List: Wedges (Complete)</span>
-                                    <span class="status-badge healthy">2 RECORDS</span>
-                                </div>
-                                <div class="data-card-body" style="padding: 0;">
-                                    <table class="data-table" style="text-align: left; padding: 16px;">
-                                        <thead>
-                                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
-                                                <th style="padding: 12px 16px; font-weight: 500;">Order ID</th>
-                                                <th style="padding: 12px 16px; font-weight: 500;">Customer</th>
-                                                <th style="padding: 12px 16px; font-weight: 500;">Plant</th>
-                                                <th style="padding: 12px 16px; font-weight: 500;">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td style="padding: 12px 16px;"><strong>30044</strong></td>
-                                                <td style="padding: 12px 16px;">Aldi</td>
-                                                <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: var(--success);">Complete (Billed)</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 12px 16px;"><strong>30045</strong></td>
-                                                <td style="padding: 12px 16px;">Lidl</td>
-                                                <td style="padding: 12px 16px;">4010</td>
-                                                <td style="padding: 12px 16px; color: var(--success);">Complete (Billed)</td>
+                                                <td style="padding: 12px 16px; color: ${statusColor};">${statusFormatted}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -4116,31 +4051,18 @@
                             <div class="footer-metadata">
                                 <span><strong>Data Sources Updated:</strong> 
                                     <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Invoice Header Data - <em>Last Updated: ${getTimestamp(2)}</em></div>
                                 </span>
                             </div>
                         `);
-                        appendFollowUpActions(['Download Invoices', 'Export to Excel', 'Check payment status']);
+                        appendFollowUpActions(['View all items', 'Export to Excel', 'Check production schedule']);
                     }, 800);
                 } else {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
-                        const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
                         appendAIMessage(`
-                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                                <div>
-                                    I'm sorry, I couldn't find any recent data for that input in this demo. Try the dummy keyword.
-                                    <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
-                                </div>
-                                <div class="inline-input-container">
-                                    <input type="text" placeholder="Product (e.g. potatoes)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
-                                    <input type="text" placeholder="Status (e.g. shipped)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS', this)">Submit</button>
-                                </div>
-                            </div>
-                        `, modalId, 'PRODUCT_STATUS');
-                        waitingForInput = 'PRODUCT_STATUS';
+                            <div class="ai-text-content" style="margin-bottom:0;">I'm sorry, I couldn't find a valid status in that input. Please try entering a status like <strong>shipped, blocked, delivered, or processing</strong>.</div>
+                        `);
                     }, 800);
                 }
             } else if (waitingForInput === 'INVENTORY_CHECK') {
