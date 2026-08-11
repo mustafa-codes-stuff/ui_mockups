@@ -2392,6 +2392,7 @@
                             </div>
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q8_UNBILLED')">
+                                <input type="date" class="inline-input" style="flex: 0 0 36px; padding: 0 8px; cursor: pointer;" title="Pick a specific date" onchange="this.previousElementSibling.value = this.value">
                                 <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q8_UNBILLED')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q8_UNBILLED', this)">Submit</button>
                             </div>
@@ -2987,6 +2988,7 @@
                             </div>
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q4_PAST_DUE')">
+                                <input type="date" class="inline-input" style="flex: 0 0 36px; padding: 0 8px; cursor: pointer;" title="Pick a specific date" onchange="this.previousElementSibling.value = this.value">
                                 <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q4_PAST_DUE')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q4_PAST_DUE', this)">Submit</button>
                             </div>
@@ -3312,6 +3314,7 @@
                             </div>
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. Yesterday)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q11_BILLED')">
+                                <input type="date" class="inline-input" style="flex: 0 0 36px; padding: 0 8px; cursor: pointer;" title="Pick a specific date" onchange="this.previousElementSibling.value = this.value">
                                 <input type="text" placeholder="Customer (Optional, e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q11_BILLED')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q11_BILLED', this)">Submit</button>
                             </div>
@@ -3488,6 +3491,7 @@
                             </div>
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. This Week)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q12_SMALL')">
+                                <input type="date" class="inline-input" style="flex: 0 0 36px; padding: 0 8px; cursor: pointer;" title="Pick a specific date" onchange="this.previousElementSibling.value = this.value">
                                 <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q12_SMALL')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q12_SMALL', this)">Submit</button>
                             </div>
@@ -3589,6 +3593,7 @@
                             </div>
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. Next 2 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q10_BLOCKED')">
+                                <input type="date" class="inline-input" style="flex: 0 0 36px; padding: 0 8px; cursor: pointer;" title="Pick a specific date" onchange="this.previousElementSibling.value = this.value">
                                 <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q10_BLOCKED')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q10_BLOCKED', this)">Submit</button>
                             </div>
@@ -3678,6 +3683,7 @@
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Customer ID or Name" class="inline-input" onkeypress="handleInlineEnter(event, 'Q7_PURCHASE')">
                                 <input type="text" placeholder="Time Frame (e.g. Last 12 Months)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q7_PURCHASE')">
+                                <input type="date" class="inline-input" style="flex: 0 0 36px; padding: 0 8px; cursor: pointer;" title="Pick a specific date" onchange="this.previousElementSibling.value = this.value">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q7_PURCHASE', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -3786,6 +3792,7 @@
                             </div>
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. June 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q6_FILL_RATE')">
+                                <input type="date" class="inline-input" style="flex: 0 0 36px; padding: 0 8px; cursor: pointer;" title="Pick a specific date" onchange="this.previousElementSibling.value = this.value">
                                 <input type="text" placeholder="Customer ID" class="inline-input" onkeypress="handleInlineEnter(event, 'Q6_FILL_RATE')">
                                 <input type="text" placeholder="Plant (Optional)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q6_FILL_RATE')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q6_FILL_RATE', this)">Submit</button>
@@ -4819,6 +4826,7 @@
                                     <input type="text" placeholder="Customer ID (e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
                                     <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
                                     <input type="text" placeholder="Time Frame (e.g. June 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
+                                <input type="date" class="inline-input" style="flex: 0 0 36px; padding: 0 8px; cursor: pointer;" title="Pick a specific date" onchange="this.previousElementSibling.value = this.value">
                                     <button class="inline-submit-btn" onclick="handleInlineSend('FILL_RATE_CHECK', this)">Submit</button>
                                 </div>
                             </div>
