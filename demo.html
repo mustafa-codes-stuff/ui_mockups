@@ -3398,10 +3398,20 @@
                     badge = '<span class="status-badge delayed">BLOCKED ORDERS</span>';
                     
                     const tableHtml = `
-                        <tr><th>SAP Order #</th><th>PO #</th><th>Block Reason</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">923456</a></td><td>PO-11223</td><td style="color:var(--danger);">Credit Block: Not Approved</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">923457</a></td><td>PO-44556</td><td style="color:var(--danger);">Delivery Block: Missing Info</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">923458</a></td><td>PO-99887</td><td style="color:var(--danger);">Billing Block: Pricing Issue</td></tr>
+                        <table class="data-table" style="text-align: left; padding: 16px; width: 100%;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
+                                    <th style="padding: 12px 16px; font-weight: 500;">SAP Order #</th>
+                                    <th style="padding: 12px 16px; font-weight: 500;">PO #</th>
+                                    <th style="padding: 12px 16px; font-weight: 500;">Block Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="padding: 12px 16px;"><a href="#" style="color:var(--primary);"><strong>923456</strong></a></td><td style="padding: 12px 16px;">PO-11223</td><td style="padding: 12px 16px; color:var(--danger);">Credit Block: Not Approved</td></tr>
+                                <tr><td style="padding: 12px 16px;"><a href="#" style="color:var(--primary);"><strong>923457</strong></a></td><td style="padding: 12px 16px;">PO-44556</td><td style="padding: 12px 16px; color:var(--danger);">Delivery Block: Missing Info</td></tr>
+                                <tr><td style="padding: 12px 16px;"><a href="#" style="color:var(--primary);"><strong>923458</strong></a></td><td style="padding: 12px 16px;">PO-99887</td><td style="padding: 12px 16px; color:var(--danger);">Billing Block: Pricing Issue</td></tr>
+                            </tbody>
+                        </table>
                     `;
                     
                     finalHtml = `
@@ -3411,10 +3421,8 @@
                                 <span class="data-card-title">Blocked Orders</span>
                                 ${badge}
                             </div>
-                            <div class="data-card-body">
-                                <table class="data-table">
-                                    ${tableHtml}
-                                </table>
+                            <div class="data-card-body" style="padding: 0;">
+                                ${tableHtml}
                             </div>
                         </div>
                     `;
