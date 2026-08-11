@@ -2140,7 +2140,7 @@
         
         function resolveOrderStatus(orderId) {
             // Generate the dynamic text response based on 8 scenarios
-            const r = window.forceSuccess ? (window.forceSuccess = false, 0) : Math.random();
+            const r = window.forceSuccess ? (window.forceSuccess = false, 0.8) : Math.random();
             let text = "";
             let badge = "";
             let badgeClass = "";
