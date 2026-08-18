@@ -1346,14 +1346,14 @@
             const lower = String(input).toLowerCase();
             
             if (flowType === 'ORDER_STATUS') {
-                if (lower.includes('0000') || lower.includes('error') || lower.includes('invalid') || lower.includes('9999') || lower.includes('empty') || lower.includes('none')) {
+                if (lower.includes('0000') || lower.includes('error') || lower.includes('invalid') || lower.includes('7265') || lower.includes('empty') || lower.includes('none')) {
                     return 0.99; 
                 }
                 return 0.85; 
             }
             
             if (lower.includes('0000') || lower.includes('error') || lower.includes('invalid')) return 0.99;
-            if (lower.includes('9999') || lower.includes('empty') || lower.includes('none')) return 0.8;
+            if (lower.includes('7265') || lower.includes('empty') || lower.includes('none')) return 0.8;
             
             return 0.1;
         }
@@ -1399,7 +1399,7 @@
             let initials = "JD";
             let role = "Purchasing Manager";
             let dept = "Acme Corp";
-            let phone = "+1 (555) 123-4567";
+            let phone = "+1 (555) 1000011358-4567";
             let totalOrders = "124";
             let openOrders = "3";
             let lastOrder = "June 15, 2026";
@@ -1495,27 +1495,23 @@
                         <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; margin-bottom: 8px;">
                             <strong style="color: var(--text-secondary); grid-column: 1 / -1; margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">SAP Order Scenarios</strong>
                             
-                            <code>123001</code> <div>Cancelled / Rejected</div>
-                            <code>123002</code> <div>Credit Hold</div>
-                            <code>123003</code> <div>Delivery Block</div>
-                            <code>123004</code> <div>Billing Block</div>
-                            <code>123005</code> <div>Open - Not Yet Allocated</div>
-                            <code>123006</code> <div>Delivery Created (No PGI)</div>
-                            <code>123007</code> <div>Shipment Created (No PGI)</div>
-                            <code>123008</code> <div>Loaded / Shipped - Not Billed</div>
-                            <code>123009</code> <div>Loaded and Billed - Complete</div>
-                            <code>123010</code> <div>Multiple Deliveries flow</div>
-                            <code>123999</code> <div>Not Found flow</div>
+                            <code>61161208</code> <div>Credit Hold</div>
+                            <code>33535511</code> <div>Delivery Block</div>
+                            <code>61161256</code> <div>Billing Block</div>
+                            <code>33535372</code> <div>Open - Not Yet Allocated</div>
+                            <code>33535665</code> <div>Delivery Created (No PGI)</div>
+                            <code>0033502481</code> <div>Loaded / Shipped - Not Billed</div>
+                            <code>0033502413</code> <div>Loaded and Billed - Complete</div>
+                            <code>999999999</code> <div>Not Found flow</div>
 
                             <strong style="color: var(--text-secondary); grid-column: 1 / -1; margin-top: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">PO Number Scenarios</strong>
-                            <code>990001</code> <div>Direct Match</div>
-                            <code>990002</code> <div>Multiple Orders Match</div>
-                            <code>990003</code> <div>Not Found</div>
+                            <code>6503143320</code> <div>Direct Match</div>
+                            <code>INVALIDPO</code> <div>Not Found</div>
 
                             <strong style="color: var(--text-secondary); grid-column: 1 / -1; margin-top: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Advanced Search Scenarios</strong>
-                            <code>Walmart</code> <div>Name Search: Shows active orders</div>
-                            <code>Target</code> <div>Name Search: Too many results (narrow down)</div>
-                            <code>SKU-123</code> <div>SKU Search: Shows product orders</div>
+                            <code>CHETNA</code> <div>Name Search: Shows active orders</div>
+                            <code>CHETNA</code> <div>Name Search: Too many results (narrow down)</div>
+                            <code>SKU-1000011358</code> <div>SKU Search: Shows product orders</div>
                             <code>SKU-EMPTY</code> <div>SKU Search: No active orders found</div>
                         </div>
                     </div>
@@ -1535,11 +1531,9 @@
                         <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px; margin-bottom: 8px;">
                             <strong style="color: var(--text-secondary); grid-column: 1 / -1; margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q2 Product Scenarios</strong>
                             
-                            <code>123</code> <div>Provide just SKU to trigger branching for Plant ID</div>
-                            <code>123, 4010</code> <div>Scenario 1: Stock found, plant authorized</div>
-                            <code>456, 4010</code> <div>Scenario 2: Stock found but zero</div>
-                            <code>789, 5555</code> <div>Scenario 3: Access Restricted</div>
-                            <code>999, 9999</code> <div>Scenario 4: Not found / No match</div>
+                            <code>1000011358</code> <div>Provide just SKU to trigger branching for Plant ID</div>
+                            <code>1000011358, 7265</code> <div>Scenario 1: Stock found, plant authorized</div>
+                            <code>999999, 7265</code> <div>Scenario 4: Not found / No match</div>
                         </div>
                     </div>
                 `;
@@ -1570,7 +1564,7 @@
 
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
-                                <code style="white-space:normal;">Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped, for Sales Org 9999 between Last 7 Days</code>
+                                <code style="white-space:normal;">Show orders with delivery created but a confirmed quantity less than the ordered quantity (shortages) that have not yet shipped, for Sales Org 7265 between Last 7 Days</code>
                             </div>
                         </div>
                     </div>
@@ -1602,7 +1596,7 @@
 
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
-                                <code style="white-space:normal;">Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd), for Sales Org 9999, Last 7 Days?</code>
+                                <code style="white-space:normal;">Which orders had a planned loading (PGI) date in the past but have not yet shipped (been PGI'd), for Sales Org 7265, Last 7 Days?</code>
                             </div>
                         </div>
                     </div>
@@ -1623,7 +1617,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q5 Unconfirmed Orders Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Orders found</div>
-                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 30 Days</code>
+                                <code style="white-space:normal;">Sales Org: IN01, Time Frame: Last 30 Days</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1631,7 +1625,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
-                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 30 Days</code>
+                                <code style="white-space:normal;">Sales Org: 7265, Time Frame: Last 30 Days</code>
                             </div>
                         </div>
                     </div>
@@ -1648,7 +1642,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q6 Delivery Blocked Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Orders found</div>
-                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 7 Days</code>
+                                <code style="white-space:normal;">Sales Org: IN01, Time Frame: Last 7 Days</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1656,7 +1650,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
-                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 7 Days</code>
+                                <code style="white-space:normal;">Sales Org: 7265, Time Frame: Last 7 Days</code>
                             </div>
                         </div>
                     </div>
@@ -1673,7 +1667,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q7 Billing Blocked Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Orders found</div>
-                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 7 Days</code>
+                                <code style="white-space:normal;">Sales Org: IN01, Time Frame: Last 7 Days</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1681,7 +1675,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
-                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 7 Days</code>
+                                <code style="white-space:normal;">Sales Org: 7265, Time Frame: Last 7 Days</code>
                             </div>
                         </div>
                     </div>
@@ -1698,7 +1692,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q8 Shipped but Not Invoiced Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Orders found</div>
-                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 7 Days</code>
+                                <code style="white-space:normal;">Sales Org: IN01, Time Frame: Last 7 Days</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1706,7 +1700,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
-                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 7 Days</code>
+                                <code style="white-space:normal;">Sales Org: 7265, Time Frame: Last 7 Days</code>
                             </div>
                         </div>
                     </div>
@@ -1723,7 +1717,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q9 Ship-Short Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Orders found</div>
-                                <code style="white-space:normal;">Sales Org: 3010, Time Frame: Last 7 Days</code>
+                                <code style="white-space:normal;">Sales Org: IN01, Time Frame: Last 7 Days</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1731,7 +1725,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
-                                <code style="white-space:normal;">Sales Org: 9999, Time Frame: Last 7 Days</code>
+                                <code style="white-space:normal;">Sales Org: 7265, Time Frame: Last 7 Days</code>
                             </div>
                         </div>
                     </div>
@@ -1748,7 +1742,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q10 Blocked Orders (Scheduled to load) Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Orders found</div>
-                                <code style="white-space:normal;">Sales Org: 3010 (or Leave Blank)</code>
+                                <code style="white-space:normal;">Sales Org: IN01 (or Leave Blank)</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1756,7 +1750,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Invalid Org</div>
-                                <code style="white-space:normal;">Sales Org: 9999</code>
+                                <code style="white-space:normal;">Sales Org: 7265</code>
                             </div>
                         </div>
                     </div>
@@ -1773,7 +1767,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q11 Billed Orders Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Orders found</div>
-                                <code style="white-space:normal;">Customer: 100234 (or Leave Blank)</code>
+                                <code style="white-space:normal;">Customer: 33535511 (or Leave Blank)</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1781,7 +1775,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Error</div>
-                                <code style="white-space:normal;">Customer/Timeframe: 9999</code>
+                                <code style="white-space:normal;">Customer/Timeframe: 7265</code>
                             </div>
                         </div>
                     </div>
@@ -1798,7 +1792,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q12 Small Orders Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Orders found</div>
-                                <code style="white-space:normal;">Sales Org: 3010 (or Leave Blank)</code>
+                                <code style="white-space:normal;">Sales Org: IN01 (or Leave Blank)</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1806,7 +1800,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Access Restricted / Error</div>
-                                <code style="white-space:normal;">Sales Org: 9999</code>
+                                <code style="white-space:normal;">Sales Org: 7265</code>
                             </div>
                         </div>
                     </div>
@@ -1831,7 +1825,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Error</div>
-                                <code style="white-space:normal;">Product ID: 9999</code>
+                                <code style="white-space:normal;">Product ID: 7265</code>
                             </div>
                         </div>
                     </div>
@@ -1856,7 +1850,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Error</div>
-                                <code style="white-space:normal;">Date: Invalid or 9999</code>
+                                <code style="white-space:normal;">Date: Invalid or 7265</code>
                             </div>
                         </div>
                     </div>
@@ -1898,7 +1892,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q16 Open Orders Weight Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Found</div>
-                                <code style="white-space:normal;">Customer: 100234 (or Leave Blank)</code>
+                                <code style="white-space:normal;">Customer: 33535511 (or Leave Blank)</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1906,7 +1900,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Error</div>
-                                <code style="white-space:normal;">Customer: 9999</code>
+                                <code style="white-space:normal;">Customer: 7265</code>
                             </div>
                         </div>
                     </div>
@@ -1923,7 +1917,7 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q17 Shortage Impact Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Found</div>
-                                <code style="white-space:normal;">Sales Org: 3010 (or Leave Blank)</code>
+                                <code style="white-space:normal;">Sales Org: IN01 (or Leave Blank)</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: None found</div>
@@ -1931,7 +1925,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Error</div>
-                                <code style="white-space:normal;">Sales Org: 9999</code>
+                                <code style="white-space:normal;">Sales Org: 7265</code>
                             </div>
                         </div>
                     </div>
@@ -1956,7 +1950,7 @@
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Error</div>
-                                <code style="white-space:normal;">Country: 9999</code>
+                                <code style="white-space:normal;">Country: 7265</code>
                             </div>
                         </div>
                     </div>
@@ -1973,15 +1967,15 @@
                             <strong style="color: var(--text-secondary); margin-top: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Q19 Amend Order Scenarios</strong>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 1: Can Amend</div>
-                                <code style="white-space:normal;">Order ID: 123001 (or Leave Blank)</code>
+                                <code style="white-space:normal;">Order ID: 33535665 (or Leave Blank)</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px solid #eee;">
                                 <div style="font-weight:500;">Scenario 2: Cannot Amend</div>
-                                <code style="white-space:normal;">Order ID: 123008</code>
+                                <code style="white-space:normal;">Order ID: 0033502481</code>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:4px;">
                                 <div style="font-weight:500;">Scenario 3: Not Found</div>
-                                <code style="white-space:normal;">Order ID: 9999</code>
+                                <code style="white-space:normal;">Order ID: 7265</code>
                             </div>
                         </div>
                     </div>
@@ -2066,10 +2060,10 @@
                         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>123, 4010</td><td>Stock found (1,250 cases)</td></tr>
-                            <tr><td>456, 4010</td><td>Zero stock (0 cases)</td></tr>
-                            <tr><td>789, 5555</td><td>Access Restricted</td></tr>
-                            <tr><td>999, 9999</td><td>Not found</td></tr>
+                            <tr><td>1000011358, 7265</td><td>Stock found (1,250 cases)</td></tr>
+                            <tr><td>1000011358, 7265</td><td>Zero stock (0 cases)</td></tr>
+                            <tr><td>1000011358, 7265</td><td>Access Restricted</td></tr>
+                            <tr><td>999, 7265</td><td>Not found</td></tr>
                         </table>
                     </div>
                     `;
@@ -2080,8 +2074,8 @@
                         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>3010, Last 7 days</td><td>9 orders found</td></tr>
-                            <tr><td>3010, Last 30 days</td><td>None found</td></tr>
+                            <tr><td>IN01, Last 7 Days</td><td>9 orders found</td></tr>
+                            <tr><td>IN01, Last 30 Days</td><td>None found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -2093,8 +2087,8 @@
                         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>3010, Last 7 days</td><td>4 orders found</td></tr>
-                            <tr><td>3010, Last 30 days</td><td>None found</td></tr>
+                            <tr><td>IN01, Last 7 Days</td><td>4 orders found</td></tr>
+                            <tr><td>IN01, Last 30 Days</td><td>None found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -2105,8 +2099,8 @@
                         <h4>Demo Helper: Valid Inputs</h4>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>100234, Yesterday, 3010</td><td>12 orders found</td></tr>
-                            <tr><td>100234, Last Week, 3010</td><td>None found</td></tr>
+                            <tr><td>33535511, Yesterday, IN01</td><td>12 orders found</td></tr>
+                            <tr><td>33535511, Last Week, IN01</td><td>None found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -2117,8 +2111,8 @@
                         <h4>Demo Helper: Valid Inputs</h4>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>April 16, 2026, 3010</td><td>8 orders found</td></tr>
-                            <tr><td>April 17, 2026, 3010</td><td>None found</td></tr>
+                            <tr><td>April 16, 2026, IN01</td><td>8 orders found</td></tr>
+                            <tr><td>April 17, 2026, IN01</td><td>None found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -2129,7 +2123,7 @@
                         <h4>Demo Helper: Valid Inputs</h4>
                         <table class="helper-table">
                             <tr><th>Input (Customer ID)</th><th>Result</th></tr>
-                            <tr><td>100234</td><td>5 orders found</td></tr>
+                            <tr><td>33535511</td><td>5 orders found</td></tr>
                             <tr><td>100235</td><td>No open orders</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
@@ -2153,7 +2147,7 @@
                         <h4>Demo Helper: Valid Inputs</h4>
                         <table class="helper-table">
                             <tr><th>Input (Order/PO)</th><th>Result</th></tr>
-                            <tr><td>123456</td><td>Fully open</td></tr>
+                            <tr><td>1000011358</td><td>Fully open</td></tr>
                             <tr><td>123457</td><td>Delivery created</td></tr>
                             <tr><td>123458</td><td>Loaded/Shipped</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
@@ -2166,8 +2160,8 @@
                         <h4>Demo Helper: Valid Inputs</h4>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>This Month, 3010</td><td>Ranked list found</td></tr>
-                            <tr><td>Last Month, 3010</td><td>No shortages found</td></tr>
+                            <tr><td>This Month, IN01</td><td>Ranked list found</td></tr>
+                            <tr><td>Last Month, IN01</td><td>No shortages found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -2204,8 +2198,8 @@
                         <h4>Demo Helper: Valid Inputs</h4>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>200, This Week, 3010</td><td>27 orders found</td></tr>
-                            <tr><td>200, Last Week, 3010</td><td>None found</td></tr>
+                            <tr><td>200, This Week, IN01</td><td>27 orders found</td></tr>
+                            <tr><td>200, Last Week, IN01</td><td>None found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -2217,8 +2211,8 @@
                         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>3010, Next 2 days</td><td>3 orders found</td></tr>
-                            <tr><td>3010, Next 5 days</td><td>None found</td></tr>
+                            <tr><td>IN01, Next 2 days</td><td>3 orders found</td></tr>
+                            <tr><td>IN01, Next 5 days</td><td>None found</td></tr>
                             <tr><td>Any other</td><td>Not found / Error</td></tr>
                         </table>
                     </div>
@@ -2230,8 +2224,8 @@
                         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Try these dummy inputs:</div>
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
-                            <tr><td>100234, 4010, June 2026</td><td>Fill rate calculated</td></tr>
-                            <tr><td>100234, 4010, May 2026</td><td>No orders in period</td></tr>
+                            <tr><td>33535511, 7265, June 2026</td><td>Fill rate calculated</td></tr>
+                            <tr><td>33535511, 7265, May 2026</td><td>No orders in period</td></tr>
                             <tr><td>Any other</td><td>Not found / No match</td></tr>
                         </table>
                     </div>
@@ -2244,7 +2238,7 @@
                         <table class="helper-table">
                             <tr><th>Input</th><th>Result</th></tr>
                             <tr><td>org 1234</td><td>Shortages found</td></tr>
-                            <tr><td>org 9999</td><td>No shortages found</td></tr>
+                            <tr><td>org 7265</td><td>No shortages found</td></tr>
                             <tr><td>Any other</td><td>Invalid organization</td></tr>
                         </table>
                     </div>
@@ -2458,7 +2452,7 @@
                         responseHtml = '<div class="ai-text-content">I have generated the Excel report. <a href="#" style="color: var(--accent-color); font-weight: 500;">Click here to download report.xlsx</a></div>';
                         break;
                     case 'Contact Warehouse':
-                        responseHtml = '<div class="ai-text-content">I am pinging the warehouse manager (Plant 4010) on Teams. What message would you like to send them?</div>';
+                        responseHtml = '<div class="ai-text-content">I am pinging the warehouse manager (Plant 7265) on Teams. What message would you like to send them?</div>';
                         break;
                     case 'Check production schedule':
                         responseHtml = '<div class="ai-text-content">The next production run for this SKU is scheduled for tomorrow at 06:00 AM. Expected yield is 5,000 cases.</div>';
@@ -2565,49 +2559,43 @@
         // 20+ EXPANDED SCENARIOS
         const orderScenarios = {
             // 1. Cancelled / Rejected
-            '123001': {
-                title: 'Cancelled / Rejected', badge: 'CANCELLED', badgeClass: 'delayed', timeline: buildTimeline('CANCELLED', {1: 'Customer Serv.'}),
-                text: 'Order 123001 has been cancelled - all line items were rejected.', table: `<tr><td class="label">Order Placed</td><td class="value">April 10, 2026</td></tr><tr><td class="label">Cancellation Date</td><td class="value" style="color: var(--danger);">April 11, 2026</td></tr><tr><td class="label">Reason</td><td class="value" style="color: var(--danger);">Customer requested cancellation (Z01)</td></tr>`, tables: 'Order Header Data, Order Items Data'
-            },
+            
             // 2. Credit Hold
-            '123002': {
-                title: 'Blocks before delivery creation', badge: 'CREDIT HOLD', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Credit Team'}),
-                text: 'Order 123002 is currently on credit hold and cannot proceed until released by the Credit team.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Total Value</td><td class="value">$45,200.00</td></tr><tr><td class="label">Credit Status</td><td class="value" style="color: var(--danger);">Not Approved</td></tr>`, tables: 'Order Header Data, Credit Status Data'
+            '61161208': {
+                title: 'Blocks before delivery creation', badge: 'CREDIT HOLD', badgeClass: 'delayed', followUps: ['What is the block ID and description?', 'Who releases this block?', 'Can this order still be amended while it is held?'], timeline: buildTimeline('BLOCKED', {1: 'Credit Team'}),
+                text: 'Order 61161208 is currently on credit hold and cannot proceed until released by the Credit team.', table: `<tr><td class="label">Order Placed</td><td class="value">April 12, 2026</td></tr><tr><td class="label">Total Value</td><td class="value">$45,200.00</td></tr><tr><td class="label">Credit Status</td><td class="value" style="color: var(--danger);">Not Approved</td></tr>`, tables: 'Order Header Data, Credit Status Data'
             },
             // 3. Delivery Block
-            '123003': {
-                title: 'Blocks before delivery creation', badge: 'DELIVERY BLOCK', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Logistics'}),
-                text: 'Order 123003 has a delivery block (Z2 - Missing Routing Info) and has not been processed for delivery note creation.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Delivery Block</td><td class="value" style="color: var(--danger);">Z2 - Missing Routing Info</td></tr>`, tables: 'Order Header Data'
+            '33535511': {
+                title: 'Blocks before delivery creation', badge: 'DELIVERY BLOCK', badgeClass: 'delayed', followUps: ['What is the block ID and description?', 'Who releases this block?', 'Can this order still be amended while it is held?'], timeline: buildTimeline('BLOCKED', {1: 'Logistics'}),
+                text: 'Order 33535511 has a delivery block (Z2 - Missing Routing Info) and has not been processed for delivery note creation.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Delivery Block</td><td class="value" style="color: var(--danger);">Z2 - Missing Routing Info</td></tr>`, tables: 'Order Header Data'
             },
             // 4. Billing Block
-            '123004': {
-                title: 'Blocks before delivery creation', badge: 'BILLING BLOCK', badgeClass: 'delayed', timeline: buildTimeline('BLOCKED', {1: 'Finance'}),
-                text: 'Order 123004 is on billing block (04 - Check pricing) and has not been processed for delivery note creation.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Billing Block</td><td class="value" style="color: var(--danger);">04 - Check pricing</td></tr>`, tables: 'Order Header Data'
+            '61161256': {
+                title: 'Blocks before delivery creation', badge: 'BILLING BLOCK', badgeClass: 'delayed', followUps: ['What is the block ID and description?', 'Who releases this block?', 'Can this order still be amended while it is held?'], timeline: buildTimeline('BLOCKED', {1: 'Finance'}),
+                text: 'Order 61161256 is on billing block (04 - Check pricing) and has not been processed for delivery note creation.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Billing Block</td><td class="value" style="color: var(--danger);">04 - Check pricing</td></tr>`, tables: 'Order Header Data'
             },
             // 5. Open - Not Yet Allocated
-            '123005': {
-                title: 'Open - Not Yet Allocated', badge: 'OPEN', badgeClass: 'processing', followUps: ['Contact Sales', 'Cancel Order'], timeline: buildTimeline(1, {1: 'System'}),
-                text: 'Order 123005 is open; no delivery exist yet. Estimated shipping date: April 16, 2026.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Estimated Shipping</td><td class="value">April 16, 2026</td></tr>`, tables: 'Order Header Data, Order Items Data'
+            '33535372': {
+                title: 'Open - Not Yet Allocated', badge: 'OPEN', badgeClass: 'processing', followUps: ['Can this order still be amended?', 'Is the confirmed quantity short against what was ordered?', 'Is this order already past its planned loading date?'], timeline: buildTimeline(1, {1: 'System'}),
+                text: 'Order 33535372 is open; no delivery exist yet. Estimated shipping date: April 16, 2026.', table: `<tr><td class="label">Order Placed</td><td class="value">April 14, 2026</td></tr><tr><td class="label">Estimated Shipping</td><td class="value">April 16, 2026</td></tr>`, tables: 'Order Header Data, Order Items Data'
             },
             // 6. Delivery Created - no PGI'd
-            '123006': {
-                title: 'Delivery Created - no PGI\'d', badge: 'DELIVERY CREATED', badgeClass: 'processing', followUps: ['Contact Warehouse', 'Request Rush'], timeline: buildTimeline(2, {1: 'System', 2: 'Warehouse'}),
-                text: 'Order 123006 has delivery 0080012345. Estimated shipping date: April 16, 2026.', table: `<tr><td class="label">Delivery No.</td><td class="value">0080012345</td></tr><tr><td class="label">Estimated Shipping</td><td class="value">April 16, 2026</td></tr>`, tables: 'Order Header Data, Delivery Header Data'
+            '33535665': {
+                title: 'Delivery Created - no PGI\'d', badge: 'DELIVERY CREATED', badgeClass: 'processing', followUps: ['Which deliveries and lines exist on this order?', 'Can this order still be amended at this stage?', 'Was the confirmed quantity short at delivery creation?'], timeline: buildTimeline(2, {1: 'System', 2: 'Warehouse'}),
+                text: 'Order 33535665 has delivery 0080012345. Estimated shipping date: April 16, 2026.', table: `<tr><td class="label">Delivery No.</td><td class="value">0080012345</td></tr><tr><td class="label">Estimated Shipping</td><td class="value">April 16, 2026</td></tr>`, tables: 'Order Header Data, Delivery Header Data'
             },
             // 7. Shipment Created - no PGI'd
-            '123007': {
-                title: 'Shipment Created - no PGI\'d', badge: 'SHIPMENT CREATED', badgeClass: 'processing', followUps: ['Track Shipment', 'Contact Carrier'], timeline: buildTimeline(2, {1: 'System', 2: 'Logistics'}),
-                text: 'Order 123007 has delivery 0080012345, shipment 7891011. Estimated shipping date: April 16, 2026.', table: `<tr><td class="label">Delivery No.</td><td class="value">0080012345</td></tr><tr><td class="label">Shipment No.</td><td class="value">7891011</td></tr><tr><td class="label">Carrier</td><td class="value">FedEx Freight</td></tr>`, tables: 'Delivery Header Data, Shipment Data'
-            },
+            
             // 8. Loaded / Shipped - Not Yet Billed
-            '123008': {
-                title: 'Loaded / Shipped - Not Yet Billed', badge: 'SHIPPED', badgeClass: 'shipped', followUps: ['Track Shipment', 'Contact Carrier', 'Request Invoice'], timeline: buildTimeline(3, {1: 'System', 2: 'Warehouse', 3: 'Logistics'}),
-                text: 'Order 123008 was shipped on April 16, 2026. Invoicing is still pending.', table: `<tr><td class="label">Actual GI Date</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value">Pending</td></tr>`, tables: 'Delivery Header Data, Shipment Data'
+            '0033502481': {
+                title: 'Loaded / Shipped - Not Yet Billed', badge: 'SHIPPED', badgeClass: 'shipped', followUps: ['When is this expected to be invoiced?', 'Can they get proof of delivery or the shipping paperwork?', 'Did the shipped quantity match what was confirmed?'], timeline: buildTimeline(3, {1: 'System', 2: 'Warehouse', 3: 'Logistics'}),
+                text: 'Order 0033502481 was shipped on April 16, 2026. Invoicing is still pending.', table: `<tr><td class="label">Actual GI Date</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice Status</td><td class="value">Pending</td></tr>`, tables: 'Delivery Header Data, Shipment Data'
             },
             // 9. Loaded and Billed - Complete
-            '123009': {
-                title: 'Loaded and Billed - Complete', badge: 'COMPLETE', badgeClass: 'delivered', followUps: ['View Invoice (PDF)', 'Contact Carrier', 'Order Again'], timeline: buildTimeline(3, {1: 'System', 2: 'Warehouse', 3: 'Finance'}),
-                text: 'Order 123009 was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.', table: `<tr><td class="label">Actual GI Date</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice No.</td><td class="value">0090004567</td></tr><tr><td class="label">Invoice Date</td><td class="value">April 17, 2026</td></tr>`, tables: 'Delivery Header Data, Billing Document Data'
+            '0033502413': {
+                title: 'Loaded and Billed - Complete', badge: 'COMPLETE', badgeClass: 'delivered', followUps: ['Can they get a copy of the invoice?', 'Did the shipped quantity match what was confirmed?', 'What else was billed on that date?'], timeline: buildTimeline(3, {1: 'System', 2: 'Warehouse', 3: 'Finance'}),
+                text: 'Order 0033502413 was shipped on April 16, 2026, invoice 0090004567 was issued on April 17, 2026. This order is complete.', table: `<tr><td class="label">Actual GI Date</td><td class="value">April 16, 2026</td></tr><tr><td class="label">Invoice No.</td><td class="value">0090004567</td></tr><tr><td class="label">Invoice Date</td><td class="value">April 17, 2026</td></tr>`, tables: 'Delivery Header Data, Billing Document Data'
             }
         };
 
@@ -2687,7 +2675,7 @@
                         handleOptionClick(value, 'Q1_INITIAL', true);
                     }
                 } else if (stateContext === 'Q1_CUSTOMER') {
-                    const customerName = value.includes('ABC') ? 'ABC Company' : 'Walmart';
+                    const customerName = value.includes('ABC') ? 'CHETNA' : 'CHETNA';
                     appendAIOptions(`I found the customer ${customerName}. In the last month we received 10 orders from the customer and 2 are in open state. Please select an order to view its status:`, [
                         {label: 'Order #12345 (Placed 2 days ago)', value: '12345'},
                         {label: 'Order #98765 (Placed last week)', value: '98765'}
@@ -2701,7 +2689,7 @@
                     } else {
                         appendAIMessage('Understood. Is there anything else I can help you with?', null, null, true);
                     }
-                    appendFollowUpActions(['View Invoice (PDF)', 'Contact Carrier']);
+                    appendFollowUpActions(['Why was each line rejected?', 'Was a replacement order raised?', 'Can this order be reinstated?']);
                     waitingForInput = null;
                 }
             }, 800);
@@ -2731,7 +2719,7 @@
                     </div>
                 `;
                 appendAIMessage(finalHtml, null, null, true);
-                let followUps = sc.followUps || ['View Invoice (PDF)', 'Contact Carrier'];
+                let followUps = sc.followUps || ['Why was each line rejected?', 'Was a replacement order raised?', 'Can this order be reinstated?'];
                 if (sc.badgeClass === 'danger' || sc.badgeClass === 'delayed') {
                     if(!sc.followUps) followUps.unshift('Escalate to Supervisor');
                 }
@@ -2775,30 +2763,6 @@
         }
 
         // FLOW: Pull all orders in status
-        function pullAllOrdersInStatus() {
-            resetChat();
-            if(initialState) initialState.style.display = 'none';
-            appendUserMessage("Give me a list of all orders for a product and their status");
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                appendAIMessage(`
-                    <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                        <div>
-                            Which product and what status would you like me to check?
-                            <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
-                        </div>
-                        <div class="inline-input-container">
-                            <input type="text" placeholder="Product (e.g. potatoes)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
-                            <input type="text" placeholder="Status (e.g. shipped)" class="inline-input" onkeypress="handleInlineEnter(event, 'PRODUCT_STATUS')">
-                            <button class="inline-submit-btn" onclick="handleInlineSend('PRODUCT_STATUS', this)">Submit</button>
-                        </div>
-                    </div>
-                `, modalId, 'PRODUCT_STATUS');
-                waitingForInput = 'PRODUCT_STATUS';
-            }, 800);
-        }
 
         // FLOW: Inventory
         function startInventoryFlow() {
@@ -2815,8 +2779,8 @@
                             What is the current on-hand stock for a specific SKU at a plant/warehouse, and how many open orders exist against it? Please provide the details below.
                         </div>
                         <div class="inline-input-container" style="display: flex; gap: 8px; flex-direction: row; background: transparent; border: none; padding: 0;">
-                            <input type="text" placeholder="SKU (e.g. 123)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
-                            <input type="text" placeholder="Plant ID (e.g. 4010)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                            <input type="text" placeholder="SKU (e.g. 1000011358)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                            <input type="text" placeholder="Plant ID (e.g. 7265)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
                             <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK', this)">Submit</button>
                         </div>
                     </div>
@@ -2837,12 +2801,12 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
-                } else if (input.includes('3010')) {
-                    text = `I found 5 orders that have shipped but haven't been invoiced yet for Sales Org 3010 in the selected period.`;
+                } else if (input.includes('IN01')) {
+                    text = `I found 5 orders that have shipped but haven't been invoiced yet for IN01 in the selected period.`;
                     badge = '<span class="status-badge delayed">UNBILLED ORDERS</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
@@ -2884,13 +2848,13 @@
                 hideLoading();
                 appendAIMessage(`I can check for shipped but unbilled orders. What Time Period should I look at (e.g. Last 7 Days), and do you want to specify a Sales Org?
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('Last 7 Days, Org 3010', 'Q8_UNBILLED')">Last 7 Days, Org 3010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Last 7 Days, Org IN01', 'Q8_UNBILLED')">Last 7 Days, Org IN01</button>
                                 <button class="chat-option-btn" onclick="handleOptionClick('This Month, All Orgs', 'Q8_UNBILLED')">This Month, All Orgs</button>
                             </div>
                             <div class="inline-input-container">
                                 <input type="date" class="inline-input" style="flex: 0 0 130px; cursor: pointer; color: var(--text-secondary);" title="Select a Specific Date" onchange="this.nextElementSibling.value = this.value">
                                 <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q8_UNBILLED')">
-                                <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q8_UNBILLED')">
+                                <input type="text" placeholder="Sales Org (Optional, e.g. IN01)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q8_UNBILLED')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q8_UNBILLED', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -2909,12 +2873,12 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Sorry, I couldn't find any orders matching that criteria - please double check the sales org, customer, or PO number.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
-                } else if (input.includes('3010')) {
-                    text = `I found 4 orders that shipped short (shipped qty is less than confirmed qty) for Sales Org 3010 in the selected period.`;
+                } else if (input.includes('IN01')) {
+                    text = `I found 4 orders that shipped short (shipped qty is less than confirmed qty) for IN01 in the selected period.`;
                     badge = '<span class="status-badge delayed">SHIP SHORT</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
@@ -2926,9 +2890,9 @@
                             <div class="data-card-body">
                                 <table class="data-table">
                                     <tr><th>SAP Order #</th><th>Product</th><th>Name</th><th>Shorted Qty</th></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">332211</a></td><td>1001</td><td>Fries 1</td><td>5 cases</td></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">332212</a></td><td>1002</td><td>Fries 2</td><td>10 cases</td></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">332213</a></td><td>1003</td><td>Wedges 1</td><td>2 cases</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">332211</a></td><td>33535511</td><td>Fries 1</td><td>5 cases</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">332212</a></td><td>33535512</td><td>Fries 2</td><td>10 cases</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">332213</a></td><td>33535513</td><td>Wedges 1</td><td>2 cases</td></tr>
                                     <tr><td><a href="#" style="color:var(--primary);">332214</a></td><td>1004</td><td>Tots 1</td><td>8 cases</td></tr>
                                 </table>
                             </div>
@@ -2964,7 +2928,7 @@
                                     <option value="Order Date">Order Date</option>
                                 </select>
                                 <input type="text" placeholder="Date Range (e.g. Last 7 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q9_SHIP_SHORT')">
-                                <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q9_SHIP_SHORT')">
+                                <input type="text" placeholder="Sales Org (Optional, e.g. IN01)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q9_SHIP_SHORT')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q9_SHIP_SHORT', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -2983,7 +2947,7 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Customer ID not recognized.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
@@ -2992,7 +2956,7 @@
                     badge = '<span class="status-badge healthy">NONE FOUND</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
                 } else {
-                    text = `I found 3 open orders for Customer 100234.`;
+                    text = `I found 3 open orders for Customer 33535511.`;
                     badge = '<span class="status-badge healthy">OPEN ORDERS</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
@@ -3026,7 +2990,7 @@
                 hideLoading();
                 appendAIMessage(`I can pull open orders with weight and pallet details. Please provide the Customer ID or Name. I will base this on all currently open orders unless you specify a date range.
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('Cust 100234', 'Q16_WEIGHT')">Cust 100234</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Cust 33535511', 'Q16_WEIGHT')">Cust 33535511</button>
                                 <button class="chat-option-btn" onclick="handleOptionClick('Cust 999111', 'Q16_WEIGHT')">Cust 999111</button>
                             </div>
                             <div class="inline-input-container">
@@ -3075,16 +3039,16 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Order not found.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
-                } else if (input.includes('123008')) {
-                    text = `No, order 123008 has already shipped and cannot be amended.`;
+                } else if (input.includes('0033502481')) {
+                    text = `No, order 0033502481 has already shipped and cannot be amended.`;
                     badge = '<span class="status-badge healthy">CANNOT AMEND</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
                 } else {
-                    text = `Yes, order 123001 is open and can be amended.`;
+                    text = `Yes, order 33535372 is open and can be amended.`;
                     badge = '<span class="status-badge healthy">CAN AMEND</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
                 }
@@ -3103,8 +3067,8 @@
                 hideLoading();
                 appendAIMessage(`I can check the status of an order to see if it can be amended. Please provide the SAP Order Number or PO Number.
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('Order 123456', 'Q19_AMEND')">Order 123456</button>
-                                <button class="chat-option-btn" onclick="handleOptionClick('PO-9999', 'Q19_AMEND')">PO-9999</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Order 1000011358', 'Q19_AMEND')">Order 1000011358</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('PO-7265', 'Q19_AMEND')">PO-7265</button>
                             </div>
                             <div class="inline-input-container">
                                 <input type="text" placeholder="SAP Order or PO Number" class="inline-input" onkeypress="handleInlineEnter(event, 'Q19_AMEND')">
@@ -3126,7 +3090,7 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Sales Org not recognized.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
@@ -3135,7 +3099,7 @@
                     badge = '<span class="status-badge healthy">NONE FOUND</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
                 } else {
-                    text = `Here are the customers most impacted by shortages for Sales Org 3010.`;
+                    text = `Here are the customers most impacted by shortages for IN01.`;
                     badge = '<span class="status-badge healthy">SHORTAGE IMPACT</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
@@ -3169,7 +3133,7 @@
                 hideLoading();
                 appendAIMessage(`I can rank the customers impacted by shortages. Should I look at orders by their estimated loading date or by when the order was placed? And what date range?
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('Loading Date: This Week, Org 3010', 'Q17_SHORTAGE_IMPACT')">Loading Date: This Week, Org 3010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Loading Date: This Week, Org IN01', 'Q17_SHORTAGE_IMPACT')">Loading Date: This Week, Org IN01</button>
                                 <button class="chat-option-btn" onclick="handleOptionClick('Order Date: Last Month, All Orgs', 'Q17_SHORTAGE_IMPACT')">Order Date: Last Month, All Orgs</button>
                             </div>
                             <div class="inline-input-container">
@@ -3197,7 +3161,7 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('invalid') || input.includes('9999')) {
+                if (input.includes('invalid') || input.includes('7265')) {
                     text = `Sorry, that date format is not recognized.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
@@ -3311,7 +3275,7 @@
                 let finalHtml = '';
                 let badge = '';
                 
-                if (salesOrg.includes('9999')) {
+                if (salesOrg.includes('7265')) {
                     // Scenario 3: Unauthorized / Not Found
                     text = `Sorry, I couldn't find that plant or sales organization, or you don't have access to it.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
@@ -3320,7 +3284,7 @@
                         <div class="ai-text-content">${text}</div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Sales Org']);
+                    appendFollowUpActions(['Open one of these orders in full', 'How many days past due is each one?', 'Which are held by a block?']);
                 } else if (timeFrame.toLowerCase().includes('last month')) {
                     // Scenario 2: None found
                     text = `No past-due CPU orders are currently open for that plant and time frame.`;
@@ -3330,10 +3294,10 @@
                         <div class="ai-text-content">${text}</div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different sales org']);
+                    appendFollowUpActions(['Open one of these orders in full', 'How many days past due is each one?', 'Which are held by a block?']);
                 } else {
                     // Scenario 1: Orders found
-                    text = `I found 6 past-due CPU orders not yet PGI'd for plant 4010 in the selected period.`;
+                    text = `I found 6 past-due CPU orders not yet PGI'd for plant 7265 in the selected period.`;
                     badge = '<span class="status-badge delayed">PAST DUE ORDERS</span>';
                     
                     const tableHtml = `
@@ -3368,7 +3332,7 @@
                         </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Resolve credit holds', 'Export to Excel']);
+                    appendFollowUpActions(['Open one of these orders in full', 'How many days past due is each one?', 'Which are held by a block?']);
                 }
                 
                 waitingForInput = null;
@@ -3386,7 +3350,7 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Sorry, product ID not recognized.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
@@ -3430,7 +3394,7 @@
                 appendAIMessage(`I can find unshipped orders by product. Please provide the Product ID or Name. Do you want to narrow the search by Shipping Plant?
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
                                 <button class="chat-option-btn" onclick="handleOptionClick('SKU 456789, All Plants', 'Q13_UNSHIPPED')">SKU 456789, All Plants</button>
-                                <button class="chat-option-btn" onclick="handleOptionClick('Premium Fries, Plant 4010', 'Q13_UNSHIPPED')">Premium Fries, Plant 4010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Premium Fries, Plant 7265', 'Q13_UNSHIPPED')">Premium Fries, Plant 7265</button>
                             </div>
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Product ID or Name" class="inline-input" onkeypress="handleInlineEnter(event, 'Q13_UNSHIPPED')">
@@ -3453,7 +3417,7 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Sorry, I couldn't run that search - customer not recognized.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
@@ -3497,12 +3461,12 @@
                 appendAIMessage(`I can pull a list of billed orders. What time frame should I look at (e.g. Yesterday), and do you want to filter by a specific Customer?
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
                                 <button class="chat-option-btn" onclick="handleOptionClick('Yesterday, All Customers', 'Q11_BILLED')">Yesterday, All Customers</button>
-                                <button class="chat-option-btn" onclick="handleOptionClick('Last Week, Cust 100234', 'Q11_BILLED')">Last Week, Cust 100234</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Last Week, Cust 33535511', 'Q11_BILLED')">Last Week, Cust 33535511</button>
                             </div>
                             <div class="inline-input-container">
                                 <input type="date" class="inline-input" style="flex: 0 0 130px; cursor: pointer; color: var(--text-secondary);" title="Select a Specific Date" onchange="this.nextElementSibling.value = this.value">
                                 <input type="text" placeholder="Time Frame (e.g. Yesterday)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q11_BILLED')">
-                                <input type="text" placeholder="Customer (Optional, e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q11_BILLED')">
+                                <input type="text" placeholder="Customer (Optional, e.g. 33535511)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q11_BILLED')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q11_BILLED', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -3511,88 +3475,7 @@
         }
 
         
-        function startNonFullPalletFlow() {
-            resetChat();
-            if(initialState) initialState.style.display = 'none';
-            appendUserMessage("For plant xx, give me a list of orders where SKUs are not ordered in full pallet quantities.");
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                appendAIMessage(`I can find orders that don't match full pallet quantities. Do you want me to look at all currently open orders, or only orders created in a specific date range? And which plant?
-                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('All Open Orders, Plant 4010', 'Q5_NON_FULL')">All Open Orders, Plant 4010</button>
-                                <button class="chat-option-btn" onclick="handleOptionClick('This Month, All Plants', 'Q5_NON_FULL')">This Month, All Plants</button>
-                            </div>
-                            <div class="inline-input-container">
-                                <input type="text" placeholder="Date Range (e.g. All Open)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q5_NON_FULL')">
-                                <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q5_NON_FULL')">
-                                <button class="inline-submit-btn" onclick="handleInlineSend('Q5_NON_FULL', this)">Submit</button>
-                            </div>
-                        `, null, null, false);
-                waitingForInput = 'Q5_NON_FULL';
-            }, 800);
-        }
 
-        function resolveNonFullPalletFlow(input) {
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
-                let text = '';
-                let finalHtml = '';
-                let badge = '';
-                let plant = input.match(/4010/i) ? '4010' : 'all authorized plants';
-                
-                if (r < 0.7) {
-                    text = `I found 5 open order lines at plant ${plant} that are not in full pallet quantities.`;
-                    badge = '<span class="status-badge delayed">NON-FULL PALLETS</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>Order #</th><th>SKU</th><th>Ordered Qty</th><th>Pallet Conv.</th><th>Mismatch</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">523456</a></td><td>SKU 123</td><td>1150 CS</td><td>50 CS/Pallet</td><td style="color:var(--danger);">23 Pallets + 0 CS</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">523457</a></td><td>SKU 999</td><td>525 CS</td><td>50 CS/Pallet</td><td style="color:var(--danger);">10 Pallets + 25 CS</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">523458</a></td><td>SKU 444</td><td>2040 CS</td><td>100 CS/Pallet</td><td style="color:var(--danger);">20 Pallets + 40 CS</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">523459</a></td><td>SKU 222</td><td>480 CS</td><td>50 CS/Pallet</td><td style="color:var(--danger);">9 Pallets + 30 CS</td></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">523460</a></td><td>SKU 111</td><td>80 CS</td><td>50 CS/Pallet</td><td style="color:var(--danger);">1 Pallet + 30 CS</td></tr>
-                    `;
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Non-Full Pallet Orders</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body">
-                                <table class="data-table">
-                                    ${tableHtml}
-                                </table>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'Send to Logistics']);
-                } else {
-                    text = `Sorry, I couldn't find that plant, or you don't have access to it.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Plant']);
-                }
-                
-                waitingForInput = null;
-            }, 800);
-        }
 
         
         function resolveSmallOrdersFlow(input) {
@@ -3605,7 +3488,7 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Sorry, Sales Org not recognized or you don't have access.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
@@ -3647,13 +3530,13 @@
                 hideLoading();
                 appendAIMessage(`I can look for orders with less than 200 cases. What order creation date range should I check? (e.g., this week, this month), and for which Sales Org?
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('This Week, Org 3010', 'Q12_SMALL')">This Week, Org 3010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('This Week, Org IN01', 'Q12_SMALL')">This Week, Org IN01</button>
                                 <button class="chat-option-btn" onclick="handleOptionClick('This Month, All Orgs', 'Q12_SMALL')">This Month, All Orgs</button>
                             </div>
                             <div class="inline-input-container">
                                 <input type="date" class="inline-input" style="flex: 0 0 130px; cursor: pointer; color: var(--text-secondary);" title="Select a Specific Date" onchange="this.nextElementSibling.value = this.value">
                                 <input type="text" placeholder="Time Frame (e.g. This Week)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q12_SMALL')">
-                                <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q12_SMALL')">
+                                <input type="text" placeholder="Sales Org (Optional, e.g. IN01)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q12_SMALL')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q12_SMALL', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -3672,12 +3555,12 @@
                 
                 if (!input) input = "";
                 
-                if (input.includes('9999')) {
+                if (input.includes('7265')) {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
-                } else if (input.includes('3010') || !input) {
-                    text = `I found 3 orders shipping in the next 2 days that are on credit hold for Sales Org 3010.`;
+                } else if (input.includes('IN01') || !input) {
+                    text = `I found 3 orders shipping in the next 2 days that are on credit hold for IN01.`;
                     badge = '<span class="status-badge delayed">ON BLOCK</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
@@ -3717,13 +3600,13 @@
                 hideLoading();
                 appendAIMessage(`I can find orders on block. What time frame are you looking for, and do you want to narrow it down by Sales Org?
                             <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('Next 2 Days, Org 3010', 'Q10_BLOCKED')">Next 2 Days, Org 3010</button>
+                                <button class="chat-option-btn" onclick="handleOptionClick('Next 2 Days, Org IN01', 'Q10_BLOCKED')">Next 2 Days, Org IN01</button>
                                 <button class="chat-option-btn" onclick="handleOptionClick('Next 7 Days, All Orgs', 'Q10_BLOCKED')">Next 7 Days, All Orgs</button>
                             </div>
                             <div class="inline-input-container">
                                 <input type="date" class="inline-input" style="flex: 0 0 130px; cursor: pointer; color: var(--text-secondary);" title="Select a Specific Date" onchange="this.nextElementSibling.value = this.value">
                                 <input type="text" placeholder="Time Frame (e.g. Next 2 Days)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q10_BLOCKED')">
-                                <input type="text" placeholder="Sales Org (Optional, e.g. 3010)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q10_BLOCKED')">
+                                <input type="text" placeholder="Sales Org (Optional, e.g. IN01)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q10_BLOCKED')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q10_BLOCKED', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -3732,204 +3615,10 @@
         }
 
         
-        function resolveFillRateFlow(input) {
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
-                let text = '';
-                let finalHtml = '';
-                let badge = '';
-                
-                let customer = input.match(/100234/i) ? '100234' : '999999';
-                let plant = input.match(/4010/i) ? '4010' : 'All Plants';
-                
-                if (r < 0.5) {
-                    text = `Customer ${customer}'s fill rate at plant ${plant} for June 2026 was 94.2% (11,100 of 11,300 cases shipped).`;
-                    badge = '<span class="status-badge healthy">94.2% FILL RATE</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Fill Rate Analysis</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body" style="display: flex; gap: 20px;">
-                                <div><strong>Customer:</strong> ${customer}</div>
-                                <div><strong>Plant:</strong> ${plant}</div>
-                                <div><strong>Ordered:</strong> 11,300 CS</div>
-                                <div><strong>Delivered:</strong> 11,100 CS</div>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['View shortage details', 'Export Data']);
-                } else if (r < 0.8) {
-                    text = `I didn't find any orders for customer ${customer} at plant ${plant} in the period you selected, so a fill rate can't be calculated.`;
-                    badge = '<span class="status-badge neutral">NO ACTIVITY</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different customer']);
-                } else {
-                    text = `Sorry, I couldn't find that customer/plant combination. Please confirm the customer ID and plant.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another search']);
-                }
-                
-                waitingForInput = null;
-            }, 800);
-        }
 
         
-        function startPurchaseHistoryFlow() {
-            resetChat();
-            if(initialState) initialState.style.display = 'none';
-            appendUserMessage("List products purchased by customer [XXXX] and the producing plant for each, for [time frame].");
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                appendAIMessage(`I can pull the purchase history. Please provide the Customer ID or Name. Do you want the last 12 months of purchase history, or a different time period?
-                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('Cust 100234, Last 12 Months', 'Q7_PURCHASE')">Cust 100234, Last 12 Months</button>
-                                <button class="chat-option-btn" onclick="handleOptionClick('ABC Foods, This Year', 'Q7_PURCHASE')">ABC Foods, This Year</button>
-                            </div>
-                            <div class="inline-input-container">
-                                <input type="text" placeholder="Customer ID or Name" class="inline-input" onkeypress="handleInlineEnter(event, 'Q7_PURCHASE')">
-                                <input type="date" class="inline-input" style="flex: 0 0 130px; cursor: pointer; color: var(--text-secondary);" title="Select a Specific Date" onchange="this.nextElementSibling.value = this.value">
-                                <input type="text" placeholder="Time Frame (e.g. Last 12 Months)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q7_PURCHASE')">
-                                <button class="inline-submit-btn" onclick="handleInlineSend('Q7_PURCHASE', this)">Submit</button>
-                            </div>
-                        `, null, null, false);
-                waitingForInput = 'Q7_PURCHASE';
-            }, 800);
-        }
 
-        function resolvePurchaseHistoryFlow(input) {
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                const r = window.forceSuccess ? (window.forceSuccess = false, 0.1) : getDeterministicFloat(typeof id !== "undefined" ? id : (typeof input !== "undefined" ? input : ""));
-                let text = '';
-                let finalHtml = '';
-                let badge = '';
-                
-                const isAmbiguous = input.toLowerCase().includes('abc');
-                
-                if (isAmbiguous) {
-                    text = `I found more than one customer named 'ABC Foods' - did you mean 100234 (Toronto) or 100456 (Montreal)?`;
-                    badge = '<span class="status-badge neutral">MULTIPLE FOUND</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="chat-options-container" style="margin-top: 8px;">
-                            <button class="chat-option-btn" onclick="handleOptionClick('100234', 'Q7_PURCHASE')">100234 (Toronto)</button>
-                            <button class="chat-option-btn" onclick="handleOptionClick('100456', 'Q7_PURCHASE')">100456 (Montreal)</button>
-                        </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    waitingForInput = 'Q7_PURCHASE'; // Stay in the same state to handle the resolution
-                    return;
-                }
-                
-                if (r < 0.6) {
-                    text = `Customer 100234 purchased 12 SKUs in the last 12 months; here is each SKU and its producing plant.`;
-                    badge = '<span class="status-badge healthy">PURCHASE HISTORY</span>';
-                    
-                    const tableHtml = `
-                        <tr><th>Product ID</th><th>Description</th><th>Producing Plant</th></tr>
-                        <tr><td>SKU 123</td><td>Premium Fries</td><td>4010 - Toronto</td></tr>
-                        <tr><td>SKU 999</td><td>Wedges</td><td>4010 - Toronto</td></tr>
-                        <tr><td>SKU 444</td><td>Hashbrowns</td><td>1000 - Montreal</td></tr>
-                        <tr><td>SKU 222</td><td>Onion Rings</td><td>3010 - Vancouver</td></tr>
-                        <tr><td colspan="3" style="text-align:center; color:var(--text-secondary);">8 more rows available in export</td></tr>
-                    `;
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                        <div class="data-card" style="width: 100%;">
-                            <div class="data-card-header">
-                                <span class="data-card-title">Products Purchased</span>
-                                ${badge}
-                            </div>
-                            <div class="data-card-body">
-                                <table class="data-table">
-                                    ${tableHtml}
-                                </table>
-                            </div>
-                        </div>
-                    
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Item Data - <em>Last Updated: ${getTimestamp(5)}</em></div>
-                                </span>
-                            </div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'View order volumes']);
-                } else if (r < 0.9) {
-                    text = `I didn't find any purchases for customer 100234 in the selected period for the requested producer plant.`;
-                    badge = '<span class="status-badge neutral">NO PURCHASES</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different customer']);
-                } else {
-                    text = `Sorry, I couldn't find that customer. Please confirm the customer ID or name.`;
-                    badge = '<span class="status-badge delayed">ERROR</span>';
-                    
-                    finalHtml = `
-                        <div class="ai-text-content">${text}</div>
-                    `;
-                    appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another search']);
-                }
-                
-                waitingForInput = null;
-            }, 800);
-        }
 
-        function startFillRateFlow() {
-            resetChat();
-            if(initialState) initialState.style.display = 'none';
-            appendUserMessage("What is the fill rate for customer [XX] at plant [XXXX] for [time frame]?");
-            showLoading();
-            setTimeout(() => {
-                hideLoading();
-                appendAIMessage(`I can calculate the fill rate based on actual shipping date. What period are you looking for (e.g., June 2026), and for which Customer ID?
-                            <div class="chat-options-container" style="margin-top: 8px; margin-bottom: 8px;">
-                                <button class="chat-option-btn" onclick="handleOptionClick('June 2026, Cust 100234, Plant 4010', 'Q6_FILL_RATE')">June 2026, Cust 100234, Plant 4010</button>
-                                <button class="chat-option-btn" onclick="handleOptionClick('Last Month, Cust 999999', 'Q6_FILL_RATE')">Last Month, Cust 999999</button>
-                            </div>
-                            <div class="inline-input-container">
-                                <input type="date" class="inline-input" style="flex: 0 0 130px; cursor: pointer; color: var(--text-secondary);" title="Select a Specific Date" onchange="this.nextElementSibling.value = this.value">
-                                <input type="text" placeholder="Time Frame (e.g. June 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q6_FILL_RATE')">
-                                <input type="text" placeholder="Customer ID" class="inline-input" onkeypress="handleInlineEnter(event, 'Q6_FILL_RATE')">
-                                <input type="text" placeholder="Plant (Optional)" class="inline-input" onkeypress="handleInlineEnter(event, 'Q6_FILL_RATE')">
-                                <button class="inline-submit-btn" onclick="handleInlineSend('Q6_FILL_RATE', this)">Submit</button>
-                            </div>
-                        `, null, null, false);
-                waitingForInput = 'Q6_FILL_RATE';
-            }, 800);
-        }
 
         
         function resolveShortageDateRange(input) {
@@ -3949,12 +3638,12 @@
                     // Scenario 3: Invalid Sales Org
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
                     appendAIMessage(`<div class="ai-text-content">${text}</div>`, null, null, true);
-                    appendFollowUpActions(['Check my authorizations', 'Try another Sales Org']);
+                    appendFollowUpActions(['Open one of these orders in full', 'How short is each line?', 'What is on hand for the short SKUs?']);
                 } else if (dateRange && dateRange.toLowerCase().includes('month')) {
                     // Scenario 2: No shortages found
                     text = `Good news - I didn't find any orders with shortages that haven't shipped for the criteria you gave.`;
                     appendAIMessage(`<div class="ai-text-content" style="margin-bottom: 0;">${text}</div>`, null, null, true);
-                    appendFollowUpActions(['Check different date range', 'Check different sales org']);
+                    appendFollowUpActions(['Open one of these orders in full', 'How short is each line?', 'What is on hand for the short SKUs?']);
                 } else {
                     // Scenario 1: Shortages found
                     text = `I found 14 orders with shortages that have not yet shipped for Sales Org ${salesOrg} in the selected period.`;
@@ -3962,7 +3651,7 @@
                     
                     const tableHtml = `
                         <tr><th>SAP Order #</th><th>Customer</th><th>Material</th><th>Ordered Qty</th><th>Confirmed Qty</th><th>Shortage Qty</th></tr>
-                        <tr><td><a href="#" style="color:var(--primary);">123456</a></td><td>Cust A</td><td>SKU 123</td><td>1000</td><td style="color:var(--danger);">800</td><td style="color:var(--danger);">200</td></tr>
+                        <tr><td><a href="#" style="color:var(--primary);">1000011358</a></td><td>Cust A</td><td>SKU 1000011358</td><td>1000</td><td style="color:var(--danger);">800</td><td style="color:var(--danger);">200</td></tr>
                         <tr><td><a href="#" style="color:var(--primary);">123457</a></td><td>Cust B</td><td>SKU 999</td><td>500</td><td style="color:var(--danger);">250</td><td style="color:var(--danger);">250</td></tr>
                         <tr><td><a href="#" style="color:var(--primary);">123458</a></td><td>Cust C</td><td>SKU 444</td><td>2000</td><td style="color:var(--danger);">1900</td><td style="color:var(--danger);">100</td></tr>
                         <tr><td><a href="#" style="color:var(--primary);">123459</a></td><td>Cust D</td><td>SKU 555</td><td>100</td><td style="color:var(--danger);">0</td><td style="color:var(--danger);">100</td></tr>
@@ -3991,7 +3680,7 @@
                             </div>
                     `;
                     appendAIMessage(finalHtml, null, null, true);
-                    appendFollowUpActions(['Export to Excel', 'Email Report']);
+                    appendFollowUpActions(['Open one of these orders in full', 'How short is each line?', 'What is on hand for the short SKUs?']);
                 }
                 
                 waitingForInput = null;
@@ -4066,16 +3755,6 @@
                 waitingForInput = null;
                 resolveShortageDateRange(id);
                 return;
-            } else if (waitingForInput === 'Q5_NON_FULL') {
-                const id = text.trim();
-                waitingForInput = null;
-                resolveNonFullPalletFlow(id);
-                return;
-            } else if (waitingForInput === 'Q7_PURCHASE') {
-                const id = text.trim();
-                waitingForInput = null; // Cleared in resolve if not ambiguous
-                resolvePurchaseHistoryFlow(id);
-                return;
             } else if (waitingForInput === 'Q9_SHIP_SHORT') {
                 const id = text.trim();
                 waitingForInput = null;
@@ -4136,11 +3815,6 @@
                 waitingForInput = null;
                 resolveUnbilledOrdersFlow(id);
                 return;
-            } else if (waitingForInput === 'Q6_FILL_RATE') {
-                const id = text.trim();
-                waitingForInput = null;
-                resolveFillRateFlow(id);
-                return;
             } else if (waitingForInput === 'Q4_PAST_DUE') {
                 const id = text.trim();
                 waitingForInput = null;
@@ -4170,11 +3844,11 @@
                         if (id === '123010') {
                             // Multiple Deliveries
                             appendAIOptions(`Multiple deliveries exist against order ${id}. Which delivery/line is relevant?`, [
-                                {label: 'Delivery 80012345 (Line 10)', value: '123008'},
-                                {label: 'Delivery 80012346 (Line 20)', value: '123009'}
+                                {label: 'Delivery 80012345 (Line 10)', value: '0033502481'},
+                                {label: 'Delivery 80012346 (Line 20)', value: '0033502413'}
                             ], 'Q1_DELIVERY');
                             waitingForInput = 'Q1_DELIVERY';
-                        } else if (id === '123999') {
+                        } else if (id === '999999999') {
                             // Not Found
                             appendAIOptions(`I couldn't find a match for order ${id} or it belongs to an unauthorized Sales Org. Would you like to try searching by Customer Name (Sold-to)?`, [
                                 {label: 'Yes, search by Name', value: 'Yes, search by Name'},
@@ -4185,13 +3859,7 @@
                             resolveOrderStatus(id);
                         }
                     } else if (prevState === 'Q1_PO') {
-                        if (id === '990002') {
-                            appendAIOptions(`This PO number matches multiple sales orders. Please confirm which order you are referring to:`, [
-                                {label: 'Order 123005 - Plant XYZ - ShipTo A', value: '123005'},
-                                {label: 'Order 123006 - Plant ABC - ShipTo B', value: '123006'}
-                            ], 'Q1_PO_PLANT');
-                            waitingForInput = 'Q1_PO_PLANT';
-                        } else if (id === '990003') {
+                        if (id === 'INVALIDPO') {
                             appendAIOptions(`I couldn't find a match for PO ${id}. Would you like to try searching by Customer Name (Sold-to)?`, [
                                 {label: 'Yes, search by Name', value: 'Yes, search by Name'},
                                 {label: 'Try another PO', value: 'Customer PO Number'}
@@ -4199,20 +3867,20 @@
                             waitingForInput = 'Q1_NOT_FOUND_NAME';
                         } else {
                             // PO-SINGLE or other
-                            resolveOrderStatus('123005');
+                            resolveOrderStatus('33535372');
                         }
                     } else if (prevState === 'Q1_ADVANCED') {
                         const searchLower = id.toLowerCase();
-                        if (searchLower.includes('walmart')) {
-                            appendAIOptions(`I found recent active orders for Walmart. Please select one to view its status:`, [
-                                {label: 'Order 123008 (Placed 2 days ago)', value: '123008'},
-                                {label: 'Order 123009 (Placed last week)', value: '123009'}
+                        if (searchLower.includes('chetna')) {
+                            appendAIOptions(`I found recent active orders for CHETNA. Please select one to view its status:`, [
+                                {label: 'Order 0033502481 (Placed 2 days ago)', value: '0033502481'},
+                                {label: 'Order 0033502413 (Placed last week)', value: '0033502413'}
                             ], 'Q1_CUSTOMER_ORDER');
                             waitingForInput = 'Q1_CUSTOMER_ORDER';
-                        } else if (searchLower.includes('target')) {
-                            appendAIMessage(`I found over 50 open orders for Target. To help narrow it down, please provide a Date or a specific SKU.
+                        } else if (searchLower.includes('chetna')) {
+                            appendAIMessage(`I found over 50 open orders for CHETNA. To help narrow it down, please provide a Date or a specific SKU.
                                 <div class="inline-input-container" style="margin-top: 8px; display: flex; gap: 8px; background: transparent; border: none; padding: 0; align-items: stretch;">
-                                    <input type="text" placeholder="SKU (e.g. SKU-123)" class="inline-input" style="flex: 1; padding: 8px 12px;" onkeypress="if(event.key === 'Enter') handleInlineDateRangeSend('Q1_DATE_NARROW', this.parentElement.querySelector('button'))">
+                                    <input type="text" placeholder="SKU (e.g. SKU-1000011358)" class="inline-input" style="flex: 1; padding: 8px 12px;" onkeypress="if(event.key === 'Enter') handleInlineDateRangeSend('Q1_DATE_NARROW', this.parentElement.querySelector('button'))">
                                     <div style="display: flex; align-items: center; color: var(--text-secondary); font-size: 12px; font-weight: 500; padding: 0 4px;">OR</div>
                                     <div style="display: flex; flex: 1; gap: 4px; align-items: center;">
                                         <input type="date" class="inline-input" style="flex: 1; padding: 8px 12px; cursor: text;" onkeypress="if(event.key === 'Enter') handleInlineDateRangeSend('Q1_DATE_NARROW', this.parentElement.closest('.inline-input-container').querySelector('button'))">
@@ -4223,10 +3891,10 @@
                                 </div>
                             `, null, null, false);
                             waitingForInput = 'Q1_DATE_NARROW';
-                        } else if (searchLower.includes('sku-123')) {
-                            appendAIOptions(`I found the following active orders containing SKU-123. Please select one:`, [
-                                {label: 'Order 123005 (Qty: 200 cases)', value: '123005'},
-                                {label: 'Order 123006 (Qty: 450 cases)', value: '123006'}
+                        } else if (searchLower.includes('sku-1000011358')) {
+                            appendAIOptions(`I found the following active orders containing SKU-1000011358. Please select one:`, [
+                                {label: 'Order 33535372 (Qty: 200 cases)', value: '33535372'},
+                                {label: 'Order 33535665 (Qty: 450 cases)', value: '33535665'}
                             ], 'Q1_CUSTOMER_ORDER');
                             waitingForInput = 'Q1_CUSTOMER_ORDER';
                         } else if (searchLower.includes('sku-empty')) {
@@ -4234,7 +3902,7 @@
                         } else {
                             // Name not found
                             appendAIOptions(`I could not find any active customers or orders matching that criteria. Did you mean:`, [
-                                {label: 'Wal-Mart Stores Inc.', value: 'Walmart'},
+                                {label: 'Wal-Mart Stores Inc.', value: 'CHETNA'},
                                 {label: 'Try another search', value: 'Advanced Search'}
                             ], 'Q1_INITIAL');
                         }
@@ -4247,8 +3915,8 @@
                 showLoading();
                 setTimeout(() => {
                     hideLoading();
-                    appendAIOptions(`Here are the orders for Target in the timeframe "${id}". Please select one:`, [
-                        {label: 'Order 123004', value: '123004'}
+                    appendAIOptions(`Here are the orders for CHETNA in the timeframe "${id}". Please select one:`, [
+                        {label: 'Order 61161256', value: '61161256'}
                     ], 'Q1_CUSTOMER_ORDER');
                     waitingForInput = 'Q1_CUSTOMER_ORDER';
                 }, 600);
@@ -4256,12 +3924,12 @@
             }
 
             const resolveInventoryAnswer = (sku, plant) => {
-                if (sku === '123' && plant === '4010') {
+                if (sku === '1000011358' && plant === '7265') {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">Plant 4010 currently has 1,250 cases of SKU 123 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
+                            <div class="ai-text-content">Plant 7265 currently has 1,250 cases of SKU 1000011358 on hand; there are 8 open orders totaling 3,400 cases against it.</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-header">
                                     <span class="data-card-title">Inventory Analysis</span>
@@ -4281,14 +3949,14 @@
                                 </span>
                             </div>
                         `);
-                        appendFollowUpActions(['Check alternate plants', 'View open orders', 'Contact Planner']);
+                        appendFollowUpActions(['Which open orders are consuming that stock?', 'How much is uncommitted?', 'When is the next receipt due?']);
                     }, 800);
-                } else if ((sku === '456' || sku === '124') && plant === '4010') {
+                } else if ((sku === '1000011358' || sku === '124') && plant === '7265') {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">Plant 4010 currently has 0 cases of SKU ${sku} on hand; there are 8 open orders totaling 3,400 cases against it.</div>
+                            <div class="ai-text-content">Plant 7265 currently has 0 cases of SKU ${sku} on hand; there are 8 open orders totaling 3,400 cases against it.</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-header">
                                     <span class="data-card-title">Inventory Analysis</span>
@@ -4308,9 +3976,9 @@
                                 </span>
                             </div>
                         `);
-                        appendFollowUpActions(['Check alternate plants', 'View open orders', 'Contact Planner']);
+                        appendFollowUpActions(['Which open orders are consuming that stock?', 'How much is uncommitted?', 'When is the next receipt due?']);
                     }, 800);
-                } else if (sku === '789' && plant === '5555') {
+                } else if (sku === '1000011358' && plant === '7265') {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
@@ -4328,8 +3996,8 @@
                                     Sorry, I couldn't find stock data for that plant and SKU combination. Please confirm the plant and product ID.
                                 </div>
                                 <div class="inline-input-container" style="display: flex; gap: 8px; flex-direction: row; background: transparent; border: none; padding: 0;">
-                                    <input type="text" placeholder="SKU (e.g. 123)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
-                                    <input type="text" placeholder="Plant ID (e.g. 4010)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <input type="text" placeholder="SKU (e.g. 1000011358)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
+                                    <input type="text" placeholder="Plant ID (e.g. 7265)" class="inline-input" style="flex: 1; min-width: 0;" onkeypress="handleInlineEnter(event, 'INVENTORY_CHECK')">
                                     <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_CHECK', this)">Submit</button>
                                 </div>
                             </div>
@@ -4348,12 +4016,12 @@
                     hideLoading();
                     sku = sku.replace(/sku-/i, '');
                     
-                    const validPlants = ['4010', '5555', '9999'];
+                    const validPlants = ['7265', '7265'];
                     if (!validPlants.includes(plant)) {
                         window.currentQ2Sku = sku;
                         appendAIMessage(`Plant ID <strong>${plant}</strong> did not match any known locations. Please provide a valid Plant/Warehouse ID to check stock for SKU-${sku}.
                             <div class="inline-input-container" style="margin-top: 8px; display: flex; gap: 8px; background: transparent; border: none; padding: 0;">
-                                <input type="text" placeholder="e.g. 4010" class="inline-input" onkeypress="handleInlineEnter(event, 'Q2_PLANT')">
+                                <input type="text" placeholder="e.g. 7265" class="inline-input" onkeypress="handleInlineEnter(event, 'Q2_PLANT')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q2_PLANT', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -4361,13 +4029,13 @@
                         return;
                     }
 
-                    if (sku === '123' && plant === '4010') {
-                        appendAIMessage(`Plant 4010 currently has <strong>1,250 cases</strong> of SKU 123 on hand; there are <strong>8 open orders</strong> totaling 3,400 cases against it.`);
-                        appendFollowUpActions(['View Inventory for SKU 123']);
-                    } else if (sku === '456' && plant === '4010') {
-                        appendAIMessage(`Plant 4010 currently has <strong>0 cases</strong> of SKU 456 on hand; there are <strong>8 open orders</strong> totaling 3,400 cases against it.`);
-                        appendFollowUpActions(['View Order Details']);
-                    } else if (sku === '789' && plant === '5555') {
+                    if (sku === '1000011358' && plant === '7265') {
+                        appendAIMessage(`Plant 7265 currently has <strong>1,250 cases</strong> of SKU 1000011358 on hand; there are <strong>8 open orders</strong> totaling 3,400 cases against it.`);
+                        appendFollowUpActions(['Why was each line rejected?', 'Was a replacement order raised?', 'Can this order be reinstated?']);
+                    } else if (sku === '1000011358' && plant === '7265') {
+                        appendAIMessage(`Plant 7265 currently has <strong>0 cases</strong> of SKU 1000011358 on hand; there are <strong>8 open orders</strong> totaling 3,400 cases against it.`);
+                        appendFollowUpActions(['Why was each line rejected?', 'Was a replacement order raised?', 'Can this order be reinstated?']);
+                    } else if (sku === '1000011358' && plant === '7265') {
                         appendAIMessage(`You do not have authorization to view stock data for plant ${plant}. If you need access, please contact your administrator.`);
                     } else {
                         appendAIMessage(`Sorry, I couldn't find stock data for that plant and SKU combination. Please confirm the plant and product ID.`);
@@ -4389,7 +4057,7 @@
                     if (!plant && numbers.length > 1) plant = numbers[1];
                 }
 
-                if (!sku) sku = '123'; // Fallback for demo if generic input
+                if (!sku) sku = '1000011358'; // Fallback for demo if generic input
 
                 if (!plant) {
                     window.currentQ2Sku = sku;
@@ -4399,7 +4067,7 @@
                         hideLoading();
                         appendAIMessage(`To check stock for SKU-${sku}, please provide the <strong>Plant/Warehouse ID</strong>.
                             <div class="inline-input-container" style="margin-top: 8px; display: flex; gap: 8px; background: transparent; border: none; padding: 0;">
-                                <input type="text" placeholder="e.g. 4010" class="inline-input" onkeypress="handleInlineEnter(event, 'Q2_PLANT')">
+                                <input type="text" placeholder="e.g. 7265" class="inline-input" onkeypress="handleInlineEnter(event, 'Q2_PLANT')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('Q2_PLANT', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -4413,7 +4081,7 @@
             
             if (waitingForInput === 'Q2_PLANT') {
                 const textLower = text.toLowerCase();
-                let plantMatch = textLower.match(/plant\s*(\d+)/) || textLower.match(/\b(4010|9999)\b/);
+                let plantMatch = textLower.match(/plant\s*(\d+)/) || textLower.match(/\b(7265|7265)\b/);
                 let plant = plantMatch ? (plantMatch[1] || plantMatch[0]) : text.trim();
                 
                 resolveQ2Answer(window.currentQ2Sku, plant);
@@ -4535,7 +4203,7 @@
                                             <tr>
                                                 <td style="padding: 12px 16px;"><strong>10022</strong></td>
                                                 <td style="padding: 12px 16px;">Sysco (GB)</td>
-                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px;">7265</td>
                                                 <td style="padding: 12px 16px; color: ${statusColor};">${statusFormatted}</td>
                                             </tr>
                                             <tr>
@@ -4547,7 +4215,7 @@
                                             <tr>
                                                 <td style="padding: 12px 16px;"><strong>10055</strong></td>
                                                 <td style="padding: 12px 16px;">Tesco</td>
-                                                <td style="padding: 12px 16px;">4010</td>
+                                                <td style="padding: 12px 16px;">7265</td>
                                                 <td style="padding: 12px 16px; color: ${statusColor};">${statusFormatted}</td>
                                             </tr>
                                         </tbody>
@@ -4560,7 +4228,7 @@
                                 </span>
                             </div>
                         `);
-                        appendFollowUpActions(['View all items', 'Export to Excel', 'Check production schedule']);
+                        appendFollowUpActions(['Open one of these orders in full', 'How short is each line?', 'What is on hand for the short SKUs?']);
                     }, 800);
                 } else {
                     showLoading();
@@ -4585,10 +4253,10 @@
                     if (!plant && numbers.length > 1) plant = numbers[1];
                 }
 
-                if (!sku) sku = '123';
-                if (!plant) plant = '4010';
+                if (!sku) sku = '1000011358';
+                if (!plant) plant = '7265';
 
-                const validPlants = ['4010', '5555', '9999'];
+                const validPlants = ['7265', '7265'];
                 if (!validPlants.includes(plant)) {
                     window.currentInventorySku = sku;
                     showLoading();
@@ -4596,7 +4264,7 @@
                         hideLoading();
                         appendAIMessage(`Plant ID <strong>${plant}</strong> did not match any known locations. Please provide a valid Plant/Warehouse ID to check stock for SKU-${sku}.
                             <div class="inline-input-container" style="margin-top: 8px; display: flex; gap: 8px; background: transparent; border: none; padding: 0;">
-                                <input type="text" placeholder="e.g. 4010" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_PLANT')">
+                                <input type="text" placeholder="e.g. 7265" class="inline-input" onkeypress="handleInlineEnter(event, 'INVENTORY_PLANT')">
                                 <button class="inline-submit-btn" onclick="handleInlineSend('INVENTORY_PLANT', this)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -4605,11 +4273,11 @@
                     return;
                 }
 
-                if (sku === '123' && plant === '4010') {
+                if (sku === '1000011358' && plant === '7265') {
                     resolveInventoryAnswer(sku, plant);
-                } else if ((sku === '456' || sku === '124') && plant === '4010') {
+                } else if ((sku === '1000011358' || sku === '124') && plant === '7265') {
                     resolveInventoryAnswer(sku, plant);
-                } else if (sku === '789' && plant === '5555') {
+                } else if (sku === '1000011358' && plant === '7265') {
                     resolveInventoryAnswer(sku, plant);
                 } else {
                     resolveInventoryAnswer(sku, plant);
@@ -4625,12 +4293,12 @@
             } else if (waitingForInput === 'UNBILLED_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
-                if (input.includes('3010') && input.includes('7')) {
+                if (input.includes('IN01') && input.includes('7')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">I found 9 orders shipped but not yet billed for Sales Org 3010 in the selected period.</div>
+                            <div class="ai-text-content">I found 9 orders shipped but not yet billed for IN01 in the selected period.</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-body" style="padding-top: 12px;">
                                     <table class="data-table" style="text-align: left;">
@@ -4650,9 +4318,9 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Full List', 'Send Reminders']);
+                        appendFollowUpActions(['Open one of these orders in full', 'How many days sitting unbilled?', 'Did any ship short?']);
                     }, 800);
-                } else if (input.includes('3010') && input.includes('30')) {
+                } else if (input.includes('IN01') && input.includes('30')) {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">All shipped orders for that period and sales org have been billed - no exceptions found.</div>`); }, 800);
                 } else {
@@ -4662,12 +4330,12 @@
             } else if (waitingForInput === 'SHIP_SHORT_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
-                if (input.includes('3010') && input.includes('7')) {
+                if (input.includes('IN01') && input.includes('7')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">I found 4 orders that shipped short (shipped qty is less than confirmed qty) for Sales Org 3010 in the selected period.</div>
+                            <div class="ai-text-content">I found 4 orders that shipped short (shipped qty is less than confirmed qty) for IN01 in the selected period.</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-body" style="padding-top: 12px;">
                                     <table class="data-table" style="text-align: left;">
@@ -4687,9 +4355,9 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Investigate Shortages', 'Notify Sales Reps']);
+                        appendFollowUpActions(['Open one of these orders in full', 'How large is the shortfall?', 'Which customers are most impacted?']);
                     }, 800);
-                } else if (input.includes('3010') && input.includes('30')) {
+                } else if (input.includes('IN01') && input.includes('30')) {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No fully-confirmed orders were shipped short for the criteria you gave.</div>`); }, 800);
                 } else {
@@ -4699,12 +4367,12 @@
             } else if (waitingForInput === 'BILLED_ORDERS_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
-                if (input.includes('100234') && input.includes('yesterday')) {
+                if (input.includes('33535511') && input.includes('yesterday')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">12 orders were billed yesterday for Sales Org 3010.</div>
+                            <div class="ai-text-content">12 orders were billed yesterday for IN01.</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-body" style="padding-top: 12px;">
                                     <table class="data-table" style="text-align: left;">
@@ -4724,9 +4392,9 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Invoices', 'View Customer Account']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Can they get a copy of an invoice?', 'Did any ship short?']);
                     }, 800);
-                } else if (input.includes('100234') && input.includes('last week')) {
+                } else if (input.includes('33535511') && input.includes('last week')) {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No orders were billed yesterday for that sales org/customer.</div>`); }, 800);
                 } else {
@@ -4736,12 +4404,12 @@
             } else if (waitingForInput === 'OPEN_ORDERS_WEIGHT_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
-                if (input.includes('100234')) {
+                if (input.includes('33535511')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">Customer 100234 has 5 open orders totaling 40 pallets / 3,200 cases / 64,000 kg.</div>
+                            <div class="ai-text-content">Customer 33535511 has 5 open orders totaling 40 pallets / 3,200 cases / 64,000 kg.</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-body" style="padding-top: 12px;">
                                     <table class="data-table" style="text-align: left;">
@@ -4761,11 +4429,11 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Full List', 'Check Pallet Config']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Are any lines not in full pallets?', 'Is stock available?']);
                     }, 800);
                 } else if (input.includes('100235')) {
                     showLoading();
-                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Customer 100234 has no open orders at this time.</div>`); }, 800);
+                    setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Customer 33535511 has no open orders at this time.</div>`); }, 800);
                 } else {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't find that customer. Please confirm the customer ID or name.</div>`); }, 800);
@@ -4783,9 +4451,9 @@
                                 <div class="data-card-body" style="padding-top: 12px;">
                                     <table class="data-table" style="text-align: left;">
                                         <tr><th>Delivery #</th><th>Customer</th><th>Plant</th></tr>
-                                        <tr><td>80099201</td><td>100234 (Acme Corp)</td><td>4010</td></tr>
-                                        <tr><td>80099202</td><td>100456 (Global Tech)</td><td>4020</td></tr>
-                                        <tr><td>80099203</td><td>100789 (Initech)</td><td>4010</td></tr>
+                                        <tr><td>80099201</td><td>33535511 (Acme Corp)</td><td>7265</td></tr>
+                                        <tr><td>80099202</td><td>33535511 (Global Tech)</td><td>4020</td></tr>
+                                        <tr><td>80099203</td><td>100789 (Initech)</td><td>7265</td></tr>
                                     </table>
                                 </div>
                             </div>
@@ -4797,7 +4465,7 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Full List', 'Check Logistics']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Are any past their planned loading date?', 'Is anything on block?']);
                     }, 800);
                 } else if (input.includes('us')) {
                     showLoading();
@@ -4809,19 +4477,19 @@
             } else if (waitingForInput === 'AMEND_ORDER_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
-                if (input.includes('123456')) {
+                if (input.includes('1000011358')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
-                        appendAIMessage(`<div class="ai-text-content">Yes, order 123456 is still fully open - and can be amended.</div>`);
-                        appendFollowUpActions(['Amend Quantity', 'Change Delivery Date']);
+                        appendAIMessage(`<div class="ai-text-content">Yes, order 1000011358 is still fully open - and can be amended.</div>`);
+                        appendFollowUpActions(['What is on the order today?', 'Is stock available to increase qty?', 'Would a change push the ship date?']);
                     }, 800);
                 } else if (input.includes('123457')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`<div class="ai-text-content">Order 123457 already has a delivery in progress. Low chances for changes to still be possible, please contact Customer Service representative.</div>`);
-                        appendFollowUpActions(['Contact CS']);
+                        appendFollowUpActions(['What is on the order today?', 'Is stock available to increase qty?', 'Would a change push the ship date?']);
                     }, 800);
                 } else if (input.includes('123458')) {
                     showLoading();
@@ -4833,18 +4501,18 @@
             } else if (waitingForInput === 'SHORTAGE_IMPACT_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
-                if (input.includes('this month') && input.includes('3010')) {
+                if (input.includes('this month') && input.includes('IN01')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">Top customers impacted by shortages in Sales Org 3010:<br>1) Customer 100234 (1,200 cases)<br>2) Customer 100456 (850 cases)</div>
+                            <div class="ai-text-content">Top customers impacted by shortages in IN01:<br>1) Customer 33535511 (1,200 cases)<br>2) Customer 33535511 (850 cases)</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-body" style="padding-top: 12px;">
                                     <table class="data-table" style="text-align: left;">
                                         <tr><th>Rank</th><th>Customer</th><th>Shortage Impact</th><th>Hierarchy Node</th></tr>
-                                        <tr><td>1</td><td>100234 (Acme Corp)</td><td>1,200 cases</td><td>H_NA_EAST</td></tr>
-                                        <tr><td>2</td><td>100456 (Global Tech)</td><td>850 cases</td><td>H_NA_WEST</td></tr>
+                                        <tr><td>1</td><td>33535511 (Acme Corp)</td><td>1,200 cases</td><td>H_NA_EAST</td></tr>
+                                        <tr><td>2</td><td>33535511 (Global Tech)</td><td>850 cases</td><td>H_NA_WEST</td></tr>
                                         <tr><td>3</td><td>100789 (Initech)</td><td>420 cases</td><td>H_NA_SOUTH</td></tr>
                                     </table>
                                 </div>
@@ -4857,9 +4525,9 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Rankings', 'Investigate Acme Corp']);
+                        appendFollowUpActions(['Open a customer\'s shortage detail', 'What was that customer\'s fill rate?', 'Which products drove the shortfall?']);
                     }, 800);
-                } else if (input.includes('last month') && input.includes('3010')) {
+                } else if (input.includes('last month') && input.includes('IN01')) {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No customers currently show shortage impact for the criteria you gave.</div>`); }, 800);
                 } else {
@@ -4869,18 +4537,18 @@
             } else if (waitingForInput === 'EST_SHIPPING_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
-                if (input.includes('16') && input.includes('3010')) {
+                if (input.includes('16') && input.includes('IN01')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">I found 8 orders with a planned shipping date of April 16, 2026 for Sales Org 3010.</div>
+                            <div class="ai-text-content">I found 8 orders with a planned shipping date of April 16, 2026 for IN01.</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-body" style="padding-top: 12px;">
                                     <table class="data-table" style="text-align: left;">
                                         <tr><th>SAP#</th><th>Status</th><th>Shipping Plant</th></tr>
-                                        <tr><td>10099301</td><td>Open Order</td><td>4010 - Plant Alpha</td></tr>
-                                        <tr><td>10099302</td><td>Delivery Note Created</td><td>4010 - Plant Alpha</td></tr>
+                                        <tr><td>10099301</td><td>Open Order</td><td>7265 - Plant Alpha</td></tr>
+                                        <tr><td>10099302</td><td>Delivery Note Created</td><td>7265 - Plant Alpha</td></tr>
                                         <tr><td>10099303</td><td>Open Order</td><td>4020 - Plant Beta</td></tr>
                                     </table>
                                     <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">+ 5 more orders</div>
@@ -4894,9 +4562,9 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Full List', 'Check Plant Capacity']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Which of these are on block?', 'Which have a delivery but no shipment?']);
                     }, 800);
-                } else if (input.includes('17') && input.includes('3010')) {
+                } else if (input.includes('17') && input.includes('IN01')) {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No orders are currently planned shipping date for the criteria given.</div>`); }, 800);
                 } else {
@@ -4934,7 +4602,7 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['View Inventory', 'Check Pending Orders']);
+                        appendFollowUpActions(['What is on hand for this SKU?', 'Which open orders contain this product?', 'Which customers buy this SKU?']);
                     }, 800);
                 } else if (input.includes('456790')) {
                     showLoading();
@@ -4970,7 +4638,7 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Full List', 'Release Blocks']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Is there stock to cover these?', 'Are any lines short?']);
                     }, 800);
                 } else if (input.includes('456790')) {
                     showLoading();
@@ -4996,7 +4664,7 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Full List', 'Check Delivery Status']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Is there stock to cover these?', 'Are any lines short?']);
                     }, 800);
                 } else if (input.includes('456791')) {
                     showLoading();
@@ -5022,7 +4690,7 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Full List', 'Track Shipments']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Is there stock to cover these?', 'Are any lines short?']);
                     }, 800);
                 } else if (input.includes('456792')) {
                     showLoading();
@@ -5059,7 +4727,7 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Export Full List', 'Group by Customer']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Are any not in full pallet quantities?', 'What are the pallets and cases?']);
                     }, 800);
                 } else if (input.includes('200') && input.includes('last week')) {
                     showLoading();
@@ -5071,12 +4739,12 @@
             } else if (waitingForInput === 'BLOCKED_ORDERS_CHECK') {
                 waitingForInput = null;
                 const input = text.toLowerCase();
-                if (input.includes('3010') && input.includes('2')) {
+                if (input.includes('IN01') && input.includes('2')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
-                            <div class="ai-text-content">I found 3 orders shipping in the next 2 days that are on credit hold for Sales Org 3010.</div>
+                            <div class="ai-text-content">I found 3 orders shipping in the next 2 days that are on credit hold for IN01.</div>
                             <div class="data-card" style="width: 100%;">
                                 <div class="data-card-body" style="padding-top: 12px;">
                                     <table class="data-table" style="text-align: left;">
@@ -5095,79 +4763,14 @@
                                 </span>
                             </div>
                     `);
-                        appendFollowUpActions(['Request Credit Release', 'Email Finance']);
+                        appendFollowUpActions(['Open one of these orders in full', 'Who releases each block type?', 'What is the block ID?']);
                     }, 800);
-                } else if (input.includes('3010') && input.includes('5')) {
+                } else if (input.includes('IN01') && input.includes('5')) {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">No orders shipping in the selected period are currently on credit hold for that sales org.</div>`); }, 800);
                 } else {
                     showLoading();
                     setTimeout(() => { hideLoading(); appendAIMessage(`<div class="ai-text-content">Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.</div>`); }, 800);
-                }
-            } else if (waitingForInput === 'FILL_RATE_CHECK') {
-                waitingForInput = null;
-                const input = text.toLowerCase();
-                if (input.includes('100234') && input.includes('4010') && input.includes('june 2026')) {
-                    showLoading();
-                    setTimeout(() => {
-                        hideLoading();
-                        appendAIMessage(`
-                            <div class="ai-text-content">Customer 100234's fill rate at plant 4010 for June 2026 was 94.2% (10,456 of 11,100 cases shipped).</div>
-                            <div class="data-card" style="width: 100%;">
-                                <div class="data-card-header">
-                                    <span class="data-card-title">Fill Rate Analysis</span>
-                                    <span class="status-badge healthy">CALCULATED</span>
-                                </div>
-                                <div class="data-card-body">
-                                    <table class="data-table">
-                                        <tr><td class="label">Time Frame</td><td class="value">June 2026</td></tr>
-                                        <tr><td class="label">Ordered Qty</td><td class="value">11,100 cases</td></tr>
-                                        <tr><td class="label">Shipped Qty</td><td class="value">10,456 cases</td></tr>
-                                        <tr><td class="label">Fill Rate</td><td class="value">94.2%</td></tr>
-                                    </table>
-                                </div>
-                            </div>
-                        
-                            <div class="footer-metadata">
-                                <span><strong>Data Sources Updated:</strong> 
-                                    <div style="margin-top: 4px; margin-left: 8px;">Order Header Data - <em>Last Updated: ${getTimestamp(15)}</em></div>
-                                    <div style="margin-top: 4px; margin-left: 8px;">Delivery Header (PGI Date) - <em>Last Updated: ${getTimestamp(2)}</em></div>
-                                </span>
-                            </div>
-                    `);
-                        appendFollowUpActions(['Export to Excel', 'View unfulfilled orders', 'Check July 2026']);
-                    }, 800);
-                } else if (input.includes('100234') && input.includes('4010') && input.includes('may 2026')) {
-                    showLoading();
-                    setTimeout(() => {
-                        hideLoading();
-                        appendAIMessage(`
-                            <div class="ai-text-content">I didn't find any orders for customer 100234 at plant 4010 in the period you selected (May 2026), so a fill rate can't be calculated.</div>
-                        `);
-                        appendFollowUpActions(['Check June 2026', 'View all customer activity']);
-                    }, 800);
-                } else {
-                    showLoading();
-                    setTimeout(() => {
-                        hideLoading();
-                        const modalId = 'modal-' + Math.random().toString(36).substr(2, 9);
-                        appendAIMessage(`
-                            <div class="ai-text-content" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-                                <div>
-                                    Sorry, I couldn't find that customer/plant combination. Please confirm the customer ID and plant.
-                                    <span class="helper-icon" style="margin-left: 8px;" onmouseenter="showHelperModal('${modalId}')" onmouseleave="hideHelperModal('${modalId}')">i</span>
-                                </div>
-                                <div class="inline-input-container">
-                                    <input type="text" placeholder="Customer ID (e.g. 100234)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
-                                    <input type="text" placeholder="Plant (Optional, e.g. 4010)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
-                                    <input type="date" class="inline-input" style="flex: 0 0 130px; cursor: pointer; color: var(--text-secondary);" title="Select a Specific Date" onchange="this.nextElementSibling.value = this.value">
-                                <input type="text" placeholder="Time Frame (e.g. June 2026)" class="inline-input" onkeypress="handleInlineEnter(event, 'FILL_RATE_CHECK')">
-                                    <button class="inline-submit-btn" onclick="handleInlineSend('FILL_RATE_CHECK', this)">Submit</button>
-                                </div>
-                            </div>
-                        `, modalId, 'FILL_RATE_CHECK');
-                        waitingForInput = 'FILL_RATE_CHECK';
-                    }, 800);
                 }
             } else if (waitingForInput === 'SHORTAGE_CHECK') {
                 waitingForInput = null;
@@ -5199,16 +4802,16 @@
                                 </span>
                             </div>
                         `);
-                        appendFollowUpActions(['Export shortage list', 'Notify Sales Team', 'Check production schedule']);
+                        appendFollowUpActions(['Open one of these orders in full', 'How short is each line?', 'What is on hand for the short SKUs?']);
                     }, 800);
-                } else if (input.includes('9999')) {
+                } else if (input.includes('7265')) {
                     showLoading();
                     setTimeout(() => {
                         hideLoading();
                         appendAIMessage(`
                             <div class="ai-text-content" style="margin-bottom: 0;">Good news - I didn't find any orders with shortages that haven't shipped for the criteria you gave.</div>
                         `);
-                        appendFollowUpActions(['Check different date range', 'Check different sales org']);
+                        appendFollowUpActions(['Open one of these orders in full', 'How short is each line?', 'What is on hand for the short SKUs?']);
                     }, 800);
                 } else {
                     showLoading();
@@ -5349,7 +4952,7 @@
                 appendAIMessage(`Please provide the Period of Time (Sales Document Date or Loading Date) and the Sales Organization.
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. Last 30 Days)" class="inline-input" id="q5_time" onkeypress="handleInlineEnter(event, 'Q5_UNCONFIRMED')">
-                                <input type="text" placeholder="Sales Org (e.g. 3010)" class="inline-input" id="q5_org" onkeypress="handleInlineEnter(event, 'Q5_UNCONFIRMED')">
+                                <input type="text" placeholder="Sales Org (e.g. IN01)" class="inline-input" id="q5_org" onkeypress="handleInlineEnter(event, 'Q5_UNCONFIRMED')">
                                 <button class="inline-submit-btn" onclick="resolveUnconfirmedOrdersFlow(document.getElementById('q5_org').value, document.getElementById('q5_time').value)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -5365,12 +4968,12 @@
                 let finalHtml = '';
                 let badge = '';
                 
-                if (salesOrg.includes('9999')) {
+                if (salesOrg.includes('7265')) {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
-                } else if (salesOrg.includes('3010')) {
-                    text = `I found 2 unconfirmed orders for Sales Org 3010 in the selected period.`;
+                } else if (salesOrg.includes('IN01')) {
+                    text = `I found unconfirmed orders for the selected period.`;
                     badge = '<span class="status-badge delayed">UNCONFIRMED</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
@@ -5382,8 +4985,8 @@
                             <div class="data-card-body">
                                 <table class="data-table">
                                     <tr><th>SAP Order #</th><th>PO #</th><th>Order Date</th><th>Customer</th><th>Product</th><th>Unconfirmed Qty</th></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">998877</a></td><td>A123</td><td>2026-08-01</td><td>100123</td><td>Prod X</td><td>100</td></tr>
-                                    <tr><td><a href="#" style="color:var(--primary);">998878</a></td><td>B456</td><td>2026-08-02</td><td>100124</td><td>Prod Y</td><td>50</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">998877</a></td><td>A123</td><td>2026-08-01</td><td>OrdA123</td><td>Prod X</td><td>100</td></tr>
+                                    <tr><td><a href="#" style="color:var(--primary);">998878</a></td><td>B456</td><td>2026-08-02</td><td>OrdB456</td><td>Prod Y</td><td>50</td></tr>
                                 </table>
                             </div>
                         </div>`;
@@ -5393,6 +4996,7 @@
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
                 }
                 appendAIMessage(finalHtml, null, null, true);
+                appendFollowUpActions(['Open one of these orders in full', 'Check unconfirmed item availability', 'Why are these lines unconfirmed?']);
             }, 800);
         }
 
@@ -5408,7 +5012,7 @@
                 appendAIMessage(`Please provide the Period of Time (Loading Date or Order Creation Date) and the Sales Organization.
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" id="q6_time">
-                                <input type="text" placeholder="Sales Org (e.g. 3010)" class="inline-input" id="q6_org">
+                                <input type="text" placeholder="Sales Org (e.g. IN01)" class="inline-input" id="q6_org">
                                 <button class="inline-submit-btn" onclick="resolveDeliveryBlockedFlow(document.getElementById('q6_org').value, document.getElementById('q6_time').value)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -5424,12 +5028,12 @@
                 let finalHtml = '';
                 let badge = '';
                 
-                if (salesOrg.includes('9999')) {
+                if (salesOrg.includes('7265')) {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
-                } else if (salesOrg.includes('3010')) {
-                    text = `I found 3 orders with a delivery block for Sales Org 3010 in the selected period.`;
+                } else if (salesOrg.includes('IN01')) {
+                    text = `I found 3 orders with a delivery block for IN01 in the selected period.`;
                     badge = '<span class="status-badge delayed">DELIVERY BLOCKED</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
@@ -5453,6 +5057,7 @@
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
                 }
                 appendAIMessage(finalHtml, null, null, true);
+                appendFollowUpActions(['Open one of these orders in full', 'Who releases each block type?', 'What is the block ID?']);
             }, 800);
         }
 
@@ -5468,7 +5073,7 @@
                 appendAIMessage(`Please provide the Period of Time (Loading Date or Order Creation Date) and the Sales Organization.
                             <div class="inline-input-container">
                                 <input type="text" placeholder="Time Frame (e.g. Last 7 Days)" class="inline-input" id="q7_time">
-                                <input type="text" placeholder="Sales Org (e.g. 3010)" class="inline-input" id="q7_org">
+                                <input type="text" placeholder="Sales Org (e.g. IN01)" class="inline-input" id="q7_org">
                                 <button class="inline-submit-btn" onclick="resolveBillingBlockedFlow(document.getElementById('q7_org').value, document.getElementById('q7_time').value)">Submit</button>
                             </div>
                         `, null, null, false);
@@ -5484,12 +5089,12 @@
                 let finalHtml = '';
                 let badge = '';
                 
-                if (salesOrg.includes('9999')) {
+                if (salesOrg.includes('7265')) {
                     text = `Sorry, I couldn't run that search - the sales organization provided isn't recognized or isn't one you have access to.`;
                     badge = '<span class="status-badge delayed">ERROR</span>';
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
-                } else if (salesOrg.includes('3010')) {
-                    text = `I found 1 order with a billing block for Sales Org 3010 in the selected period.`;
+                } else if (salesOrg.includes('IN01')) {
+                    text = `I found 1 order with a billing block for IN01 in the selected period.`;
                     badge = '<span class="status-badge delayed">BILLING BLOCKED</span>';
                     finalHtml = `
                         <div class="ai-text-content">${text}</div>
@@ -5511,6 +5116,7 @@
                     finalHtml = `<div class="ai-text-content">${text}</div>`;
                 }
                 appendAIMessage(finalHtml, null, null, true);
+                appendFollowUpActions(['Open one of these orders in full', 'Who releases each block type?', 'What is the block ID?']);
             }, 800);
         }
 
